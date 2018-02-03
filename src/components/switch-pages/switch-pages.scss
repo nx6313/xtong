@@ -1,0 +1,17 @@
+switch-pages {
+    .switchPageWrap {
+        position: relative;
+        height: 100%;
+        .switchItemWrap {
+            background: #707A94;
+            height: 80px;
+            line-height: 80px;
+        }
+        switch-page {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+        }
+    }
+}

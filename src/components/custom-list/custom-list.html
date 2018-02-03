@@ -1,0 +1,15 @@
+<div class="me-menu-wrap" [ngStyle]="cssStyle">
+  <div *ngFor="let list of listArr" class="menu-item flex-r flex-b {{(list.isMenu || list.isDanger) ? 'ripple' : ''}}" (click)="list.callBack()">
+    <span *ngIf="list.type == 'desc'">
+      <span class="gray">{{list.lTxt.split('|')[0]}}：</span>{{list.ngBind ? dataBindContainer[list.ngBind] + ' ' : ''}}{{list.lTxt.split('|')[1]}}</span>
+    <span *ngIf="list.type == ''">
+      <i *ngIf="list.lIcon != ''" class="iconfont {{list.lIcon}}"></i>{{list.lTxt}}</span>
+    <span *ngIf="list.isDanger" class="deposit">{{list.rTxt}}</span>
+    <div class="menu-item-rightTxt" *ngIf="!list.isDanger">
+      <img *ngIf="list.isImg" src="{{(list.ngBind ? dataBindContainer[list.ngBind] : '') | customListData}}" />
+      <span *ngIf="!list.isImg" class="gray">{{(list.ngBind ? dataBindContainer[list.ngBind] + ' ' : '') | customListData}}{{list.rTxt}}</span>
+      <i *ngIf="list.isMenu" class="isMenuRightIcon iconfont icon-right"></i>
+      <i *ngIf="list.rIcon != '' && !list.isMenu" class="iconfont {{list.rIcon}}"></i>
+    </div>
+  </div>
+</div>

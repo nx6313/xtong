@@ -1,0 +1,8 @@
+<div class="loading-bg animated" [ngClass]="{'fadeIn': isShowLoadingFlag, 'fadeOut': !isShowLoadingFlag}" (click)="requestAgain()">
+  <div class="loading-wrap">
+    <img *ngIf="!isShowImgFlag" src="assets/imgs/loading.gif" />
+    <img *ngIf="isShowImgFlag" class="noItemImg" src="assets/imgs/{{noItemImg}}" />
+    <span *ngIf="!isShowImgFlag">{{loadingTxt}}</span>
+    <span *ngIf="isShowImgFlag">{{noItemTxt}}</span>
+  </div>
+</div>

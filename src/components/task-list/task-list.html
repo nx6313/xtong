@@ -1,0 +1,32 @@
+<div #taskListwrap class="taskListWrap">
+  <div class="taskItemWrap" *ngFor="let task of taskList" (click)="toTaskDetail(task)">
+    <span class="orderNum">订单号：{{task.orderNum}}</span>
+    <div class="orderTimeType flex-r flex-b">
+      <span class="orderTime">
+        <i class="iconfont icon-time-hmj"></i>{{task.orderTime | date:'yyyy年MM月dd日 HH时mm分'}}</span>
+      <span class="orderType"><i *ngIf="task.orderType == '钟点工'" class="iconfont icon-st-time"></i>{{task.orderType}}</span>
+    </div>
+    <div class="clientPhoneName flex-r flex-c">
+      <span class="clientPhone">
+        <i class="iconfont icon-phone"></i>{{task.clientPhone | phoneEncry}}</span>
+      <span class="clientName">
+        <i class="iconfont icon-men"></i>{{task.clientName}}</span>
+    </div>
+    <div class="flex-r flex-b">
+      <span class="clientAddress">
+        <i class="iconfont icon-dizhi-hmj"></i>{{task.clientAddress}}</span>
+      <span class="getThisOrder ripple" (click)="acceptOrder($event, task)">抢单</span>
+    </div>
+  </div>
+  <div class="noDataWrap" [hidden]="taskList.length > 0 && !isRefing">
+    <div #loadingDataTipWrap class="loadingDataTipWrap">
+      <img src="assets/imgs/loading.gif">
+      <span>数据加载中</span>
+    </div>
+    <div #dataIsEmptyTipWrap class="dataIsEmptyTipWrap">
+      <img src="assets/imgs/empty.png">
+      <span>近期没有等待服务的任务</span>
+      <span class="btn ripple" (click)="refLoadData()">重新加载</span>
+    </div>
+  </div>
+</div>

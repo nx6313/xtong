@@ -1,0 +1,45 @@
+list-caption {
+    .listCaptionWrap {
+        position: relative;
+    }
+    .captionWrap {
+        position: relative;
+    }
+    .captionContentWrap {
+        position: relative;
+        display: inline-block;
+        color: #ffffff;
+        padding: 3px 7px;
+        text-transform: uppercase;
+        text-decoration: none;
+        font: bold 96% sans-serif;
+        margin: 10px 0px 14px 18px;
+        z-index: 1;
+    }
+    .captionContentWrap::before {
+        content: '';
+        border-radius: 3px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        background: #F3776B;
+        transform: skew(-18deg);
+        -webkit-transform: skew(-18deg);
+        -moz-transform: skew(-18deg);
+        -o-transform: skew(-18deg);
+        -ms-transform: skew(-18deg);
+    }
+    .captionWrap::before {
+        border-top: none;
+        content: '';
+        display: inline-block;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        border-top: 1px solid #eeeeee;
+    }
+}

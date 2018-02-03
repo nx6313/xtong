@@ -1,0 +1,15 @@
+<div class="comm-header flex-r flex-b">
+  <div class="comm-header-icon comm-header-do ripple" *ngIf="leftIcon != null" (click)="back()">
+    <span class="iconfont {{leftIcon}}"></span>
+  </div>
+  <div class="comm-title center">
+    <span #titleBarTxt>{{title}}</span>
+  </div>
+  <div *ngIf="rightIcon != ''" class="comm-header-icon comm-header-do ripple" (click)="rightClick()">
+    <span class="iconfont {{rightIcon}}"></span>
+  </div>
+  <div *ngIf="rightTxt != ''" class="comm-header-icon comm-header-do ripple" (click)="rightClick()">
+    <span>{{rightTxt}}</span>
+  </div>
+  <div *ngIf="rightIcon == '' && rightTxt == ''" class="comm-header-icon-hidden comm-header-do"></div>
+</div>

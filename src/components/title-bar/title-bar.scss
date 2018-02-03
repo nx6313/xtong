@@ -1,0 +1,44 @@
+title-bar {
+  .comm-header {
+    position: relative;
+    height: 44px;
+    padding: 0px 4px;
+    background: #343B4C;
+    overflow: hidden;
+  }
+  .comm-title {
+    position: absolute;
+    display: inline-block;
+    color: #ebeef1;
+    font-size: 2rem;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 44px;
+    line-height: 44px;
+    margin: 0 auto;
+    text-align: center;
+    z-index: 2000;
+  }
+  .comm-title span {
+    vertical-align: middle;
+  }
+  .comm-header-do {
+    position: relative;
+    z-index: 3000;
+    color: rgb(233, 235, 240);
+  }
+  .comm-header-icon {
+    display: inline-block;
+    padding: 10px;
+  }
+  .comm-header-icon span {
+    display: inline-block;
+  }
+  .comm-header-icon-hidden {
+    display: inline-block;
+    width: 38px;
+    height: 41px;
+    visibility: hidden;
+  }
+}

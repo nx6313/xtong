@@ -1,0 +1,185 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
+
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+
+
+
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  primary:    #488aff,
+  secondary:  #32db64,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222
+);
+
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+
+
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+
+
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+
+
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+
+@import "ionic.ionicons";
+
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";
+
+.flex-r {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.flex-col {
+	display: flex;
+	flex-direction: column;
+}
+
+.flex-1 {
+	flex: 1 1 auto;
+}
+
+.flex-c {
+	justify-content: center;
+}
+
+.flex-b {
+	justify-content: space-between;
+}
+
+.flex-a {
+	justify-content: space-around;
+}
+
+.flex-s {
+	justify-content: flex-start;
+}
+
+.flex-e {
+	justify-content: flex-end;
+}
+
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.ripple {
+	position: relative;
+	overflow: hidden;
+}
+
+.ripple:after {
+	content: "";
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	background-image: radial-gradient(circle, rgb(179, 179, 179) 10%, transparent 10.01%);
+	background-repeat: no-repeat;
+	background-position: 50%;
+	transform: scale(10, 10);
+	opacity: 0;
+	transition: transform .3s, opacity .5s;
+}
+
+.ripple:active:after {
+	transform: scale(0, 0);
+	opacity: .3;
+	transition: 0s;
+}
+
+ion-alert.alert-top {
+	padding-top: 140px !important;
+}
+
+@font-face {
+	font-family: Yujian;
+	src: url('../assets/yujian.ttf');
+}
+
+.frosted-glass {
+	background: inherit;
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-ms-filter: blur(5px);
+	-o-filter: blur(5px);
+	filter: blur(5px);
+	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=false);
+}
+
+@font-face {
+	font-family: 'iconfont';  /* project id 498653 */
+	src: url('//at.alicdn.com/t/font_498653_faskuuuhyg44pldi.eot');
+	src: url('//at.alicdn.com/t/font_498653_faskuuuhyg44pldi.eot?#iefix') format('embedded-opentype'),
+	url('//at.alicdn.com/t/font_498653_faskuuuhyg44pldi.woff') format('woff'),
+	url('//at.alicdn.com/t/font_498653_faskuuuhyg44pldi.ttf') format('truetype'),
+	url('//at.alicdn.com/t/font_498653_faskuuuhyg44pldi.svg#iconfont') format('svg');
+}
