@@ -32,7 +32,8 @@ export class ScrollviewComponent {
   @Input('ignoreElementClases') ignoreElements: string = '';
   @Input('footerWaterMark') footerWaterMark: string = '';
   @Input('diffHeightWhenLoadFinish') diffHeightWhenLoadFinish: number = 0;
-
+  @Input('canSwitchSlide') canSwitchSlide: Boolean = false;
+  
   @Input('scrollviewRank') scrollviewRank: string = '';
 
   pageLoadFinish: Function = () => { };
@@ -60,6 +61,7 @@ export class ScrollviewComponent {
     }
     let scrollEle: HTMLElement = this._pullrefContent.nativeElement;
     let pageIdName = $(scrollEle.parentElement.parentElement).parents('ion-content').parent().get(0).localName;
+    let pageTitleBarHeight = $(scrollEle.parentElement.parentElement).parents('ion-content').parent().find('ion-header').height();
     PullToRefresh.init({
       mainElement: scrollEle,
       classPrefix: 'ionic-',
@@ -76,6 +78,7 @@ export class ScrollviewComponent {
       iconZoomRate: this.iconZoomRate,
       refTxtColor: this.refTxtColor,
       ignoreElements: this.ignoreElements,
+      canSwitchSlide: this.canSwitchSlide,
       onRefresh: () => {
         let dataPullRefFn = this.dataPullRef;
         return new Promise(function (resolve) {
@@ -89,7 +92,7 @@ export class ScrollviewComponent {
       upLoadMore: this.upLoadMore,
       upLoadRefingIcon: this.upLoadRefingIcon,
       scrollViewHeight: this.scrollViewHeight,
-      titleBarHeight: 44,
+      titleBarHeight: pageTitleBarHeight,
       footerBarHeight: 'auto',
       otherElmHeight: this.bottomOtherHeight,
       offsetWidth: scrollEle.offsetWidth,
@@ -129,14 +132,15 @@ export class ScrollviewComponent {
   changeHeight(diffHeight: number) {
     let scrollEle: HTMLElement = this._pullrefContent.nativeElement;
     let pageIdName = $(scrollEle.parentElement.parentElement).parents('ion-content').parent().get(0).localName;
+    let pageTitleBarHeight = $(scrollEle.parentElement.parentElement).parents('ion-content').parent().find('ion-header').height();
     $(pageIdName).find('scrollview').find('div.pullRefWrap').css({
       'overflow-x': 'hidden', 'overflow-y': 'auto'
     });
     $(pageIdName).find('scrollview').find('div.pullRefWrap').stop().animate({
-      height: (document.body.clientHeight - 44 - scrollEle.offsetTop - Number(this.bottomOtherHeight) - diffHeight)
+      height: (document.body.clientHeight - pageTitleBarHeight - scrollEle.offsetTop - Number(this.bottomOtherHeight) - diffHeight)
     }, 300);
     $(pageIdName).find('scrollview').find('div.ionic-ptr-after').stop().animate({
-      height: (document.body.clientHeight - 44 - scrollEle.offsetTop - Number(this.bottomOtherHeight) - diffHeight)
+      height: (document.body.clientHeight - pageTitleBarHeight - scrollEle.offsetTop - Number(this.bottomOtherHeight) - diffHeight)
     }, 300);
   }
 

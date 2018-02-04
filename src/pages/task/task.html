@@ -6,14 +6,19 @@
 <ion-content>
   <switch-pages>
     <switch-page>
-      <!-- <scrollview [scrollviewRank]="'page_1'"> -->
+      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_1'">
         23423第一页
-      <!-- </scrollview> -->
+      </scrollview>
     </switch-page>
     <switch-page>
-      <!-- <scrollview [scrollviewRank]="'page_2'"> -->
+      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_2'">
         23434第二页
-      <!-- </scrollview> -->
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_3'">
+        23434第三页
+      </scrollview>
     </switch-page>
   </switch-pages>
 </ion-content>

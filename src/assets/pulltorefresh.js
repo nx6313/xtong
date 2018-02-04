@@ -42,10 +42,10 @@ var PullToRefresh = (function () {
     getStyles: _ptrStyles,
     ignoreElements: '',
     footerWaterMark: '',
-    pageLoadFinish: function () {},
-    onInit: function () {},
-    onRefresh: function () {},
-    onRefreshAfter: function () {},
+    pageLoadFinish: function () { },
+    onInit: function () { },
+    onRefresh: function () { },
+    onRefreshAfter: function () { },
     resistanceFunction: function (t) {
       return Math.min(1, t / 4.6);
     },
@@ -72,13 +72,21 @@ var PullToRefresh = (function () {
     otherElmHeight: 0,
     offsetWidth: -1,
     offsetTop: 0,
-    offsetLeft: 0
+    offsetLeft: 0,
+    canSwitchSlide: false,
+    switchPageRate: 0.8
   };
 
   var pullStartY = null;
   var pullMoveY = null;
   var dist = 0;
   var distResisted = 0;
+
+  var startTramformX = null;
+  var pullStartX = null;
+  var pullMoveX = null;
+  var distX = 0;
+  var switchDirect = null;
 
   var _setup = false;
   var _enable = false;
@@ -117,58 +125,54 @@ var PullToRefresh = (function () {
     return curPageIdName;
   }
 
-  function getPtrElement(classPrefix) {
-    let ptrElement = null;
-    // 先判断是否存在模态页面
-    // 不存在再从tabs中寻找当前页面
-    let ionModal = document.getElementsByTagName('ion-modal');
-    if (ionModal && ionModal.length > 0) {
-      ptrElement = $(ionModal[ionModal.length - 1]).find('ion-content').find('scrollview').find('div.' + classPrefix + 'ptr').get(0);
-    } else {
-      let showTabsContentPages = $('ion-tabs').find('ion-tab.show-tab').find('ion-content');
-      for (let pageIndex = 0; pageIndex < showTabsContentPages.length; pageIndex++) {
-        if ($(showTabsContentPages[pageIndex]).parent().is(':visible')) {
-          ptrElement = $(showTabsContentPages[pageIndex]).find('scrollview').find('div.' + classPrefix + 'ptr').get(0);
-        }
-      }
+  function getCurPageRankName(e) {
+    let curPageRankName = '';
+    let curScrollViewClassName = $(e.target).parents('scrollview').find('div').first().attr('class');
+    if (curScrollViewClassName) {
+      curPageRankName = curScrollViewClassName;
     }
+    return curPageRankName;
+  }
+
+  function getPtrElement(e, classPrefix) {
+    let ptrElement = $(e.target).parents('scrollview').find('div.' + classPrefix + 'ptr').get(0);
     return ptrElement;
   }
 
-  function getPtrAfterElement(classPrefix) {
-    let ptrAfterElement = null;
-    // 先判断是否存在模态页面
-    // 不存在再从tabs中寻找当前页面
-    let ionModal = document.getElementsByTagName('ion-modal');
-    if (ionModal && ionModal.length > 0) {
-      ptrAfterElement = $(ionModal[ionModal.length - 1]).find('ion-content').find('scrollview').find('div.' + classPrefix + 'ptr-after').get(0);
-    } else {
-      let showTabsContentPages = $('ion-tabs').find('ion-tab.show-tab').find('ion-content');
-      for (let pageIndex = 0; pageIndex < showTabsContentPages.length; pageIndex++) {
-        if ($(showTabsContentPages[pageIndex]).parent().is(':visible')) {
-          ptrAfterElement = $(showTabsContentPages[pageIndex]).find('scrollview').find('div.' + classPrefix + 'ptr-after').get(0);
-        }
-      }
-    }
+  function getPtrAfterElement(e, classPrefix) {
+    let ptrAfterElement = $(e.target).parents('scrollview').find('div.' + classPrefix + 'ptr-after').get(0);
     return ptrAfterElement;
   }
 
-  function getTriggerElement() {
-    let triggerElement = null;
-    // 先判断是否存在模态页面
-    // 不存在再从tabs中寻找当前页面
-    let ionModal = document.getElementsByTagName('ion-modal');
-    if (ionModal && ionModal.length > 0) {
-      triggerElement = $(ionModal[ionModal.length - 1]).find('ion-content').find('scrollview').find('div.pullRefWrap').get(0);
-    } else {
-      let showTabsContentPages = $('ion-tabs').find('ion-tab.show-tab').find('ion-content');
-      for (let pageIndex = 0; pageIndex < showTabsContentPages.length; pageIndex++) {
-        if ($(showTabsContentPages[pageIndex]).parent().is(':visible')) {
-          triggerElement = $(showTabsContentPages[pageIndex]).find('scrollview').find('div.pullRefWrap').get(0);
-        }
-      }
-    }
+  function getTriggerElement(e) {
+    let triggerElement = $(e.target).parents('scrollview').find('div.pullRefWrap').get(0);
     return triggerElement;
+  }
+
+  function getSwitchPageCount(e) {
+    let switchPageCount = $(e.target).parents('switch-page').parent().find('switch-page').length;
+    return switchPageCount;
+  }
+
+  function getCurSwitchPageIndex(e) {
+    let curSwitchPageIndex = $(e.target).parents('switch-page').index();
+    return curSwitchPageIndex;
+  }
+
+  function getSwitchPageWrapElement(e) {
+    let switchPageWrapElement = $(e.target).parents('switch-page').parent().get(0);
+    return switchPageWrapElement;
+  }
+
+  function getSwitchPageWrapCurTransform(e, index) {
+    var switchPageWrapCurTransform = 0;
+    if (index >= 0 && index <= 3) {
+      let switchPageWrapElement = getSwitchPageWrapElement(e);
+      var switchPageWrapTransform = switchPageWrapElement.style.transform.trim() || '';
+      var switchPageTransformGet = switchPageWrapTransform.substr('translate3d('.length, switchPageWrapTransform.length - 'translate3d('.length - 1).split(',')[index].trim();
+      switchPageWrapCurTransform = switchPageTransformGet.substr(0, switchPageTransformGet.length - 2).trim();
+    }
+    return switchPageWrapCurTransform;
   }
 
   function getLoadMoreElem() {
@@ -189,14 +193,14 @@ var PullToRefresh = (function () {
     return $loadMore;
   }
 
-  function _update() {
+  function _update(e) {
     let curPageIdName = getCurPageIdName();
-    var pageRankName = _SETTINGS.pageRankName;
+    var pageRankName = getCurPageRankName(e);
     var onlyElasticity = pageSettingsContainer[curPageIdName + '_' + pageRankName].onlyElasticity;
     if (!onlyElasticity) {
       var classPrefix = _SETTINGS.classPrefix;
-      var ptrElement = getPtrElement(classPrefix); // _SETTINGS.ptrElement;
-      var ptrAfterElement = getPtrAfterElement(classPrefix); // _SETTINGS.ptrAfterElement;
+      var ptrElement = getPtrElement(e, classPrefix); // _SETTINGS.ptrElement;
+      var ptrAfterElement = getPtrAfterElement(e, classPrefix); // _SETTINGS.ptrAfterElement;
       var iconArrow = _SETTINGS.iconArrow;
       var iconRefreshing = _SETTINGS.iconRefreshing;
       var iconZoomRate = _SETTINGS.iconZoomRate;
@@ -230,26 +234,26 @@ var PullToRefresh = (function () {
   }
 
   function _setupEvents() {
-    function onReset() {
+    function onReset(e) {
       let curPageIdName = getCurPageIdName();
-      var pageRankName = _SETTINGS.pageRankName;
+      var pageRankName = getCurPageRankName(e);
       var classPrefix = _SETTINGS.classPrefix;
       var cssProp = _SETTINGS.cssProp;
-      var ptrElement = getPtrElement(classPrefix); // _SETTINGS.ptrElement;
-      var triggerElement = getTriggerElement(); // _SETTINGS.mainElement
+      var ptrElement = getPtrElement(e, classPrefix); // _SETTINGS.ptrElement;
+      var triggerElement = getTriggerElement(e); // _SETTINGS.mainElement
 
       ptrElement.classList.remove((classPrefix + "refresh"));
       //ptrElement.style[cssProp] = '0px';
       triggerElement.style.transform = 'translate3d(0px, 0px, 0px)';
 
       pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'pending';
-      _update();
+      _update(e);
     }
 
-    function onUpLoadMoreReset(triggerElement) {
+    function onUpLoadMoreReset(triggerElement, e) {
       triggerElement.style.transform = 'translate3d(0px, 0px, 0px)';
       let curPageIdName = getCurPageIdName();
-      var pageRankName = _SETTINGS.pageRankName;
+      var pageRankName = getCurPageRankName(e);
       var upLoadTip = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadTip;
       var $loadMore = getLoadMoreElem();
       var loadMoreElement = $loadMore.get(0);
@@ -266,15 +270,16 @@ var PullToRefresh = (function () {
 
     function _onTouchStart(e) {
       let curPageIdName = getCurPageIdName();
-      var pageRankName = _SETTINGS.pageRankName;
+      var pageRankName = getCurPageRankName(e);
       if (!pageSettingsContainer[curPageIdName + '_' + pageRankName]) {
         return;
       }
       var shouldPullToRefresh = pageSettingsContainer[curPageIdName + '_' + pageRankName].shouldPullToRefresh;
       var shouldUpToElasticity = pageSettingsContainer[curPageIdName + '_' + pageRankName].shouldUpToElasticity;
-      var triggerElement = getTriggerElement(); // _SETTINGS.mainElement
+      var triggerElement = getTriggerElement(e); // _SETTINGS.mainElement
       var upLoadMore = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadMore;
       var canUpToRef = pageSettingsContainer[curPageIdName + '_' + pageRankName].canUpToRef;
+      var canSwitchSlide = pageSettingsContainer[curPageIdName + '_' + pageRankName].canSwitchSlide;
 
       if (!triggerElement.contains(e.target)) {
         return;
@@ -282,6 +287,10 @@ var PullToRefresh = (function () {
 
       canPull = false;
       canElasticity = false;
+      if (canSwitchSlide) {
+        pullStartX = e.touches[0].screenX;
+        startTramformX = getSwitchPageWrapCurTransform(e, 0);
+      }
       if (shouldPullToRefresh() || shouldUpToElasticity()) {
         pullStartY = e.touches[0].screenY;
         if (shouldPullToRefresh() && !shouldUpToElasticity()) {
@@ -308,12 +317,12 @@ var PullToRefresh = (function () {
 
       _enable = triggerElement.contains(e.target);
       pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'pending';
-      _update();
+      _update(e);
     }
 
     function _onTouchMove(e) {
       let curPageIdName = getCurPageIdName();
-      var pageRankName = _SETTINGS.pageRankName;
+      var pageRankName = getCurPageRankName(e);
       if (!pageSettingsContainer[curPageIdName + '_' + pageRankName]) {
         return;
       }
@@ -321,9 +330,9 @@ var PullToRefresh = (function () {
       var cssProp = _SETTINGS.cssProp;
       var distMax = _SETTINGS.distMax;
       var distThreshold = _SETTINGS.distThreshold;
-      var ptrElement = getPtrElement(classPrefix); // _SETTINGS.ptrElement;
-      var ptrAfterElement = getPtrAfterElement(classPrefix); // _SETTINGS.ptrAfterElement;
-      var triggerElement = getTriggerElement(); // _SETTINGS.mainElement
+      var ptrElement = getPtrElement(e, classPrefix); // _SETTINGS.ptrElement;
+      var ptrAfterElement = getPtrAfterElement(e, classPrefix); // _SETTINGS.ptrAfterElement;
+      var triggerElement = getTriggerElement(e); // _SETTINGS.mainElement
       var resistanceFunction = _SETTINGS.resistanceFunction;
       var onlyElasticity = pageSettingsContainer[curPageIdName + '_' + pageRankName].onlyElasticity;
       var upLoadMore = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadMore;
@@ -333,6 +342,8 @@ var PullToRefresh = (function () {
       var upLoadTip = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadTip;
       var upLoadReleaseToRefTip = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadReleaseToRefTip;
       var ignoreElements = pageSettingsContainer[curPageIdName + '_' + pageRankName].ignoreElements;
+      var canSwitchSlide = pageSettingsContainer[curPageIdName + '_' + pageRankName].canSwitchSlide;
+      var switchPageRate = pageSettingsContainer[curPageIdName + '_' + pageRankName].switchPageRate;
 
       if (!triggerElement.contains(e.target)) {
         return;
@@ -344,6 +355,16 @@ var PullToRefresh = (function () {
         }
       }
 
+      if (canSwitchSlide) {
+        if (typeof startTramformX == 'string' && !startTramformX) {
+          startTramformX = getSwitchPageWrapCurTransform(e, 0);
+        }
+        if (!pullStartX) {
+          pullStartX = e.touches[0].screenX;
+        } else {
+          pullMoveX = e.touches[0].screenX;
+        }
+      }
       if (!pullStartY) {
         if (canPull || canElasticity) {
           pullStartY = e.touches[0].screenY;
@@ -365,15 +386,45 @@ var PullToRefresh = (function () {
         return;
       }
 
+
+      if (pullStartX && pullMoveX) {
+        distX = pullMoveX - pullStartX;
+      }
       if (pullStartY && pullMoveY) {
         dist = pullMoveY - pullStartY;
       }
 
+      if (canSwitchSlide) {
+        // 获取当前分屏的序号
+        var switchPageCount = getSwitchPageCount(e);
+        var curSwitchPageIndex = getCurSwitchPageIndex(e);
+        var switchPageWrapElement = getSwitchPageWrapElement(e);
+        var switchPageScreenWidth = document.body.clientWidth;
+        if (switchPageCount > 1) {
+          if (!startTramformX) {
+            startTramformX = 0;
+          }
+          if (distX < 0 && curSwitchPageIndex + 1 <= switchPageCount - 1) {
+            // 下翻页
+            switchDirect = 'next';
+            var transformTo = (Number(startTramformX) - Math.abs(distX)) * switchPageRate > 0 ? 0 : (Number(startTramformX) - Math.abs(distX)) * switchPageRate;
+            switchPageWrapElement.style.transform = 'translate3d(' + transformTo + 'px, 0px, 0px)';
+          } else if (distX > 0 && curSwitchPageIndex > 0 && curSwitchPageIndex - 1 <= switchPageCount - 1) {
+            // 上翻页
+            switchDirect = 'pre';
+            var transformTo = (Number(startTramformX) + Math.abs(distX)) * switchPageRate < - (switchPageCount - 1) * switchPageScreenWidth ? - (switchPageCount - 1) * switchPageScreenWidth : (Number(startTramformX) + Math.abs(distX)) * switchPageRate;
+            switchPageWrapElement.style.transform = 'translate3d(' + transformTo + 'px, 0px, 0px)';
+          } else {
+            switchPageWrapElement.style.transform = 'translate3d(' + Number(startTramformX) + 'px, 0px, 0px)';
+          }
+        }
+        return;
+      }
       if (canPull && dist > 0) {
         if (pageSettingsContainer[curPageIdName + '_' + pageRankName]._state === 'pending') {
           ptrElement.classList.add((classPrefix + "pull"));
           pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'pulling';
-          _update();
+          _update(e);
         }
 
         e.preventDefault();
@@ -391,13 +442,13 @@ var PullToRefresh = (function () {
           if (pageSettingsContainer[curPageIdName + '_' + pageRankName]._state === 'pulling' && distResisted > distThreshold) {
             ptrElement.classList.add((classPrefix + "release"));
             pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'releasing';
-            _update();
+            _update(e);
           }
 
           if (pageSettingsContainer[curPageIdName + '_' + pageRankName]._state === 'releasing' && distResisted < distThreshold) {
             ptrElement.classList.remove((classPrefix + "release"));
             pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'pulling';
-            _update();
+            _update(e);
           }
         }
       } else if (canElasticity && dist < 0) {
@@ -406,7 +457,7 @@ var PullToRefresh = (function () {
           if (pageSettingsContainer[curPageIdName + '_' + pageRankName]._state === 'pending' && onlyElasticity) {
             ptrAfterElement.classList.add((classPrefix + "pull"));
             pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'pulling';
-            _update();
+            _update(e);
           }
 
           e.preventDefault();
@@ -441,14 +492,14 @@ var PullToRefresh = (function () {
 
     function _onTouchEnd(e) {
       let curPageIdName = getCurPageIdName();
-      var pageRankName = _SETTINGS.pageRankName;
+      var pageRankName = getCurPageRankName(e);
       if (!pageSettingsContainer[curPageIdName + '_' + pageRankName]) {
         return;
       }
       var classPrefix = _SETTINGS.classPrefix;
-      var ptrElement = getPtrElement(classPrefix); // _SETTINGS.ptrElement;
-      var ptrAfterElement = getPtrAfterElement(classPrefix); // _SETTINGS.ptrAfterElement;
-      var triggerElement = getTriggerElement(); // _SETTINGS.mainElement
+      var ptrElement = getPtrElement(e, classPrefix); // _SETTINGS.ptrElement;
+      var ptrAfterElement = getPtrAfterElement(e, classPrefix); // _SETTINGS.ptrAfterElement;
+      var triggerElement = getTriggerElement(e); // _SETTINGS.mainElement
       var onRefresh = pageSettingsContainer[curPageIdName + '_' + pageRankName].onRefresh;
       var onRefreshAfter = pageSettingsContainer[curPageIdName + '_' + pageRankName].onRefreshAfter;
       var refreshTimeout = _SETTINGS.refreshTimeout;
@@ -462,11 +513,35 @@ var PullToRefresh = (function () {
       var upLoadRefingDis = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadRefingDis;
       var upLoadRefingIcon = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadRefingIcon;
       var upLoadTip = pageSettingsContainer[curPageIdName + '_' + pageRankName].upLoadTip;
+      var canSwitchSlide = pageSettingsContainer[curPageIdName + '_' + pageRankName].canSwitchSlide;
 
       if (!triggerElement.contains(e.target)) {
         return;
       }
 
+      if (canSwitchSlide) {
+        var curSwitchPageIndex = getCurSwitchPageIndex(e);
+        var switchPageWrapCurTransform = getSwitchPageWrapCurTransform(e, 0);
+        var switchPageScreenWidth = document.body.clientWidth;
+        var switchPageWrapYu = Math.abs(switchPageWrapCurTransform) % switchPageScreenWidth;
+        if (switchPageWrapYu != 0) {
+          var switchPageWrapElement = getSwitchPageWrapElement(e);
+          switchPageWrapElement.style.transition = '0.4s ease';
+          setTimeout(function () {
+            switchPageWrapElement.style.transition = '0.02s linear';
+          }, 0.4 * 1000);
+          if (switchDirect == 'next') {
+            if (switchPageWrapYu > switchPageScreenWidth * 1 / 4) {
+              switchPageWrapElement.style.transform = 'translate3d(-' + ((curSwitchPageIndex + 1) * switchPageScreenWidth) + 'px, 0px, 0px)';
+            } else {
+              switchPageWrapElement.style.transform = 'translate3d(-' + (curSwitchPageIndex * switchPageScreenWidth) + 'px, 0px, 0px)';
+            }
+          } else if (switchDirect == 'pre') {
+            console.log(switchPageWrapYu);
+          }
+          switchDirect = null;
+        }
+      }
       if (pageSettingsContainer[curPageIdName + '_' + pageRankName]._state === 'releasing' && distResisted > distThreshold) {
         pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'refreshing';
 
@@ -479,13 +554,13 @@ var PullToRefresh = (function () {
 
           if (retval && typeof retval.then === 'function') {
             retval.then(function (thenReturn) {
-              onReset();
+              onReset(e);
               return onRefreshAfter(thenReturn);
             });
           }
 
           if (!retval && !onRefresh.length) {
-            onReset();
+            onReset(e);
             onRefreshAfter();
           }
         }, refreshTimeout);
@@ -522,13 +597,13 @@ var PullToRefresh = (function () {
 
               if (retval && typeof retval.then === 'function') {
                 retval.then(function (thenReturn) {
-                  onUpLoadMoreReset(triggerElement);
+                  onUpLoadMoreReset(triggerElement, e);
                   return onRefreshAfter(thenReturn);
                 });
               }
 
               if (!retval && !onRefresh.length) {
-                onUpLoadMoreReset(triggerElement);
+                onUpLoadMoreReset(triggerElement, e);
                 onRefreshAfter();
               }
             }, refreshTimeout);
@@ -555,7 +630,7 @@ var PullToRefresh = (function () {
         pageSettingsContainer[curPageIdName + '_' + pageRankName]._state = 'pending';
       }
 
-      _update();
+      _update(e);
 
       ptrElement.classList.remove((classPrefix + "release"));
       ptrElement.classList.remove((classPrefix + "pull"));
@@ -568,10 +643,10 @@ var PullToRefresh = (function () {
       dist = distResisted = 0;
     }
 
-    function _onScroll() {
+    function _onScroll(e) {
       let curPageIdName = getCurPageIdName();
-      var pageRankName = _SETTINGS.pageRankName;
-      var mainElement = getTriggerElement(); // _SETTINGS.mainElement
+      var pageRankName = getCurPageRankName(e);
+      var mainElement = getTriggerElement(e); // _SETTINGS.mainElement
       var classPrefix = _SETTINGS.classPrefix;
       var shouldPullToRefresh = pageSettingsContainer[curPageIdName + '_' + pageRankName].shouldPullToRefresh;
       var triggerElement = mainElement;
@@ -583,8 +658,8 @@ var PullToRefresh = (function () {
     window.addEventListener('touchend', _onTouchEnd);
     window.addEventListener('touchstart', _onTouchStart);
     window.addEventListener('touchmove', _onTouchMove, supportsPassive ? {
-        passive: _SETTINGS.passive || false
-      } :
+      passive: _SETTINGS.passive || false
+    } :
       undefined);
 
     window.addEventListener('scroll', _onScroll);
@@ -620,6 +695,8 @@ var PullToRefresh = (function () {
     var scrollViewHeight = _SETTINGS.scrollViewHeight;
     var refTxtColor = _SETTINGS.refTxtColor;
     var triggerElement = mainElement;
+    var canSwitchSlide = _SETTINGS.canSwitchSlide;
+    var switchPageRate = _SETTINGS.switchPageRate;
     mainElement = $(triggerElement).find('div.mainContent').get(0);
     if (footerBarHeight == 'auto') {
       footerBarHeight = $('div.tabbar').height();
@@ -659,6 +736,8 @@ var PullToRefresh = (function () {
       curPageSettings['upLoadTip'] = upLoadTip;
       curPageSettings['upLoadReleaseToRefTip'] = upLoadReleaseToRefTip;
       curPageSettings['upLoadRefingIcon'] = upLoadRefingIcon;
+      curPageSettings['canSwitchSlide'] = canSwitchSlide;
+      curPageSettings['switchPageRate'] = switchPageRate;
 
       var ignoreElements = _SETTINGS.ignoreElements;
       curPageSettings['ignoreElements'] = ignoreElements;
@@ -688,13 +767,18 @@ var PullToRefresh = (function () {
         ptrAfter.style.width = offsetWidth + 'px';
       }
       let pageHeight = $(triggerElement).parents('ion-content').get(0).clientHeight;
-      if (scrollViewHeight > 0 && scrollViewHeight < pageHeight) {
-        ptrAfter.style.height = (scrollViewHeight) + 'px';
+      if (canSwitchSlide) {
+        let switchPageHeight = $(triggerElement).parents('switch-page').get(0).clientHeight;
+        ptrAfter.style.height = (switchPageHeight) + 'px';
       } else {
-        if ($.inArray(pageIdName, ['page-task', 'page-about']) >= 0) {
-          ptrAfter.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) - footerBarHeight + 'px';
+        if (scrollViewHeight > 0 && scrollViewHeight < pageHeight) {
+          ptrAfter.style.height = (scrollViewHeight) + 'px';
         } else {
-          ptrAfter.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) + 'px';
+          if ($.inArray(pageIdName, ['page-task', 'page-about']) >= 0) {
+            ptrAfter.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) - footerBarHeight + 'px';
+          } else {
+            ptrAfter.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) + 'px';
+          }
         }
       }
       // 在底部背景区域增加加载更多的文本提示
@@ -734,13 +818,18 @@ var PullToRefresh = (function () {
         triggerElement.style.transition = '';
         triggerElement.style.transform = 'translate3d(0px, 0px, 0px)';
       }
-      if (scrollViewHeight > 0 && scrollViewHeight < pageHeight) {
-        triggerElement.style.height = (scrollViewHeight) + 'px';
+      if (canSwitchSlide) {
+        let switchPageHeight = $(triggerElement).parents('switch-page').get(0).clientHeight;
+        triggerElement.style.height = (switchPageHeight) + 'px';
       } else {
-        if ($.inArray(pageIdName, ['page-task', 'page-about']) >= 0) {
-          triggerElement.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) - footerBarHeight + 'px';
+        if (scrollViewHeight > 0 && scrollViewHeight < pageHeight) {
+          triggerElement.style.height = (scrollViewHeight) + 'px';
         } else {
-          triggerElement.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) + 'px';
+          if ($.inArray(pageIdName, ['page-task', 'page-about']) >= 0) {
+            triggerElement.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) - footerBarHeight + 'px';
+          } else {
+            triggerElement.style.height = (pageHeight - titleBarHeight - offsetTop - Number(otherElmHeight)) + 'px';
+          }
         }
       }
       triggerElement.style.overflowX = 'hidden';
@@ -855,8 +944,8 @@ var PullToRefresh = (function () {
           window.removeEventListener('touchstart', handlers.onTouchStart);
           window.removeEventListener('touchend', handlers.onTouchEnd);
           window.removeEventListener('touchmove', handlers.onTouchMove, supportsPassive ? {
-              passive: _SETTINGS.passive || false
-            } :
+            passive: _SETTINGS.passive || false
+          } :
             undefined);
           window.removeEventListener('scroll', handlers.onScroll);
 
