@@ -19,3 +19,12 @@
 .tabs-md .tab-button[aria-selected=true] .tab-button-icon {
   color: #345CC2 !important;
 }
+
+.tabs-md .tab-button-icon {
+  font-size: 2rem !important;
+}
+
+.footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+  top: -1px !important;
+  height: 1px !important;
+}

@@ -48,7 +48,7 @@ export class ScrollviewComponent {
     this.platform.ready().then(() => {
       setTimeout(() => {
         this.init();
-      }, 500);
+      }, 400);
       this.initScrollView.emit(this);
     });
   }

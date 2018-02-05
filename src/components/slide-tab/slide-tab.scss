@@ -12,9 +12,7 @@ slide-tab {
       font-size: 1.2rem;
     }
     .selected {
-      background: rgb(177, 171, 92);
-      color: rgb(66, 74, 92);
-      animation: fadeIn 0.4s;
+      animation: slideTabSelected 0.6s ease both;
     }
   }
 }

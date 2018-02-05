@@ -30,9 +30,23 @@ export class TaskPage {
       txt: '已满员'
     }
   ];
+  switchTabsByTime: Array<TabObj> = [
+    {
+      id: 'tab_time_today',
+      txt: '今天'
+    }, {
+      id: 'tab_time_tomorrow',
+      txt: '明天'
+    }, {
+      id: 'tab_time_after_tomorrow',
+      txt: '后天'
+    }, {
+      id: 'tab_time_nicety',
+      txt: new Date(new Date().setDate(new Date().getDate() + 3)).getDate() + '日'
+    }
+  ];
 
   constructor(public navCtrl: NavController) {
-
   }
 
 }

@@ -20,13 +20,16 @@
 
     let marlogImgIndex = 1;
     let colorParams = [
-        ['#228C7E', '#2BAF9E', '#ECF6F5'],
-        ['#E7D3A4', '#DEC078', '#4D4C49']
+        ['#E9BF19', '#E9BF19', '#ECF6F5'],
+        ['#E9BF19', '#E9BF19', '#4D4C49'],
+        ['#33B1FE', '#33B1FE', '#4D4C49'],
+        ['#E9BF19', '#E9BF19', '#4D4C49']
     ];
 
     function init() {
         if (!document.getElementById('marLogModule')) {
             marlogImgIndex = getRandomNum(1, colorParams.length);
+            marlogImgIndex = 1;
 
             let marLogDrapElement = document.createElement('img');
             marLogDrapElement.id = 'marLogDragWrap';
@@ -38,8 +41,8 @@
             marLogDrapElement.style.msUserSelect = 'none';
             marLogDrapElement.style.webkitUserSelect = 'none';
             marLogDrapElement.style.cursor = 'pointer';
-            marLogDrapElement.style.height = '100px';
-            marLogDrapElement.style.top = (document.documentElement.clientHeight - 100) + 'px';
+            marLogDrapElement.style.height = '80px';
+            marLogDrapElement.style.top = (document.documentElement.clientHeight - 80) + 'px';
             marLogDrapElement.style.right = '4px';
             marLogDrapElement.style.zIndex = 99999999;
             marLogDrapElement.onclick = function () {

@@ -4,10 +4,10 @@
 </ion-header>
 
 <ion-content>
-  <switch-pages [switchTabs]="switchTabsByStatus">
+  <switch-pages *ngIf="tabs[0].selected" [switchTabs]="switchTabsByStatus">
     <switch-page>
       <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_1'">
-        23423第一页
+        23423第一页{{tabs[0].selected}}
       </scrollview>
     </switch-page>
     <switch-page>
@@ -18,6 +18,28 @@
     <switch-page>
       <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_3'">
         23434第三页
+      </scrollview>
+    </switch-page>
+  </switch-pages>
+  <switch-pages *ngIf="tabs[1].selected" [switchTabs]="switchTabsByTime">
+    <switch-page>
+      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_1'">
+        23423第一页{{tabs[1].selected}}
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_2'">
+        23434第二页
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_3'">
+        23434第三页
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_4'">
+        23434第四页
       </scrollview>
     </switch-page>
   </switch-pages>

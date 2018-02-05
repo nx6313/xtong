@@ -569,7 +569,7 @@ var PullToRefresh = (function () {
             if ((curSwitchPageIndex + 1 <= switchPageCount - 1) ||
               (curSwitchPageIndex > 0 && curSwitchPageIndex - 1 <= switchPageCount - 1)) {
               if (switchDirect == 'next') {
-                if (switchPageWrapYu > switchPageScreenWidth * 1 / 8) {
+                if (switchPageWrapYu > 10) {
                   startTramformX = Number(-((curSwitchPageIndex + 1) * switchPageScreenWidth));
                   switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
                   // 滑动指示器到下一页
@@ -596,7 +596,7 @@ var PullToRefresh = (function () {
                   switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
                 }
               } else if (switchDirect == 'pre') {
-                if (switchPageScreenWidth - switchPageWrapYu > switchPageScreenWidth * 1 / 8) {
+                if (switchPageScreenWidth - switchPageWrapYu > 10) {
                   startTramformX = Number(-((curSwitchPageIndex - 1) * switchPageScreenWidth));
                   switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
                   // 滑动指示器到上一页
