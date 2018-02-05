@@ -25,9 +25,9 @@ export class CustomList {
     }
 }
 export class TabObj {
-    id?: number;
+    id?: any;
     txt?: string;
-    selected: Boolean;
+    selected?: Boolean;
     constructor() {
     }
 }

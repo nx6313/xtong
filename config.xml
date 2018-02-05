@@ -76,11 +76,7 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <plugin name="cordova-plugin-device" spec="^2.0.1" />
-    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
-    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <engine name="android" spec="6.3.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-x-toast" spec="^2.6.0" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
@@ -89,4 +85,9 @@
     <plugin name="cordova-plugin-gdlocation" spec="^1.0.38">
         <variable name="API_KEY" value="849794f231b1f84d07369aa27989aa2c" />
     </plugin>
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <plugin name="cordova-plugin-device" spec="^2.0.1" />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
 </widget>

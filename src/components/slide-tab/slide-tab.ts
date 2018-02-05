@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TabObj } from '../../model/comm';
 
 @Component({
@@ -6,17 +6,7 @@ import { TabObj } from '../../model/comm';
   templateUrl: 'slide-tab.html'
 })
 export class SlideTabComponent {
-  tabs: Array<TabObj> = [
-    {
-      id: 1,
-      txt: '按状态查看',
-      selected: true
-    }, {
-      id: 2,
-      txt: '按时间查看',
-      selected: false
-    }
-  ];
+  @Input('tabs') tabs: Array<TabObj> = [];
 
   constructor() {
   }

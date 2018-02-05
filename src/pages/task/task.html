@@ -1,10 +1,10 @@
 <ion-header>
   <title-bar [title]="'任务'"></title-bar>
-  <slide-tab></slide-tab>
+  <slide-tab [tabs]="tabs"></slide-tab>
 </ion-header>
 
 <ion-content>
-  <switch-pages>
+  <switch-pages [switchTabs]="switchTabsByStatus">
     <switch-page>
       <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_1'">
         23423第一页

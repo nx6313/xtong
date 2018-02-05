@@ -1,59 +1,86 @@
 switch-pages {
-    .switchPageWrap {
-        position: relative;
+  .switchPageWrap {
+    position: relative;
+    height: 100%;
+    .switchItemWrap {
+      position: relative;
+      background: #707A94;
+      height: 40px;
+      line-height: 40px;
+      color: rgb(169, 177, 202);
+      .switchTabSlideRail {
         height: 100%;
-        .switchItemWrap {
-            background: #707A94;
-            height: 40px;
-            line-height: 40px;
-            color: rgb(242, 244, 248);
+        white-space: nowrap;
+        transform: translate3d(0px, 0px, 0px);
+        transition: 0.4s ease;
+        .switchTabItem {
+          display: inline-block;
+          padding: 0 0.4rem;
+          min-width: calc(100vw / 4);
+          text-align: center;
         }
-        .switchTabsWrap {
-            position: relative;
-            top: 0;
-            left: 0;
-            height: calc(100% - 40px);
-            transform: translate3d(0px, 0px, 0px);
-            transition: 0.02s linear;
-            switch-page {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
-            switch-page:nth-of-type(1) {
-                left: 0;
-            }
-            switch-page:nth-of-type(2) {
-                left: 100vw;
-            }
-            switch-page:nth-of-type(3) {
-                left: 200vw;
-            }
-            switch-page:nth-of-type(4) {
-                left: 300vw;
-            }
-            switch-page:nth-of-type(5) {
-                left: 400vw;
-            }
-            switch-page:nth-of-type(6) {
-                left: 500vw;
-            }
-            switch-page:nth-of-type(7) {
-                left: 600vw;
-            }
-            switch-page:nth-of-type(8) {
-                left: 700vw;
-            }
-            switch-page:nth-of-type(9) {
-                left: 800vw;
-            }
-            switch-page:nth-of-type(10) {
-                left: 900vw;
-            }
-            switch-page:nth-of-type(11) {
-                left: 1000vw;
-            }
+        .switchTabItemSelected {
+          position: relative;
+          color: rgb(224, 227, 238);
         }
+      }
+      .switchTabIndicator {
+        display: inline-block;
+        position: absolute;
+        bottom: 0;
+        height: 3px;
+        background: rgb(234, 240, 241);
+        min-width: calc(100vw / 4);
+        transform: translate3d(0px, 0px, 0px);
+        transition: 0.4s ease;
+      }
     }
+    .switchTabsWrap {
+      position: relative;
+      top: 0;
+      left: 0;
+      height: calc(100% - 40px);
+      transform: translate3d(0px, 0px, 0px);
+      transition: 0s;
+      switch-page {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      switch-page:nth-of-type(1) {
+        left: 0;
+      }
+      switch-page:nth-of-type(2) {
+        left: 100vw;
+      }
+      switch-page:nth-of-type(3) {
+        left: 200vw;
+      }
+      switch-page:nth-of-type(4) {
+        left: 300vw;
+      }
+      switch-page:nth-of-type(5) {
+        left: 400vw;
+      }
+      switch-page:nth-of-type(6) {
+        left: 500vw;
+      }
+      switch-page:nth-of-type(7) {
+        left: 600vw;
+      }
+      switch-page:nth-of-type(8) {
+        left: 700vw;
+      }
+      switch-page:nth-of-type(9) {
+        left: 800vw;
+      }
+      switch-page:nth-of-type(10) {
+        left: 900vw;
+      }
+      switch-page:nth-of-type(11) {
+        left: 1000vw;
+      }
+    }
+  }
 }

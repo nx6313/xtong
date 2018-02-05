@@ -42,10 +42,10 @@ var PullToRefresh = (function () {
     getStyles: _ptrStyles,
     ignoreElements: '',
     footerWaterMark: '',
-    pageLoadFinish: function () { },
-    onInit: function () { },
-    onRefresh: function () { },
-    onRefreshAfter: function () { },
+    pageLoadFinish: function () {},
+    onInit: function () {},
+    onRefresh: function () {},
+    onRefreshAfter: function () {},
     resistanceFunction: function (t) {
       return Math.min(1, t / 4.6);
     },
@@ -74,7 +74,7 @@ var PullToRefresh = (function () {
     offsetTop: 0,
     offsetLeft: 0,
     canSwitchSlide: false,
-    switchPageRate: 0.8
+    switchPageRate: 0.4
   };
 
   var pullStartY = null;
@@ -87,6 +87,8 @@ var PullToRefresh = (function () {
   var pullMoveX = null;
   var distX = 0;
   var switchDirect = null;
+
+  var fingerDistancePriority = null;
 
   var _setup = false;
   var _enable = false;
@@ -162,6 +164,32 @@ var PullToRefresh = (function () {
   function getSwitchPageWrapElement(e) {
     let switchPageWrapElement = $(e.target).parents('switch-page').parent().get(0);
     return switchPageWrapElement;
+  }
+
+  function getSwitchTabSlideRailElement(e) {
+    let switchTabSlideRailElement = $(e.target).parents('switch-pages').find('div.switchTabSlideRail').get(0);
+    return switchTabSlideRailElement;
+  }
+
+  function getSwitchPageIndicatorElement(e) {
+    let switchPageIndicatorElement = $(e.target).parents('switch-pages').find('span.switchTabIndicator').get(0);
+    return switchPageIndicatorElement;
+  }
+
+  function getSwitchCurTabElement(e, index) {
+    let switchCurTabElement = $(e.target).parents('switch-pages').find('div.switchTabSlideRail').find('span.switchTabItem:eq(' + index + ')').get(0);
+    return switchCurTabElement;
+  }
+
+  function getSwitchTabSlideRailCurTransform(e, index) {
+    var switchTabSlideRailCurTransform = 0;
+    if (index >= 0 && index <= 3) {
+      let switchTabSlideRailElement = getSwitchTabSlideRailElement(e);
+      var switchTabSlideRailTransform = switchTabSlideRailElement.style.transform.trim() || '';
+      var switchTabSlideRailTransformGet = switchTabSlideRailTransform.substr('translate3d('.length, switchTabSlideRailTransform.length - 'translate3d('.length - 1).split(',')[index].trim();
+      switchTabSlideRailCurTransform = switchTabSlideRailTransformGet.substr(0, switchTabSlideRailTransformGet.length - 2).trim();
+    }
+    return switchTabSlideRailCurTransform;
   }
 
   function getSwitchPageWrapCurTransform(e, index) {
@@ -386,7 +414,6 @@ var PullToRefresh = (function () {
         return;
       }
 
-
       if (pullStartX && pullMoveX) {
         distX = pullMoveX - pullStartX;
       }
@@ -394,7 +421,14 @@ var PullToRefresh = (function () {
         dist = pullMoveY - pullStartY;
       }
 
-      if (canSwitchSlide) {
+      if (!fingerDistancePriority) {
+        if (Math.abs(distX) > Math.abs(dist)) {
+          fingerDistancePriority = 'horizontal';
+        } else {
+          fingerDistancePriority = 'vertical';
+        }
+      }
+      if (canSwitchSlide && fingerDistancePriority == 'horizontal') {
         // 获取当前分屏的序号
         var switchPageCount = getSwitchPageCount(e);
         var curSwitchPageIndex = getCurSwitchPageIndex(e);
@@ -407,15 +441,13 @@ var PullToRefresh = (function () {
           if (distX < 0 && curSwitchPageIndex + 1 <= switchPageCount - 1) {
             // 下翻页
             switchDirect = 'next';
-            var transformTo = (Number(startTramformX) - Math.abs(distX)) * switchPageRate > 0 ? 0 : (Number(startTramformX) - Math.abs(distX)) * switchPageRate;
+            var transformTo = Number(startTramformX) - Math.abs(distX) * switchPageRate < -((switchPageCount - 1) * switchPageScreenWidth) ? -((switchPageCount - 1) * switchPageScreenWidth) : Number(startTramformX) - Math.abs(distX) * switchPageRate;
             switchPageWrapElement.style.transform = 'translate3d(' + transformTo + 'px, 0px, 0px)';
           } else if (distX > 0 && curSwitchPageIndex > 0 && curSwitchPageIndex - 1 <= switchPageCount - 1) {
             // 上翻页
             switchDirect = 'pre';
-            var transformTo = (Number(startTramformX) + Math.abs(distX)) * switchPageRate < - (switchPageCount - 1) * switchPageScreenWidth ? - (switchPageCount - 1) * switchPageScreenWidth : (Number(startTramformX) + Math.abs(distX)) * switchPageRate;
+            var transformTo = Number(startTramformX) + Math.abs(distX) * switchPageRate > 0 ? 0 : Number(startTramformX) + Math.abs(distX) * switchPageRate;
             switchPageWrapElement.style.transform = 'translate3d(' + transformTo + 'px, 0px, 0px)';
-          } else {
-            switchPageWrapElement.style.transform = 'translate3d(' + Number(startTramformX) + 'px, 0px, 0px)';
           }
         }
         return;
@@ -520,25 +552,75 @@ var PullToRefresh = (function () {
       }
 
       if (canSwitchSlide) {
+        var switchPageCount = getSwitchPageCount(e);
         var curSwitchPageIndex = getCurSwitchPageIndex(e);
         var switchPageWrapCurTransform = getSwitchPageWrapCurTransform(e, 0);
         var switchPageScreenWidth = document.body.clientWidth;
         var switchPageWrapYu = Math.abs(switchPageWrapCurTransform) % switchPageScreenWidth;
         if (switchPageWrapYu != 0) {
           var switchPageWrapElement = getSwitchPageWrapElement(e);
+          var switchTabSlideRailElement = getSwitchTabSlideRailElement(e);
+          var switchPageIndicatorElement = getSwitchPageIndicatorElement(e);
           switchPageWrapElement.style.transition = '0.4s ease';
           setTimeout(function () {
-            switchPageWrapElement.style.transition = '0.02s linear';
+            switchPageWrapElement.style.transition = '0s';
           }, 0.4 * 1000);
-          if (switchDirect == 'next') {
-            if (switchPageWrapYu > switchPageScreenWidth * 1 / 4) {
-              switchPageWrapElement.style.transform = 'translate3d(-' + ((curSwitchPageIndex + 1) * switchPageScreenWidth) + 'px, 0px, 0px)';
-            } else {
-              switchPageWrapElement.style.transform = 'translate3d(-' + (curSwitchPageIndex * switchPageScreenWidth) + 'px, 0px, 0px)';
+          if (switchPageCount > 1) {
+            if ((curSwitchPageIndex + 1 <= switchPageCount - 1) ||
+              (curSwitchPageIndex > 0 && curSwitchPageIndex - 1 <= switchPageCount - 1)) {
+              if (switchDirect == 'next') {
+                if (switchPageWrapYu > switchPageScreenWidth * 1 / 8) {
+                  startTramformX = Number(-((curSwitchPageIndex + 1) * switchPageScreenWidth));
+                  switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
+                  // 滑动指示器到下一页
+                  // 判断是否需要将指示器选项卡轨道进行位置移动
+                  var switchTabSlideRailCurTransform = getSwitchTabSlideRailCurTransform(e, 0);
+                  switchTabSlideRailCurTransform = switchTabSlideRailCurTransform ? switchTabSlideRailCurTransform : 0;
+                  if (switchPageCount > 4 && switchTabSlideRailCurTransform > -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth))) {
+                    let railTramformX = Number(switchTabSlideRailCurTransform) - Number(switchPageIndicatorElement.clientWidth) < -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) ? -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) : Number(switchTabSlideRailCurTransform) - Number(switchPageIndicatorElement.clientWidth);
+                    switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
+                  } else {
+                    let indicatorTramformX = 0;
+                    if (switchPageCount > 4) {
+                      indicatorTramformX = (curSwitchPageIndex + 1 - (switchPageCount - 4)) * switchPageIndicatorElement.clientWidth;
+                    } else {
+                      indicatorTramformX = (curSwitchPageIndex + 1) * switchPageIndicatorElement.clientWidth;
+                    }
+                    switchPageIndicatorElement.style.transform = 'translate3d(' + indicatorTramformX + 'px, 0px, 0px)';
+                  }
+                  var switchCurTabElement = getSwitchCurTabElement(e, curSwitchPageIndex + 1);
+                  $(switchCurTabElement).siblings().removeClass('switchTabItemSelected');
+                  $(switchCurTabElement).addClass('switchTabItemSelected');
+                } else {
+                  startTramformX = Number(-(curSwitchPageIndex * switchPageScreenWidth));
+                  switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
+                }
+              } else if (switchDirect == 'pre') {
+                if (switchPageScreenWidth - switchPageWrapYu > switchPageScreenWidth * 1 / 8) {
+                  startTramformX = Number(-((curSwitchPageIndex - 1) * switchPageScreenWidth));
+                  switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
+                  // 滑动指示器到上一页
+                  // 判断是否需要将指示器选项卡轨道进行位置移动
+                  var switchTabSlideRailCurTransform = getSwitchTabSlideRailCurTransform(e, 0);
+                  if (switchPageCount > 4 && switchTabSlideRailCurTransform < 0) {
+                    let railTramformX = Number(switchTabSlideRailCurTransform) + Number(switchPageIndicatorElement.clientWidth) > 0 ? 0 : Number(switchTabSlideRailCurTransform) + Number(switchPageIndicatorElement.clientWidth);
+                    switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
+                  } else {
+                    let indicatorTramformX = (curSwitchPageIndex - 1) * switchPageIndicatorElement.clientWidth;
+                    switchPageIndicatorElement.style.transform = 'translate3d(' + indicatorTramformX + 'px, 0px, 0px)';
+                  }
+                  var switchCurTabElement = getSwitchCurTabElement(e, curSwitchPageIndex - 1);
+                  $(switchCurTabElement).siblings().removeClass('switchTabItemSelected');
+                  $(switchCurTabElement).addClass('switchTabItemSelected');
+                } else {
+                  startTramformX = Number(-(curSwitchPageIndex * switchPageScreenWidth));
+                  switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
+                }
+              }
             }
-          } else if (switchDirect == 'pre') {
-            console.log(switchPageWrapYu);
           }
+          distX = 0;
+          pullStartX = null;
           switchDirect = null;
         }
       }
@@ -641,6 +723,7 @@ var PullToRefresh = (function () {
 
       pullStartY = pullMoveY = null;
       dist = distResisted = 0;
+      fingerDistancePriority = null;
     }
 
     function _onScroll(e) {
@@ -658,8 +741,8 @@ var PullToRefresh = (function () {
     window.addEventListener('touchend', _onTouchEnd);
     window.addEventListener('touchstart', _onTouchStart);
     window.addEventListener('touchmove', _onTouchMove, supportsPassive ? {
-      passive: _SETTINGS.passive || false
-    } :
+        passive: _SETTINGS.passive || false
+      } :
       undefined);
 
     window.addEventListener('scroll', _onScroll);
@@ -848,7 +931,84 @@ var PullToRefresh = (function () {
       _SETTINGS.ptrAfterElement = ptrAfter;
 
       _SETTINGS.ptrElement = ptr;
+
+      // 绑定事件
+      if (canSwitchSlide) {
+        if ($('switch-pages').find('div.switchTabSlideRail').find('span.switchTabItem').length > 0) {
+          $('switch-pages').find('div.switchTabSlideRail').off('click');
+          $('switch-pages').find('div.switchTabSlideRail').on('click', 'span.switchTabItem', function () {
+            switchRailItemClickFn(this);
+          });
+        }
+      }
     }
+
+    // 点击切换页选项卡项目
+    var switchRailItemClickFn = function (e) {
+      var switchCurTabElement = getSwitchCurTabElement({
+        target: $(e).get(0)
+      }, $(e).index());
+      var curSelectSwitchTabIndex = $('switch-pages').find('div.switchTabSlideRail').find('span.switchTabItemSelected').index();
+      var switchPageCount = $('switch-pages').find('switch-page').length;
+      var switchPageWrapCurTransform = getSwitchPageWrapCurTransform({
+        target: $($(e).parents('switch-pages').find('scrollview')[0]).get(0)
+      }, 0);
+      var switchPageScreenWidth = document.body.clientWidth;
+      var switchPageWrapElement = $('switch-pages').find('div.switchTabsWrap').get(0);
+      var switchTabSlideRailElement = getSwitchTabSlideRailElement({
+        target: $(e).get(0)
+      });
+      var switchPageIndicatorElement = getSwitchPageIndicatorElement({
+        target: $(e).get(0)
+      });
+      if ($(e).index() > curSelectSwitchTabIndex) {
+        switchPageWrapElement.style.transition = '0.4s ease';
+        setTimeout(function () {
+          switchPageWrapElement.style.transition = '0s';
+        }, 0.4 * 1000);
+        startTramformX = Number(-($(e).index() * switchPageScreenWidth));
+        switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
+        // 滑动指示器向下
+        // 判断是否需要将指示器选项卡轨道进行位置移动
+        var switchTabSlideRailCurTransform = getSwitchTabSlideRailCurTransform({
+          target: $(e).get(0)
+        }, 0);
+        switchTabSlideRailCurTransform = switchTabSlideRailCurTransform ? switchTabSlideRailCurTransform : 0;
+        if (switchPageCount > 4 && switchTabSlideRailCurTransform > -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth))) {
+          let railTramformX = Number(switchTabSlideRailCurTransform) - ($(e).index() - curSelectSwitchTabIndex) * Number(switchPageIndicatorElement.clientWidth) < -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) ? -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) : Number(switchTabSlideRailCurTransform) - ($(e).index() - curSelectSwitchTabIndex) * Number(switchPageIndicatorElement.clientWidth);
+          switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
+        } else {
+          let indicatorTramformX = 0;
+          if (switchPageCount > 4) {
+            indicatorTramformX = ($(e).index() - (switchPageCount - 4)) * switchPageIndicatorElement.clientWidth;
+          } else {
+            indicatorTramformX = $(e).index() * switchPageIndicatorElement.clientWidth;
+          }
+          switchPageIndicatorElement.style.transform = 'translate3d(' + indicatorTramformX + 'px, 0px, 0px)';
+        }
+      } else if ($(e).index() < curSelectSwitchTabIndex) {
+        switchPageWrapElement.style.transition = '0.4s ease';
+        setTimeout(function () {
+          switchPageWrapElement.style.transition = '0s';
+        }, 0.4 * 1000);
+        startTramformX = Number(-($(e).index() * switchPageScreenWidth));
+        switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
+        // 滑动指示器向上
+        // 判断是否需要将指示器选项卡轨道进行位置移动
+        var switchTabSlideRailCurTransform = getSwitchTabSlideRailCurTransform({
+          target: $(e).get(0)
+        }, 0);
+        if (switchPageCount > 4 && switchTabSlideRailCurTransform < 0) {
+          let railTramformX = Number(switchTabSlideRailCurTransform) + (curSelectSwitchTabIndex - $(e).index()) * Number(switchPageIndicatorElement.clientWidth) > 0 ? 0 : Number(switchTabSlideRailCurTransform) + (curSelectSwitchTabIndex - $(e).index()) * Number(switchPageIndicatorElement.clientWidth);
+          switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
+        } else {
+          let indicatorTramformX = $(e).index() * switchPageIndicatorElement.clientWidth;
+          switchPageIndicatorElement.style.transform = 'translate3d(' + indicatorTramformX + 'px, 0px, 0px)';
+        }
+      }
+      $(switchCurTabElement).siblings().removeClass('switchTabItemSelected');
+      $(switchCurTabElement).addClass('switchTabItemSelected');
+    };
 
     // Add the css styles to the style node, and then
     // insert it into the dom
@@ -944,8 +1104,8 @@ var PullToRefresh = (function () {
           window.removeEventListener('touchstart', handlers.onTouchStart);
           window.removeEventListener('touchend', handlers.onTouchEnd);
           window.removeEventListener('touchmove', handlers.onTouchMove, supportsPassive ? {
-            passive: _SETTINGS.passive || false
-          } :
+              passive: _SETTINGS.passive || false
+            } :
             undefined);
           window.removeEventListener('scroll', handlers.onScroll);
 
