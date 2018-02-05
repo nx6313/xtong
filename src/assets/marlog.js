@@ -29,7 +29,6 @@
     function init() {
         if (!document.getElementById('marLogModule')) {
             marlogImgIndex = getRandomNum(1, colorParams.length);
-            marlogImgIndex = 1;
 
             let marLogDrapElement = document.createElement('img');
             marLogDrapElement.id = 'marLogDragWrap';
