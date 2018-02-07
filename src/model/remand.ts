@@ -1,4 +1,7 @@
-export class Task {
+import { ScrollviewComponent } from "../components/scrollview/scrollview";
+import { TaskListComponent } from "../components/task-list/task-list";
+
+export class Remand {
     orderId: string = ''; // 订单Id
     orderNum: string = ''; // 订单编号
     orderTime: string = ''; // 订单时间
@@ -15,7 +18,7 @@ export class Task {
     }
 }
 
-export class TaskDetail {
+export class RemandDetail {
     address: string = '';
     addtime: string = '';
     closemoney: string = '';
@@ -42,6 +45,33 @@ export class TaskDetail {
     typeorder: string = '';
     updatetime: string = '';
     waiterid: string = '';
+    constructor() {
+    }
+}
+
+export class RemandPageContainerItem {
+    aboutScrollView: ScrollviewComponent;
+    aboutTaskList: TaskListComponent;
+    pageIndex?: number = 1;
+    dataList?: Array<Remand> = [];
+    constructor(aboutScrollView: ScrollviewComponent, aboutTaskList: TaskListComponent) {
+        this.aboutScrollView = aboutScrollView;
+        this.aboutTaskList = aboutTaskList;
+    }
+}
+
+export class RemandPageContainer {
+    tab_status_all?: RemandPageContainerItem;
+    tab_status_empty?: RemandPageContainerItem;
+    tab_status_full?: RemandPageContainerItem;
+    tab_status_stop?: RemandPageContainerItem;
+    tab_status_cancle?: RemandPageContainerItem;
+    tab_status_doing?: RemandPageContainerItem;
+    tab_status_nostart?: RemandPageContainerItem;
+    tab_time_today?: RemandPageContainerItem;
+    tab_time_tomorrow?: RemandPageContainerItem;
+    tab_time_after_tomorrow?: RemandPageContainerItem;
+    tab_time_nicety?: RemandPageContainerItem;
     constructor() {
     }
 }

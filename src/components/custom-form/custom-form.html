@@ -1,99 +1,24 @@
 <form class="formWrap" [ngStyle]="cssStyle" #customForm="ngForm" novalidate>
-  <div *ngIf="formType == 'login-auth-code'">
-    <div class="formItem">
-      <i class="iconfont icon-phon"></i>
-      <input type="text" placeholder="请输入手机号" required [(ngModel)]="formData.loginPhone" name="loginPhone" #loginPhone="ngModel">
-      <span class="roundTip ripple" [ngClass]="{'canUse': loginPhone.valid, 'cantUse': !loginPhone.valid}" (click)="getLoginSmsCode()">{{formParams.captchaTxtForLogin}}</span>
-    </div>
-    <div class="formItem">
-      <i class="iconfont icon-code"></i>
-      <input type="text" placeholder="请输入收到的验证码" required [(ngModel)]="formData.authcode" name="authcode" #authcode="ngModel">
-    </div>
+  <div class="formItem {{formIt.style=='1' ? 'formItem_style_1' : ''}} {{formIt.type == 'textarea' ? 'formItem_textarea' : ''}}"
+    *ngFor="let formIt of formItemArr" (click)="formIt.callBack != null ? formIt.callBack(formIt) : {}">
+    <span *ngIf="formIt.style=='1' && formIt.lTxt != ''" class="titleTxt">{{formIt.lTxt}}：</span>
+    <i *ngIf="formIt.type != 'textarea' && formIt.lIcon != ''" class="iconfont {{formIt.lIcon}}"></i>
+    <i *ngIf="formIt.type != 'textarea' && formIt.rIcon != ''" class="iconfont {{formIt.rIcon}}"></i>
+    <input *ngIf="formIt.type == 'input'" type="text" placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
+      name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel">
+    <input *ngIf="formIt.type == 'money'" type="text" placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
+      name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel">
+    <input *ngIf="formIt.type == 'time'" type="text" readonly placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
+      name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel">
+    <input *ngIf="formIt.type == 'picker'" type="text" readonly placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
+      name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel">
+    <textarea *ngIf="formIt.type == 'textarea'" placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
+      name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel"></textarea>
+    <span *ngIf="formIt.roundLBtn != ''" class="roundTip ripple" [ngClass]="{'canUse': loginPhone.valid, 'cantUse': !loginPhone.valid}"
+      (click)="formIt.lBtnCallBack != null ? formIt.lBtnCallBack(formIt) : {}">{{formIt.roundLBtn}}</span>
+    <span *ngIf="formIt.txtLBtn != ''" class="txtTip ripple" (click)="formIt.lBtnCallBack != null ? formIt.lBtnCallBack(formIt) : {}">{{formIt.txtLBtn}}</span>
   </div>
-  <div *ngIf="formType == 'login-pwd'">
-    <div class="formItem">
-      <i class="iconfont icon-phon"></i>
-      <input type="text" placeholder="请输入手机号" required [(ngModel)]="formData.loginPhone" name="loginPhone" #loginPhone="ngModel">
-    </div>
-    <div class="formItem">
-      <i class="iconfont icon-code"></i>
-      <input type="password" placeholder="请输入密码" required [(ngModel)]="formData.password" name="password" #password="ngModel">
-      <span class="txtTip ripple" (click)="loginForgetPwd()">忘记密码</span>
-    </div>
-  </div>
-  <div *ngIf="formType == 'login-select-tclass'">
-    <div class="formCardHead">
-      <span class="formCardItem {{ workType.selected === true ? 'selected' : '' }}" *ngFor="let workType of formParams.workType; let workTypeIndex = index;"
-        (click)="thisBigClassName = workType.name; workDes = workType.tclass; workType.selected = !(workType.selected === true); selectWorkType(workType.selected, workType, selectedWorkTypes);">{{workType.name}}</span>
-    </div>
-    <div class="formCardMiddle" style="animation: fadeInLeft 0.6s;" *ngIf="selectedWorkTypes.length > 0">
-      <div class="formCardContentTitle">当前已选择的工种：</div>
-      <span class="formCardMiddleItem" style="animation: fadeIn 0.4s;" *ngFor="let workTypeDes of selectedWorkTypes" (click)="selectedWorkTypes.splice(selectedWorkTypes.indexOf(workTypeDes), 1); workTypeDes.selected = false">
-        {{workTypeDes.name}}
-        <i class="iconfont icon-delete"></i>
-      </span>
-    </div>
-    <div class="formCardFooter" style="animation: fadeInRight 0.6s;" *ngIf="selectedWorkTypes.length > 0">
-      <div class="formCardContentTitle">『{{thisBigClassName}}』 包含业务：</div>
-      <span class="formCardFooterItem" style="animation: fadeIn 0.4s;" *ngFor="let workTypeDes of workDes">
-        <img src="http://we.hmjjz.com/attachment/{{workTypeDes.icon}}">
-        <span>{{workTypeDes.name}}</span>
-      </span>
-    </div>
-  </div>
-  <div *ngIf="formType == 'reset-pwd'">
-    <div class="formItem">
-      <i class="iconfont icon-phon"></i>
-      <input type="text" placeholder="请输入手机号" required [(ngModel)]="formData.resetPwdPhone" name="resetPwdPhone" #resetPwdPhone="ngModel">
-      <span class="roundTip ripple" [ngClass]="{'canUse': resetPwdPhone.valid, 'cantUse': !resetPwdPhone.valid}" (click)="getResetPwdSmsCode()">{{formParams.captchaTxtForResetPwd}}</span>
-    </div>
-    <div class="formItem">
-      <i class="iconfont icon-code"></i>
-      <input type="text" placeholder="请输入收到的验证码" required [(ngModel)]="formData.resetPwdAuthcode" name="resetPwdAuthcode" #resetPwdAuthcode="ngModel">
-    </div>
-    <div class="formItem">
-      <i class="iconfont icon-mima"></i>
-      <input type="text" placeholder="重新设置登录密码，不少于6位" required [(ngModel)]="formData.resetPassword" name="resetPassword" #resetPassword="ngModel">
-    </div>
-  </div>
-  <div *ngIf="formType == 'register' || formType == 'register-tep2'">
-    <div class="formItem" [hidden]="formType == 'register-tep2'">
-      <i class="iconfont icon-phon"></i>
-      <input type="text" placeholder="请输入手机号" required [(ngModel)]="formData.registerPhone" name="registerPhone" #registerPhone="ngModel">
-    </div>
-    <div class="formItem" [hidden]="formType == 'register-tep2'">
-      <i class="iconfont icon-mima"></i>
-      <input type="text" placeholder="设置登录密码，不少于6位" required [(ngModel)]="formData.registerPwd" name="registerPwd" #registerPwd="ngModel">
-    </div>
-    <div class="formItem" [hidden]="formType == 'register'">
-      <i class="iconfont icon-code"></i>
-      <input type="text" placeholder="请输入验证码" [(ngModel)]="formData.registerAuthCode" name="registerAuthCode" #registerAuthCode="ngModel">
-      <span class="roundTip ripple" [ngClass]="{'canUse': registerPhone.valid, 'cantUse': !registerPhone.valid}" (click)="getRegisterSmsCode()">{{formParams.captchaTxtForRegister}}</span>
-    </div>
-  </div>
-  <div *ngIf="formType == 'take-cash'">
-    <span class="takeCashHeader">提现金额（元）
-      <span class="warnTip">* 每笔提现不得低于 100 元</span>
-    </span>
-    <span class="takeCashInterval"></span>
-    <div class="formItem takeCashContent">
-      <i class="iconfont icon-qian"></i>
-      <input type="text" placeholder="输入提现金额" required [(ngModel)]="formData.takeCash" name="takeCash" #takeCash="ngModel" (input)="takeCashInput($event.srcElement)">
-    </div>
-    <div class="takeCashFooter ripple flex-r flex-b" (click)="takeCashAll()">
-      <span>可提现金额 {{formParams.canTakeCash}} 元</span>
-      <span>全部提现</span>
-    </div>
-  </div>
-  <div *ngIf="formType != '' && showSubmitBtn" class="formBtnWrap ripple" (click)="onSubmit(customForm)">
+  <a *ngIf="formType != '' && showSubmitBtn" class="formBtnWrap ripple" (click)="onSubmit(customForm)">
     <span class="formBtn">{{formSubmitBtnTxt}}</span>
-  </div>
-  <div *ngIf="formType == 'login-pwd' || formType == 'login-auth-code'" class="formTipWrap" (click)="toRegister()">
-    <span>还没有账号？立即注册</span>
-  </div>
-  <div *ngIf="formType == 'register'" class="formTipWrap" (click)="toLogin()">
-    <span>已有账号？
-      <span class="red">直接登录</span>
-    </span>
-  </div>
+  </a>
 </form>

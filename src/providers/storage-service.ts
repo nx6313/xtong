@@ -9,7 +9,6 @@ import { LogService } from './log-service';
 
 @Injectable()
 export class StorageService {
-  currentActivePage: string;
   userInfo: {
     userId?: string,
     workType?: string
@@ -90,12 +89,6 @@ export class StorageService {
       let userInfo: UserInfo = value;
       return userInfo;
     });
-  }
-
-  // 设置当前活跃页面
-  setCurrentActivePage(activePage) {
-    this.logService.log('设置当前活跃页面：' + activePage);
-    this.currentActivePage = activePage;
   }
 
 }

@@ -1,45 +1,65 @@
 <ion-header>
-  <title-bar [title]="'任务'"></title-bar>
-  <slide-tab [tabs]="tabs"></slide-tab>
+  <title-bar [title]="'任务'" [leftIcon]="null"></title-bar>
+  <slide-tab [tabs]="tabs" (slideTabChange)="switchChange($event)"></slide-tab>
 </ion-header>
 
 <ion-content>
-  <switch-pages *ngIf="tabs[0].selected" [switchTabs]="switchTabsByStatus">
+  <switch-pages *ngIf="tabs[0].selected" [switchTabs]="switchTabsByStatus" (switchChange)="switchChange($event)">
     <switch-page>
-      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_1'">
-        23423第一页{{tabs[0].selected}}
+      <scrollview #statusPage1ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_1'">
+        <task-list #statusPage1TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
-      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_2'">
-        23434第二页
+      <scrollview #statusPage2ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_2'">
+        <task-list #statusPage2TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
-      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_3'">
-        23434第三页
+      <scrollview #statusPage3ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_3'">
+        <task-list #statusPage3TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview #statusPage4ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_4'">
+        <task-list #statusPage4TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview #statusPage5ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_5'">
+        <task-list #statusPage5TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview #statusPage6ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_6'">
+        <task-list #statusPage6TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview #statusPage7ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_7'">
+        <task-list #statusPage7TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
   </switch-pages>
-  <switch-pages *ngIf="tabs[1].selected" [switchTabs]="switchTabsByTime">
+  <switch-pages *ngIf="tabs[1].selected" [switchTabs]="switchTabsByTime" (switchChange)="switchChange($event)">
     <switch-page>
-      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_1'">
-        23423第一页{{tabs[1].selected}}
+      <scrollview #timePage1ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_1'">
+        <task-list #timePage1TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
-      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_2'">
-        23434第二页
+      <scrollview #timePage2ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_2'">
+        <task-list #timePage2TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
-      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_3'">
-        23434第三页
+      <scrollview #timePage3ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_3'">
+        <task-list #timePage3TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
-      <scrollview [canSwitchSlide]="true" [scrollviewRank]="'page_4'">
-        23434第四页
+      <scrollview #timePage4ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_4'">
+        <task-list #timePage4TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
   </switch-pages>

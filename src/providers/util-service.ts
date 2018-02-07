@@ -205,11 +205,11 @@ export class UtilService {
 
   // 触发后退操作
   goToBack(nav: Nav | NavController) {
-    let activePage = this.userData.currentActivePage;
-    this.logService.log('HUE[#E7642B]', '当前显示页面检测：', activePage);
-    if (activePage !== 'TabsPage') {
-      if (activePage === 'LoginPage') {
-        this.eventsService.events.publish('loginPage:goToBack');
+    let activePage = this.getCurPage();
+    this.logService.log('HUE[#E7642B]', '执行后退操作，当前显示页面检测：', activePage.pageName + '『' + activePage.pageType + '』');
+    if (activePage.pageName !== 'page-task' && activePage.pageName !== 'page-about') {
+      if (activePage.pageType == 'ionModal') {
+        this.eventsService.events.publish(activePage.pageName + ':goToBack');
         return false;
       }
       return nav.pop();
@@ -358,6 +358,27 @@ export class UtilService {
     if (currentTaskElem) {
       currentTaskElem.remove();
     }
+  }
+
+  // 获取当前活动页面
+  getCurPage() {
+    let curPage = { pageType: '', pageName: '' };
+    // 先判断是否存在模态页面
+    // 不存在再从tabs中寻找当前页面
+    let ionModal = document.getElementsByTagName('ion-modal');
+    if (ionModal && ionModal.length > 0) {
+      curPage.pageType = 'ionModal';
+      curPage.pageName = $(ionModal[ionModal.length - 1]).find('ion-content').parent().get(0).localName;
+    } else {
+      let showTabsContentPages = $('ion-tabs').find('ion-tab.show-tab').find('ion-content');
+      for (let pageIndex = 0; pageIndex < showTabsContentPages.length; pageIndex++) {
+        if ($(showTabsContentPages[pageIndex]).parent().is(':visible')) {
+          curPage.pageType = 'ionModal';
+          curPage.pageName = $(showTabsContentPages[pageIndex]).parent().get(0).localName;
+        }
+      }
+    }
+    return curPage;
   }
 
 }

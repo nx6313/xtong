@@ -1,207 +1,146 @@
 custom-form {
-    .formWrap {
-        .formItem {
-            position: relative;
-            height: 4.4rem;
-            line-height: 4.4rem;
-            i {
-                position: absolute;
-                top: 0;
-                left: 1.4rem;
-                z-index: 2;
-                height: 4.4rem;
-                line-height: 4.4rem;
-                font-size: 1.6rem;
-            }
-            input {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 4.4rem;
-                line-height: 4.4rem;
-                border: none;
-                padding: 0 3.6rem;
-                z-index: 1;
-            }
-            span.roundTip {
-                position: absolute;
-                top: 0.8rem;
-                right: 1.6rem;
-                height: 2.8rem;
-                line-height: 2.8rem;
-                padding: 0 1rem;
-                z-index: 2;
-                border: 1px solid #F3F3F3;
-                color: #E0E0E0;
-                border-radius: 2em 1em 4em / 0.5em 3em;
-            }
-            span.txtTip {
-                position: absolute;
-                top: 0.8rem;
-                right: 1.6rem;
-                height: 2.8rem;
-                line-height: 2.8rem;
-                padding: 0 1rem;
-                z-index: 2;
-                color: rgb(10, 163, 130);
-            }
-            span.canUse {
-                border: 1px solid rgb(184, 184, 184);
-                color: rgb(158, 158, 158);
-            }
-            span.cantUse {
-                border: 1px solid #F3F3F3;
-                color: #E0E0E0;
-            }
-        }
-        .formItem::after {
-            content: '';
-            position: absolute;
-            left: 1rem;
-            right: 1rem;
-            bottom: 0;
-            border-bottom: 1px solid #F3F3F3;
-            z-index: 3;
-        }
-        .formBtnWrap {
-            margin-top: 4rem;
-            text-align: center;
-            span.formBtn {
-                display: inline-block;
-                width: 90%;
-                height: 3.8rem;
-                line-height: 3.8rem;
-                text-align: center;
-                background: #D33A31;
-                color: #FFFFFF;
-                border-radius: 20rem;
-                font-size: 1.6rem;
-            }
-        }
-        .formTipWrap {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 1.4rem;
-            color: #828282;
-        }
-        .formTipWrap span {
-            padding: 2rem;
-        }
-        .formTipWrap span.red {
-            color: #D33A31;
-            padding: 0;
-        } // 申请提现
-        .takeCashHeader {
-            position: relative;
-            display: block;
-            background: #ffffff;
-            padding: 1rem 2rem;
-            font-weight: bold;
-            span.warnTip {
-                color: #D33A31;
-                margin-left: 10px;
-                font-size: 1.2rem;
-            }
-        }
-        .takeCashInterval {
-            position: relative;
-            display: block;
-            height: 2rem;
-            background: #ffffff;
-        }
-        .takeCashContent {
-            i {
-                font-size: 2.6rem;
-                font-weight: bold;
-            }
-            input {
-                font-size: 2.6rem;
-                font-weight: bold;
-                padding: 0 4.6rem;
-            }
-            input::-webkit-input-placeholder {
-                color: #e6e6e6;
-            }
-            input:-moz-placeholder {
-                color: #e6e6e6;
-            }
-            input::-moz-placeholder {
-                color: #e6e6e6;
-            }
-            input:-ms-input-placeholder {
-                color: #e6e6e6;
-            }
-        }
-        .takeCashFooter {
-            background: #ffffff;
-            padding: 1rem 2rem;
-            span:first-child {
-                color: #999999;
-            }
-            span:last-child {
-                color: #0968c2;
-            }
-        }
-        .formCardHead {
-            padding: 1.4rem 1rem;
-            text-align: center;
-            background: #D33A31;
-            .formCardItem {
-                padding: 0.6rem;
-                margin: 0.4rem;
-                display: inline-block;
-                border: 1px solid #ffffff;
-                border-radius: 4px;
-                color: rgb(255, 255, 255);
-            }
-            .selected {
-                background: rgb(255, 255, 255);
-                color: #b6200c;
-            }
-        }
-        .formCardMiddle {
-            padding: 1rem;
-            background: #f1b7b4;
-            .formCardMiddleItem {
-                padding: 0.2rem 0.6rem;
-                margin: 0.4rem;
-                display: inline-block;
-                background: #e77979;
-                color: rgb(255, 255, 255);
-                border-radius: 4px;
-                i {
-                    margin-left: 4px;
-                }
-            }
-            .formCardContentTitle {
-                font-weight: bold;
-                margin-bottom: 1rem;
-            }
-        }
-        .formCardFooter {
-            padding: 1rem;
-            .formCardFooterItem {
-                padding: 0.6rem;
-                display: inline-block;
-                color: rgb(59, 59, 59);
-                text-align: center;
-                width: calc((100vw - 2rem) / 4);
-                img {
-                    width: 3.6rem;
-                }
-                span {
-                    display: block;
-                    text-align: center;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    font-size: 1rem;
-                }
-            }
-            .formCardContentTitle {
-                font-weight: bold;
-                margin-bottom: 1rem;
-            }
-        }
+  .formWrap {
+    .formItem {
+      position: relative;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      background: rgb(255, 255, 255);
+      i {
+        position: absolute;
+        top: 0;
+        left: 1.4rem;
+        z-index: 2;
+        height: 4.4rem;
+        line-height: 4.4rem;
+        font-size: 1.6rem;
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4.4rem;
+        line-height: 4.4rem;
+        border: none;
+        padding: 0 3.6rem;
+        z-index: 1;
+      }
+      span.roundTip {
+        position: absolute;
+        top: 0.8rem;
+        right: 1.6rem;
+        height: 2.8rem;
+        line-height: 2.8rem;
+        padding: 0 1rem;
+        z-index: 2;
+        border: 1px solid #F3F3F3;
+        color: #E0E0E0;
+        border-radius: 2.8rem;
+      }
+      span.txtTip {
+        position: absolute;
+        top: 0.8rem;
+        right: 1.6rem;
+        height: 2.8rem;
+        line-height: 2.8rem;
+        padding: 0 1rem;
+        z-index: 2;
+        color: rgb(10, 163, 130);
+      }
+      span.canUse {
+        border: 1px solid rgb(184, 184, 184);
+        color: rgb(158, 158, 158);
+      }
+      span.cantUse {
+        border: 1px solid #F3F3F3;
+        color: #E0E0E0;
+      }
     }
+    .formItem_style_1 {
+      position: relative;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      i {
+        position: absolute;
+        top: 0;
+        left: calc(100vw - 2.4rem);
+        z-index: 2;
+        height: 4.4rem;
+        line-height: 4.4rem;
+        font-size: 1.6rem;
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4.4rem;
+        line-height: 4.4rem;
+        border: none;
+        padding: 0 3rem 0 10rem;
+        z-index: 1;
+        text-align: right;
+      }
+      span.titleTxt {
+        position: absolute;
+        top: 0.8rem;
+        left: 0.4rem;
+        height: 2.8rem;
+        line-height: 2.8rem;
+        padding: 0 1rem;
+        z-index: 2;
+        color: #272C39;
+      }
+    }
+    .formItem_textarea {
+      height: 12.4rem;
+      line-height: 1.6rem;
+      textarea {
+        display: inline-block;
+        position: absolute;
+        top: 3.8rem;
+        left: 1rem;
+        right: 1rem;
+        width: calc(100vw - 2rem);
+        height: 8rem;
+        border: none;
+        padding: 0.4rem 0.6rem;
+        z-index: 1;
+        resize: none;
+        background: rgb(238, 238, 238);
+        border-radius: 3px;
+      }
+    }
+    .formItem::after {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 0;
+      border-bottom: 1px solid #F3F3F3;
+      z-index: 3;
+    }
+    .formItem:nth-last-of-type(1)::after {
+      border-bottom: none;
+    }
+    .formBtnWrap {
+      display: inline-block;
+      width: 100vw;
+      margin-top: 3rem;
+      margin-bottom: 5rem;
+      text-align: center;
+      span.formBtn {
+        display: inline-block;
+        width: 94vw;
+        height: 3.8rem;
+        line-height: 3.8rem;
+        text-align: center;
+        background: #F59D20;
+        color: #FFFFFF;
+        border-radius: 4px;
+        font-size: 1.6rem;
+        box-shadow: 0 0 4px rgba(88, 53, 2, 0.4);
+      }
+    }
+  }
 }

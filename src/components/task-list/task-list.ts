@@ -4,7 +4,7 @@ import { StorageService } from '../../providers/storage-service';
 import { ProtocolService } from '../../providers/protocol-service';
 import { UtilService } from '../../providers/util-service';
 import { LogService } from '../../providers/log-service';
-import { Task } from '../../model/task';
+import { Remand } from '../../model/remand';
 
 declare var $;
 
@@ -14,11 +14,11 @@ declare var $;
 })
 export class TaskListComponent {
   @Output('acceptOrderAfter') acceptOrderAfterFn = new EventEmitter<any>();
-  @Output('refLoadData') refLoadDataFn = new EventEmitter<any>();
+  @Output('clickNoDataBtn') clickNoDataBtnFn = new EventEmitter<any>();
   @ViewChild('taskListwrap', { read: ElementRef }) _taskListwrap: ElementRef;
   @ViewChild('loadingDataTipWrap', { read: ElementRef }) _loadingDataTipWrap: ElementRef;
   @ViewChild('dataIsEmptyTipWrap', { read: ElementRef }) _dataIsEmptyTipWrap: ElementRef;
-  taskList: Array<Task> = [];
+  taskList: Array<Remand> = [];
 
   isRefing: Boolean = false;
   isEmpty: Boolean = false;
@@ -35,7 +35,7 @@ export class TaskListComponent {
     private cd: ChangeDetectorRef) {
   }
 
-  setTaskList(taskList: Array<Task>, onlyClear?: Boolean) {
+  setTaskList(taskList: Array<Remand>, onlyClear?: Boolean) {
     this.taskList = taskList;
     if (this.taskList.length == 0) {
       this.isEmpty = true;
@@ -50,7 +50,7 @@ export class TaskListComponent {
     this.cd.detectChanges();
   }
 
-  addTask(addTask: (Array<Task> | Task)) {
+  addTask(addTask: (Array<Remand> | Remand)) {
     if (addTask instanceof Array) {
       this.taskList = this.taskList.concat(addTask);
     } else {
@@ -91,14 +91,15 @@ export class TaskListComponent {
   }
 
   // 点击重新加载数据
-  private refLoadData() {
+  private clickNoDataBtn() {
     // 隐藏可能显示的已无数据的提示
     let taskListNativeElem = this._taskListwrap.nativeElement;
     if (taskListNativeElem.getElementsByClassName('dataHasFullWrap').length > 0) {
       $(taskListNativeElem.getElementsByClassName('dataHasFullWrap')).remove();
     }
-    this.toggleLoadingTip(false);
-    this.refLoadDataFn.emit();
+    this.clickNoDataBtnFn.emit({
+      toggleLoadingTipFn: () => { this.toggleLoadingTip(false); }
+    });
   }
 
   private toTaskDetail(task) {
@@ -106,7 +107,6 @@ export class TaskListComponent {
       taskData: task
     });
     taskDetailModal.onDidDismiss(() => {
-      this.storageService.setCurrentActivePage('TabsPage');
       this.logService.log('从任务详情页面返回');
     });
     taskDetailModal.present();
@@ -116,25 +116,25 @@ export class TaskListComponent {
     this.storageService.getUserInfo().then((userInfo) => {
       if (userInfo && userInfo.workType && userInfo.workType.toLowerCase() !== 'null') {
         this.utilService.showLoading('正在为您接单');
-        this.protocolService.receiveOrder(task.orderId).then((receiveOrderData) => {
-          this.utilService.closeLoading();
-          if (receiveOrderData.flag == 1) {
-            // 执行移除动画
-            this.utilService.showCurrentTaskElem(() => {
-              this.toTaskDetail(task);
-            });
-            $(event.target.offsetParent).animateCss('bounceOutRight', true).then(() => {
-              this.acceptOrderAfterFn.emit({
-                acceptTask: task
-              });
-            });
-            // 移除当前订单条目
-            this.taskList.splice(this.taskList.indexOf(task), 1);
-            this.cd.detectChanges();
-          } else {
-            this.utilService.showToast(receiveOrderData.msg);
-          }
-        });
+        // this.protocolService.receiveOrder(task.orderId).then((receiveOrderData) => {
+        //   this.utilService.closeLoading();
+        //   if (receiveOrderData.flag == 1) {
+        //     // 执行移除动画
+        //     this.utilService.showCurrentTaskElem(() => {
+        //       this.toTaskDetail(task);
+        //     });
+        //     $(event.target.offsetParent).animateCss('bounceOutRight', true).then(() => {
+        //       this.acceptOrderAfterFn.emit({
+        //         acceptTask: task
+        //       });
+        //     });
+        //     // 移除当前订单条目
+        //     this.taskList.splice(this.taskList.indexOf(task), 1);
+        //     this.cd.detectChanges();
+        //   } else {
+        //     this.utilService.showToast(receiveOrderData.msg);
+        //   }
+        // });
       } else {
         let loginModal = this.modalCtrl.create(this.loginPage);
         if (!userInfo) {
@@ -146,7 +146,6 @@ export class TaskListComponent {
           loginModal = this.modalCtrl.create(this.loginPage, { setTClass: true });
         }
         loginModal.onDidDismiss(() => {
-          this.storageService.setCurrentActivePage('TabsPage');
           this.logService.log('从登录页面返回');
         });
         loginModal.present();

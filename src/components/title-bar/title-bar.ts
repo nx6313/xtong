@@ -20,7 +20,7 @@ export class TitleBarComponent {
     private platform: Platform,
     private utilService: UtilService) {
     this.title != '' ? {} : this.title = '效通';
-    this.leftIcon != '' ? {} : this.leftIcon = '';
+    this.leftIcon != '' ? {} : this.leftIcon = 'icon-left-hmj';
     this.rightIcon != '' ? {} : this.rightIcon = '';
     this.rightTxt != '' ? {} : this.rightTxt = '';
   }

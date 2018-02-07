@@ -1,7 +1,7 @@
 <div class="switchPageWrap">
   <div class="switchItemWrap">
     <div class="switchTabSlideRail">
-      <span class="switchTabItem {{switchIndex == 0 ? 'switchTabItemSelected' : ''}}" [ngStyle]="switchTabCss" *ngFor="let switchTab of switchTabs; let switchIndex = index;">{{switchTab.txt}}</span>
+      <span class="switchTabItem {{switchIndex == 0 ? 'switchTabItemSelected' : ''}}" [ngStyle]="switchTabCss" *ngFor="let switchTab of switchTabs; let switchIndex = index;" (click)="switchTabSelected(switchTab)">{{switchTab.txt}}</span>
     </div>
     <span class="switchTabIndicator" [ngStyle]="switchTabCss"></span>
   </div>

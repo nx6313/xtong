@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { TabObj } from '../../model/comm';
 
 @Component({
@@ -6,15 +6,26 @@ import { TabObj } from '../../model/comm';
   templateUrl: 'slide-tab.html'
 })
 export class SlideTabComponent {
+  @Output('slideTabChange') slideTabChangeFn = new EventEmitter<any>();
   @Input('tabs') tabs: Array<TabObj> = [];
 
   constructor() {
   }
 
-  clearSelected() {
+  clearSelected(newSelected) {
+    let curSelectedId = '';
     this.tabs.forEach((value, index) => {
+      if (value.selected) {
+        curSelectedId = value.id;
+      }
       value.selected = false;
     });
+    if (curSelectedId !== newSelected.id) {
+      this.slideTabChangeFn.emit({
+        changeType: 'slideTabChange',
+        id: newSelected.id
+      });
+    }
   }
 
 }

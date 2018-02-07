@@ -6,6 +6,29 @@ export class PageParams {
         params ? this.params = params : {};
     }
 }
+export class CustomForm {
+    type?: string = 'input'; // input、money、time、picker、textarea
+    style?: string = '1';
+    lIcon?: string = '';
+    lTxt: string = '';
+    rIcon?: string = '';
+    placeholder?: string = '';
+    callBack?: Function = null;
+    ngBind: any = null;
+    initVal?: any;
+    roundLBtn?: string = '';
+    txtLBtn?: string = '';
+    lBtnCallBack?: Function = null;
+    constructor(lTxt: string = '', ngBind: any, type?: string) {
+        this.lTxt = lTxt;
+        this.ngBind = ngBind;
+        type ? this.type = type : {};
+    }
+    setAttr(attr: string, val: any) {
+        this[attr] = val;
+        return this;
+    }
+}
 export class CustomList {
     type?: string = '';
     lIcon?: string = '';
@@ -27,6 +50,7 @@ export class CustomList {
 export class TabObj {
     id?: any;
     txt?: string;
+    keyword?: string;
     selected?: Boolean;
     constructor() {
     }

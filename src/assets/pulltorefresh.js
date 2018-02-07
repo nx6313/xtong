@@ -591,6 +591,7 @@ var PullToRefresh = (function () {
                   var switchCurTabElement = getSwitchCurTabElement(e, curSwitchPageIndex + 1);
                   $(switchCurTabElement).siblings().removeClass('switchTabItemSelected');
                   $(switchCurTabElement).addClass('switchTabItemSelected');
+                  $(switchCurTabElement).click();
                 } else {
                   startTramformX = Number(-(curSwitchPageIndex * switchPageScreenWidth));
                   switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
@@ -612,6 +613,7 @@ var PullToRefresh = (function () {
                   var switchCurTabElement = getSwitchCurTabElement(e, curSwitchPageIndex - 1);
                   $(switchCurTabElement).siblings().removeClass('switchTabItemSelected');
                   $(switchCurTabElement).addClass('switchTabItemSelected');
+                  $(switchCurTabElement).click();
                 } else {
                   startTramformX = Number(-(curSwitchPageIndex * switchPageScreenWidth));
                   switchPageWrapElement.style.transform = 'translate3d(' + startTramformX + 'px, 0px, 0px)';
@@ -931,7 +933,7 @@ var PullToRefresh = (function () {
       _SETTINGS.ptrAfterElement = ptrAfter;
 
       _SETTINGS.ptrElement = ptr;
-
+      
       // 绑定事件
       if (canSwitchSlide) {
         if ($('switch-pages').find('div.switchTabSlideRail').find('span.switchTabItem').length > 0) {
@@ -948,13 +950,13 @@ var PullToRefresh = (function () {
       var switchCurTabElement = getSwitchCurTabElement({
         target: $(e).get(0)
       }, $(e).index());
-      var curSelectSwitchTabIndex = $('switch-pages').find('div.switchTabSlideRail').find('span.switchTabItemSelected').index();
-      var switchPageCount = $('switch-pages').find('switch-page').length;
+      var curSelectSwitchTabIndex = $('switch-pages:visible').find('div.switchTabSlideRail').find('span.switchTabItemSelected').index();
+      var switchPageCount = $('switch-pages:visible').find('switch-page').length;
       var switchPageWrapCurTransform = getSwitchPageWrapCurTransform({
-        target: $($(e).parents('switch-pages').find('scrollview')[0]).get(0)
+        target: $($(e).parents('switch-pages:visible').find('scrollview')[0]).get(0)
       }, 0);
       var switchPageScreenWidth = document.body.clientWidth;
-      var switchPageWrapElement = $('switch-pages').find('div.switchTabsWrap').get(0);
+      var switchPageWrapElement = $('switch-pages:visible').find('div.switchTabsWrap').get(0);
       var switchTabSlideRailElement = getSwitchTabSlideRailElement({
         target: $(e).get(0)
       });
