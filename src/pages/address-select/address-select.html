@@ -1,0 +1,16 @@
+<ion-header>
+  <title-bar [title]="'选择地址'"></title-bar>
+</ion-header>
+
+<ion-content>
+  <div #addressMapContainer class="addressMapContainer"></div>
+  <div class="addressInputWrap">
+    <input #addressInputElem type="text" placeholder="输入地址以查询" [(ngModel)]="addressInputVal" (input)="addressInputChange()">
+    <a class="searchBtnWrap ripple" (click)="searchAddress()">
+      <span>搜索</span>
+    </a>
+  </div>
+  <a [hidden]="selectAddressPosition == null" class="useAddressBtnWrap ripple" (click)="useAddress()">
+    <span>使用该地址</span>
+  </a>
+</ion-content>

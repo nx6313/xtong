@@ -7,12 +7,13 @@ export class PageParams {
     }
 }
 export class CustomForm {
-    type?: string = 'input'; // input、money、time、picker、textarea
+    type?: string = 'input'; // input、address、money、time、picker、textarea
     style?: string = '1';
     lIcon?: string = '';
     lTxt: string = '';
     rIcon?: string = '';
     placeholder?: string = '';
+    request?: Boolean = false;
     callBack?: Function = null;
     ngBind: any = null;
     initVal?: any;
@@ -26,6 +27,18 @@ export class CustomForm {
     }
     setAttr(attr: string, val: any) {
         this[attr] = val;
+        return this;
+    }
+    isRequest() {
+        this.request = true;
+        return this;
+    }
+    setRIcon(rIcon) {
+        this.rIcon = rIcon;
+        return this;
+    }
+    setPlaceholder(placeholder) {
+        this.placeholder = placeholder;
         return this;
     }
 }

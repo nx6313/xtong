@@ -4,8 +4,10 @@
     <span *ngIf="formIt.style=='1' && formIt.lTxt != ''" class="titleTxt">{{formIt.lTxt}}：</span>
     <i *ngIf="formIt.type != 'textarea' && formIt.lIcon != ''" class="iconfont {{formIt.lIcon}}"></i>
     <i *ngIf="formIt.type != 'textarea' && formIt.rIcon != ''" class="iconfont {{formIt.rIcon}}"></i>
-    <input *ngIf="formIt.type == 'input'" type="text" placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
+    <input *ngIf="formIt.type == 'input'" type="text" placeholder="{{formIt.placeholder}}" required="{{formIt.request ? true : false}}" [(ngModel)]="dataBindContainer[formIt.ngBind]"
       name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel">
+    <input *ngIf="formIt.type == 'address'" type="text" readonly placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
+      name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel" (click)="selectedAddress(formIt.ngBind)">
     <input *ngIf="formIt.type == 'money'" type="text" placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"
       name="{{formIt.ngBind}}" #{{formIt.ngBind}}="ngModel">
     <input *ngIf="formIt.type == 'time'" type="text" readonly placeholder="{{formIt.placeholder}}" required [(ngModel)]="dataBindContainer[formIt.ngBind]"

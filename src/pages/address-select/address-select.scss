@@ -1,0 +1,48 @@
+page-address-select {
+  .addressMapContainer {
+    height: 100%;
+  }
+  .addressInputWrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0.4rem 0.6rem;
+      input {
+          width: 100%;
+          background: none;
+          border: none;
+          padding: 1rem 0.8rem;
+          background: #f8f2f2;
+          border-radius: 4px;
+          box-shadow: 0 0 8px rgba(80, 80, 80, .4);
+      }
+      .searchBtnWrap {
+          position: absolute;
+          top: 0.8rem;
+          right: 1rem;
+          box-shadow: 0 0 4px rgba(80, 80, 80, .4);
+          border-radius: 4px;
+          background: rgba(3, 99, 143, 0.8);
+          color: rgb(230, 239, 247);
+          text-align: center;
+          width: 4rem;
+          height: 2.6rem;
+          line-height: 2.6rem;
+      }
+  }
+  .useAddressBtnWrap {
+    position: absolute;
+    bottom: 0.8rem;
+    left: 8rem;
+    right: 8rem;
+    box-shadow: 0 0 4px rgba(80, 80, 80, .4);
+    border-radius: 4px;
+    background: #343B4C;
+    color: rgb(230, 239, 247);
+    text-align: center;
+    height: 2.6rem;
+    line-height: 2.6rem;
+    animation: bounceInUp 1.6s;
+  }
+}

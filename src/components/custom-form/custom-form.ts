@@ -23,10 +23,7 @@ export class CustomFormComponent {
 
   dataBindContainer: {} = {}; // 数据绑定容器
 
-  resetPwdPage: any = 'ResetPwdPage';
-  registerPage: any = 'RegisterPage';
-
-  selectedWorkTypes: Array<any> = new Array<any>();
+  addressSelectPage: string = 'AddressSelectPage';
 
   constructor(public navCtrl: NavController,
     public viewCtrl: ViewController,
@@ -51,6 +48,17 @@ export class CustomFormComponent {
 
   onSubmit(form) {
     console.log(form);
+  }
+
+  selectedAddress(addressKey) {
+    let addressSelectModal = this.modalCtrl.create(this.addressSelectPage);
+    addressSelectModal.onDidDismiss((data) => {
+      if (data) {
+        this.dataBindContainer[addressKey] = data.selectAddress.name;
+        this.cd.detectChanges();
+      }
+    });
+    addressSelectModal.present();
   }
 
 }
