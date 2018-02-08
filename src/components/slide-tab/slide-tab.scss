@@ -15,4 +15,24 @@ slide-tab {
       animation: slideTabSelected 0.6s ease both;
     }
   }
+  @-webkit-keyframes slideTabSelected {
+    0% {
+      background: rgb(83, 92, 112);
+      color: rgb(226, 235, 243);
+    }
+    100% {
+      background: rgb(177, 171, 92);
+      color: rgb(66, 74, 92);
+    }
+  }
+  @keyframes slideTabSelected {
+    0% {
+      background: rgb(83, 92, 112);
+      color: rgb(226, 235, 243);
+    }
+    100% {
+      background: rgb(177, 171, 92);
+      color: rgb(66, 74, 92);
+    }
+  }
 }

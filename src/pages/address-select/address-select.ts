@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, ViewController, NavParams, Platform } from 'ionic-angular';
 
 import { StorageService } from '../../providers/storage-service';
@@ -9,6 +9,7 @@ import { LogService } from '../../providers/log-service';
 import { SelectMarkerAddress } from '../../model/position';
 
 declare var AMap;
+declare var AMapUI;
 
 @IonicPage()
 @Component({
@@ -17,18 +18,23 @@ declare var AMap;
 })
 export class AddressSelectPage {
   @ViewChild('addressMapContainer', { read: ElementRef }) _addressMapContainer: ElementRef;
-  @ViewChild('addressInputElem', { read: ElementRef }) _addressInputElem: ElementRef;
 
+  addressSelfVal: string = '';
   addressInputVal: string = '';
   selectAddressPosition: SelectMarkerAddress = null;
 
+  locationType: string = 'input';
   addressMap: any = null;
+  userCityCode: string = ''; // 用户所在城市编号，地址联想使用，在定位后赋值; 为空时默认全国范围
   placeSearch: any = null;
   autocomplete: any = null;
+  positionPicker: any = null;
+  autoGetPoiArr: Array<any> = [];
 
   constructor(public viewCtrl: ViewController,
     private platform: Platform,
     public navParams: NavParams,
+    private cd: ChangeDetectorRef,
     private storageService: StorageService,
     private protocolService: ProtocolService,
     private eventsService: EventsService,
@@ -45,7 +51,10 @@ export class AddressSelectPage {
 
   ionViewDidLoad() {
     this.platform.ready().then(() => {
-      this.addressMap = new AMap.Map(this._addressMapContainer.nativeElement, { mapStyle: 'fresh', showBuildingBlock: true, viewMode: '3D', pitch: 20 });
+      this.addressMap = new AMap.Map(this._addressMapContainer.nativeElement, {
+        mapStyle: 'fresh',
+        zoom: 16
+      });
       let geolocation = new AMap.Geolocation({
         enableHighAccuracy: true,//是否使用高精度定位，默认:true
         timeout: 10000,          //超过10秒后停止定位，默认：无穷大
@@ -61,38 +70,90 @@ export class AddressSelectPage {
       });
       this.addressMap.addControl(geolocation);
       geolocation.getCurrentPosition();
-      AMap.plugin('AMap.Autocomplete', () => {
-        var autoOptions = {
-          city: '', //城市，默认全国
-          input: this._addressInputElem.nativeElement
-        };
-        this.autocomplete = new AMap.Autocomplete(autoOptions);
-      })
-      AMap.event.addListener(this.autocomplete, "select", (selectedPoi) => {
-        this.addressInputVal = selectedPoi.poi.name;
-        this.searchAddress();
+      AMap.event.addListener(geolocation, 'complete', (data) => {
+        this.logService.log('JSON[获取到用户定位]', {
+          '地址信息结果': data
+        });
+        if (data.info === 'SUCCESS') {
+          this.addressInputVal = '';
+          this.addressSelfVal = data.formattedAddress;
+          this.selectAddressPosition = new SelectMarkerAddress(data.formattedAddress, data.position);
+          this.userCityCode = data.addressComponent.citycode;
+          this.cd.detectChanges();
+        }
+        AMap.plugin('AMap.Autocomplete', () => {
+          var autoOptions = {
+            city: this.userCityCode,
+            citylimit: true
+          };
+          this.autocomplete = new AMap.Autocomplete(autoOptions);
+        })
       });
       AMap.service('AMap.PlaceSearch', () => {
         this.placeSearch = new AMap.PlaceSearch({
-          map: this.addressMap
+          pageSize: 1,
+          map: this.addressMap,
+          autoFitView: true
         });
       });
-      AMap.event.addListener(this.placeSearch, "markerClick", (selectedMarker) => {
-        this.logService.log('JSON[选择的地址]', selectedMarker.data);
-        this.selectAddressPosition = selectedMarker.data;
+      AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
+        this.positionPicker = new PositionPicker({
+          mode: 'dragMap', //设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
+          map: this.addressMap
+        });
+        this.positionPicker.on('success', (positionResult) => {
+          this.logService.log('JSON[获取地图拖拽选址信息]', {
+            '地址信息结果': positionResult
+          });
+          if (positionResult.info == 'OK') {
+            this.addressInputVal = positionResult.address;
+            this.selectAddressPosition = new SelectMarkerAddress(positionResult.address, positionResult.position);
+            this.cd.detectChanges();
+          }
+        });
+        this.positionPicker.on('fail', (positionResult) => {
+          this.utilService.showToast('选址信息错误，请重新选择');
+          this.addressInputVal = '';
+          this.selectAddressPosition = null;
+          this.cd.detectChanges();
+        });
       });
     });
   }
 
   addressInputChange() {
+    this.addressSelfVal = '';
+    this.selectAddressPosition = null;
+    this.addressMap.clearMap();
+    if (this.locationType != 'input') {
+      this.locationType = 'input';
+      this.utilService.showToast('已切换为输入选址方式');
+      this.positionPicker.stop();
+    }
     if (this.addressInputVal) {
       this.autocomplete.search(this.addressInputVal.trim(), (status, result) => {
         this.logService.log('JSON[获取输入地址联想]', {
           '返回地址信息状态': status,
           '地址信息结果': result
         });
+        if (result.tips) {
+          this.autoGetPoiArr = [].concat(result.tips)
+        } else {
+          this.autoGetPoiArr = [];
+        }
+        this.cd.detectChanges();
       });
+    } else {
+      this.autoGetPoiArr = [];
+      this.cd.detectChanges();
     }
+  }
+
+  selectOnePoi(selectedPoi) {
+    this.addressInputVal = selectedPoi.name;
+    this.searchAddress();
+    this.autoGetPoiArr = [];
+    this.cd.detectChanges();
   }
 
   searchAddress() {
@@ -102,6 +163,14 @@ export class AddressSelectPage {
           '返回地址信息状态': status,
           '地址信息结果': result
         });
+        if (status === 'complete' && result.info === 'OK' && result.poiList.count > 0) {
+          this.selectAddressPosition = result.poiList.pois[0];
+        } else {
+          this.selectAddressPosition = null;
+          this.addressInputVal = '';
+          this.utilService.showToast('该位置未找到');
+        }
+        this.cd.detectChanges();
       });
     }
   }
@@ -111,6 +180,24 @@ export class AddressSelectPage {
     this.viewCtrl.dismiss({
       selectAddress: this.selectAddressPosition
     });
+  }
+
+  changeLocationType() {
+    this.addressSelfVal = '';
+    this.addressInputVal = '';
+    this.autoGetPoiArr = [];
+    this.selectAddressPosition = null;
+    this.addressMap.clearMap();
+    this.cd.detectChanges();
+    this.locationType == 'input' ? (() => {
+      this.locationType = 'positionPicker';
+      this.utilService.showToast('已切换为地图选址方式');
+      this.positionPicker.start();
+    })() : (() => {
+      this.locationType = 'input';
+      this.utilService.showToast('已切换为输入选址方式');
+      this.positionPicker.stop();
+    })();
   }
 
 }

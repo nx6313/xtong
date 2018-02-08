@@ -6,6 +6,7 @@ export class SelectMarkerAddress {
     cityname?: string;
     email?: string;
     entr_location?: Location;
+    exit_location?: Location;
     location?: Location;
     name?: string;
     pcode?: string;
@@ -15,7 +16,9 @@ export class SelectMarkerAddress {
     tel?: string;
     type?: string;
     website?: string;
-    constructor() {
+    constructor(name?: string, location?: Location) {
+        name ? this.name = name : {};
+        location ? this.location = location : {};
     }
 }
 

@@ -3,33 +3,102 @@ page-address-select {
     height: 100%;
   }
   .addressInputWrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.4rem 0.6rem;
+    animation: bounceInDown 1s;
+    z-index: 999;
+    input {
+      position: relative;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.2rem 0.8rem;
+      background: rgba(52, 59, 76, .7);
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(80, 80, 80, .4);
+      color: rgb(241, 243, 247);
+      z-index: 100;
+    }
+    input::input-placeholder {
+      color: rgb(203, 214, 235);
+    }
+    input::-webkit-input-placeholder {
+      color: rgb(203, 214, 235);
+    }
+    input::-moz-placeholder {
+      color: rgb(203, 214, 235);
+    }
+    input::-ms-input-placeholder {
+      color: rgb(203, 214, 235);
+    }
+    .hasInputAddress {
+      animation: addressInputBg 0.6s both;
+    }
+    .dragMapToGetPosition {
+      padding: 1.2rem 4.6rem 1.2rem 0.8rem;
+      white-space: nowrap;
+      overflow: -webkit-marquee;
+      -webkit-marquee-direction: right;
+      -webkit-marquee-speed: normal;
+      -webkit-marquee-style: scroll;
+      -webkit-marquee-repetition: 1;
+    }
+    .getPositionInMap {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 0.4rem 0.6rem;
-      input {
-          width: 100%;
-          background: none;
-          border: none;
-          padding: 1rem 0.8rem;
-          background: #f8f2f2;
-          border-radius: 4px;
-          box-shadow: 0 0 8px rgba(80, 80, 80, .4);
+      height: 3rem;
+      right: 1.2rem;
+      top: 0.76rem;
+      z-index: 200;
+    }
+    .weakenImg {
+      opacity: .4;
+    }
+    .addressPoiSelectWrap {
+      position: relative;
+      margin-top: 2px;
+      border-radius: 4px;
+      animation: addressFadeInDown 0.6s both;
+      overflow: hidden;
+      z-index: 99;
+      max-height: 60vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          list-style: none;
+          padding: 1rem 0.6rem;
+          color: rgb(255, 255, 255);
+          i {
+            display: inline-block;
+            margin-right: 8px;
+          }
+          div {
+            display: inline-block;
+            span:first-child {
+              display: inline-block;
+            }
+            span:last-child {
+              display: block;
+              margin-top: 4px;
+              color: rgb(196, 196, 196);
+              font-size: 1rem;
+              line-height: 16px;
+            }
+          }
+        }
+        li:nth-child(odd) {
+          background: rgb(86, 95, 119);
+        }
+        li:nth-child(even) {
+          background: rgb(103, 114, 139);
+        }
       }
-      .searchBtnWrap {
-          position: absolute;
-          top: 0.8rem;
-          right: 1rem;
-          box-shadow: 0 0 4px rgba(80, 80, 80, .4);
-          border-radius: 4px;
-          background: rgba(3, 99, 143, 0.8);
-          color: rgb(230, 239, 247);
-          text-align: center;
-          width: 4rem;
-          height: 2.6rem;
-          line-height: 2.6rem;
-      }
+    }
   }
   .useAddressBtnWrap {
     position: absolute;
@@ -37,12 +106,53 @@ page-address-select {
     left: 8rem;
     right: 8rem;
     box-shadow: 0 0 4px rgba(80, 80, 80, .4);
-    border-radius: 4px;
+    border-radius: 3rem;
     background: #343B4C;
     color: rgb(230, 239, 247);
     text-align: center;
-    height: 2.6rem;
-    line-height: 2.6rem;
-    animation: bounceInUp 1.6s;
+    height: 3rem;
+    line-height: 3rem;
+    animation: fadeInUp 0.4s;
+    z-index: 999;
+  }
+  @-webkit-keyframes addressInputBg {
+    0% {
+      background: rgba(52, 59, 76, .7);
+    }
+    100% {
+      background: rgba(52, 59, 76, 1);
+    }
+  }
+  @keyframes addressInputBg {
+    0% {
+      background: rgba(52, 59, 76, .7);
+    }
+    100% {
+      background: rgba(52, 59, 76, 1);
+    }
+  }
+  @-webkit-keyframes addressFadeInDown {
+    from {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -30px, 0);
+      transform: translate3d(0, -30px, 0);
+    }
+    to {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;
+    }
+  }
+  @keyframes addressFadeInDown {
+    from {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -30px, 0);
+      transform: translate3d(0, -30px, 0);
+    }
+    to {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;
+    }
   }
 }

@@ -7,7 +7,7 @@ export class PageParams {
     }
 }
 export class CustomForm {
-    type?: string = 'input'; // input、address、money、time、picker、textarea
+    type?: string = 'input'; // input、address、number、money、time、picker、textarea
     style?: string = '1';
     lIcon?: string = '';
     lTxt: string = '';

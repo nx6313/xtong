@@ -20,7 +20,7 @@ export class RemandAddPage {
     new CustomForm('卸货地址', 'endAddress', 'address').isRequest().setRIcon('icon-dizhi-hmj').setPlaceholder('请选择卸货地址'),
     new CustomForm('开始时间', 'startTime', 'time').isRequest().setRIcon('icon-time-hmj').setPlaceholder('请选择开始时间'),
     new CustomForm('结束时间', 'endTime', 'time').isRequest().setRIcon('icon-time-hmj').setPlaceholder('请选择结束时间'),
-    new CustomForm('车辆数目', 'carNumber', 'picker').isRequest().setRIcon('icon-right').setPlaceholder('请选择需求车辆数目'),
+    new CustomForm('车辆数目', 'carNumber', 'number').isRequest().setRIcon('icon-rw-hmj').setPlaceholder('请选择需求车辆数目'),
     new CustomForm('货运类型', 'cargoType', 'picker').isRequest().setRIcon('icon-right').setPlaceholder('请选择货运类型'),
     new CustomForm('运输费用', 'freight', 'money').isRequest().setRIcon('icon-qian').setPlaceholder('请输入运输价格（每吨）'),
     new CustomForm('备注说明', 'remark', 'textarea').setPlaceholder('请输入备注信息...')

@@ -2515,6 +2515,57 @@
   animation-name: hinge;
 }
 
+@-webkit-keyframes jackInTheBox {
+  from {
+    opacity: 0;
+    -webkit-transform: scale(0.1) rotate(30deg);
+    transform: scale(0.1) rotate(30deg);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+  }
+  50% {
+    -webkit-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+  70% {
+    -webkit-transform: rotate(3deg);
+    transform: rotate(3deg);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes jackInTheBox {
+  from {
+    opacity: 0;
+    -webkit-transform: scale(0.1) rotate(30deg);
+    transform: scale(0.1) rotate(30deg);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+  }
+  50% {
+    -webkit-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+  70% {
+    -webkit-transform: rotate(3deg);
+    transform: rotate(3deg);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.jackInTheBox {
+  -webkit-animation-name: jackInTheBox;
+  animation-name: jackInTheBox;
+}
+
 /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
 
 @-webkit-keyframes rollIn {
@@ -3260,27 +3311,5 @@
   }
   100% {
     background-position: 0 0;
-  }
-}
-
-@-webkit-keyframes slideTabSelected {
-  0% {
-    background: rgb(83, 92, 112);
-    color: rgb(226, 235, 243);
-  }
-  100% {
-    background: rgb(177, 171, 92);
-    color: rgb(66, 74, 92);
-  }
-}
-
-@keyframes slideTabSelected {
-  0% {
-    background: rgb(83, 92, 112);
-    color: rgb(226, 235, 243);
-  }
-  100% {
-    background: rgb(177, 171, 92);
-    color: rgb(66, 74, 92);
   }
 }

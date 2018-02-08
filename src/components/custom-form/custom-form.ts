@@ -13,14 +13,13 @@ import { CustomForm } from '../../model/comm';
   templateUrl: 'custom-form.html'
 })
 export class CustomFormComponent {
-  @Output('initForm') initFormFn = new EventEmitter<any>();
   @Output('formSubmit') formSubmitFn = new EventEmitter<any>();
   @Input('formItems') formItemArr: Array<CustomForm> = [];
   @Input() showSubmitBtn: boolean = true;
   @Input() formSubmitBtnTxt: string = '提交';
-  @Input() formSubmitTipTxt: string = '数据提交中，请稍后...';
   @Input('cssStyle') cssStyle: {} = {};
 
+  itemOptionContainer: {} = {}; // 表单项参数绑定容器
   dataBindContainer: {} = {}; // 数据绑定容器
 
   addressSelectPage: string = 'AddressSelectPage';
@@ -41,13 +40,37 @@ export class CustomFormComponent {
     for (let index in this.formItemArr) {
       if (this.formItemArr[index].ngBind !== '') {
         this.dataBindContainer[this.formItemArr[index].ngBind] = this.formItemArr[index].initVal ? this.formItemArr[index].initVal : '';
+        this.itemOptionContainer[this.formItemArr[index].ngBind] = this.formItemArr[index];
       }
     }
     this.cd.detectChanges();
   }
 
   onSubmit(form) {
-    console.log(form);
+    if (form.valid) {
+      this.formSubmitFn.emit({
+        formData: form.value
+      });
+    } else {
+      for (let formItemOpt in this.itemOptionContainer) {
+        if (this.itemOptionContainer[formItemOpt].request && form.value[formItemOpt] === '') {
+          this.utilService.showToast(this.itemOptionContainer[formItemOpt].lTxt + '不能为空');
+          return false;
+        } else if (form.value[formItemOpt] !== '') {
+          if (this.itemOptionContainer[formItemOpt].type === 'number') {
+            if (!/^[0-9]+$/.test(form.value[formItemOpt])) {
+              this.utilService.showToast(this.itemOptionContainer[formItemOpt].lTxt + '不是有效的数值');
+              return false;
+            }
+          } else if (this.itemOptionContainer[formItemOpt].type === 'money') {
+            if (!/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test(form.value[formItemOpt])) {
+              this.utilService.showToast(this.itemOptionContainer[formItemOpt].lTxt + '不是有效的金额');
+              return false;
+            }
+          }
+        }
+      }
+    }
   }
 
   selectedAddress(addressKey) {
@@ -59,6 +82,14 @@ export class CustomFormComponent {
       }
     });
     addressSelectModal.present();
+  }
+
+  selectedTime(timeKey) {
+
+  }
+
+  selectedPicker(timeKey) {
+
   }
 
 }

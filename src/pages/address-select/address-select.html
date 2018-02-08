@@ -4,13 +4,25 @@
 
 <ion-content>
   <div #addressMapContainer class="addressMapContainer"></div>
-  <div class="addressInputWrap">
-    <input #addressInputElem type="text" placeholder="输入地址以查询" [(ngModel)]="addressInputVal" (input)="addressInputChange()">
-    <a class="searchBtnWrap ripple" (click)="searchAddress()">
-      <span>搜索</span>
-    </a>
+  <div class="addressInputWrap" [hidden]="userCityCode == ''">
+    <input class="{{addressInputVal ? 'hasInputAddress' : ''}} {{locationType == 'input' ? '' : 'dragMapToGetPosition'}}" type="text"
+      readonly="{{locationType == 'input' ? '' : 'readonly'}}" placeholder="输入地址以查询" [(ngModel)]="addressInputVal" (input)="addressInputChange()">
+    <img class="getPositionInMap {{locationType == 'input' ? 'weakenImg' : ''}}" src="https://raw.githubusercontent.com/nx6313/project_resources/master/imgs/get_position_in_map.png"
+      (click)="changeLocationType()">
+    <div class="addressPoiSelectWrap" *ngIf="autoGetPoiArr.length > 0">
+      <ul>
+        <li class="flex-r flex-l ripple" *ngFor="let autoPoi of autoGetPoiArr" (click)="selectOnePoi(autoPoi)">
+          <i class="iconfont icon-dizhi-hmj"></i>
+          <div>
+            <span>{{autoPoi.name}}</span>
+            <span>{{autoPoi.district}}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
   <a [hidden]="selectAddressPosition == null" class="useAddressBtnWrap ripple" (click)="useAddress()">
-    <span>使用该地址</span>
+    <span *ngIf="addressSelfVal != ''">使用当前定位</span>
+    <span *ngIf="addressSelfVal == '' && addressInputVal != ''">使用该地址</span>
   </a>
 </ion-content>
