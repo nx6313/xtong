@@ -30,7 +30,7 @@
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-crosswalk-webview": "^2.4.0",
     "cordova-plugin-device": "^2.0.1",
-    "cordova-plugin-gdlocation": "^1.0.38",
+    "cordova-plugin-gdlocation": "^1.0.46",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-splashscreen": "^5.0.2",

@@ -740,23 +740,3 @@ function getRandomNum(Min, Max) {
 function defaultEvent(e) {
     e.preventDefault();
 }
-
-/**
- * 扩展 JQuery 添加动画属性方法
- */
-$.fn.extend({
-    animateCss: function (animationName, removeFlag) {
-        let that = this;
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-        let animationEndPromise = new Promise(function (resolve) {
-            that.addClass('animated ' + animationName).one(animationEnd, function () {
-                resolve('移出属性动画执行完毕');
-                $(that).removeClass('animated ' + animationName);
-                if (removeFlag) {
-                    $(that).remove();
-                }
-            });
-        });
-        return animationEndPromise;
-    }
-});
