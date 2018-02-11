@@ -86,8 +86,8 @@
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <engine name="android" spec="6.3.0" />
     <plugin name="cordova-plugin-gdlocation" spec="^1.0.46">
         <variable name="API_KEY" value="849794f231b1f84d07369aa27989aa2c" />
     </plugin>
+    <engine name="android" spec="6.3.0" />
 </widget>

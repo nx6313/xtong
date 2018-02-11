@@ -8,6 +8,8 @@ import { UtilService } from '../../providers/util-service';
 import { LogService } from '../../providers/log-service';
 import { CustomForm } from '../../model/comm';
 
+declare var Picker;
+
 @Component({
   selector: 'custom-form',
   templateUrl: 'custom-form.html'
@@ -85,11 +87,15 @@ export class CustomFormComponent {
   }
 
   selectedTime(timeKey) {
-
+    Picker.instance({
+      headTitleTxt: '请选择' + this.itemOptionContainer[timeKey].lTxt
+    }).show();
   }
 
-  selectedPicker(timeKey) {
-
+  selectedPicker(formItemKey) {
+    Picker.instance({
+      headTitleTxt: '请选择' + this.itemOptionContainer[formItemKey].lTxt
+    }).show();
   }
 
 }
