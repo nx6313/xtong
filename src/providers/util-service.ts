@@ -7,6 +7,7 @@ import { EventsService } from './events-service';
 
 declare var MarLog;
 declare var GdLocation;
+declare var Picker;
 declare var $;
 
 @Injectable()
@@ -205,6 +206,12 @@ export class UtilService {
 
   // 触发后退操作
   goToBack(nav: Nav | NavController) {
+    // 判断Picker是否显示
+    var pickerShow = Picker.isShow();
+    if (pickerShow.show) {
+      pickerShow.hideFn();
+      return false;
+    }
     let activePage = this.getCurPage();
     this.logService.log('HUE[#E7642B]', '执行后退操作，当前显示页面检测：', activePage.pageName + '『' + activePage.pageType + '』');
     if (activePage.pageName !== 'page-task' && activePage.pageName !== 'page-about') {

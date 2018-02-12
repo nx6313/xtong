@@ -16,9 +16,11 @@ var Picker = (function () {
     pickerItemHeight: 36,
     pickerHighlightRadio: 0.5,
     pickerHighlightOffsetTop: -6,
-    pickerItemRate: 0.7
+    pickerItemRate: 0.7,
+    pickerItemMaxsScaleAdd: 0.6
   };
 
+  var pickerItemChangeAudio = null;
   var transformToRange = [];
 
   var supportsPassive = false;
@@ -69,6 +71,8 @@ var Picker = (function () {
       var triggerElement = null;
       if ($(e.target).hasClass('pickerItemsWrap')) {
         triggerElement = $(e.target).find('div.pickerItemsCol').get(0);
+      } else if ($(e.target).hasClass('pickerItemsCol')) {
+        triggerElement = $(e.target).get(0);
       } else {
         triggerElement = $(e.target).parents('div.pickerItemsCol').get(0);
       }
@@ -81,6 +85,8 @@ var Picker = (function () {
       var triggerElement = null;
       if ($(e.target).hasClass('pickerItemsWrap')) {
         triggerElement = $(e.target).find('div.pickerItemsCol').get(0);
+      } else if ($(e.target).hasClass('pickerItemsCol')) {
+        triggerElement = $(e.target).get(0);
       } else {
         triggerElement = $(e.target).parents('div.pickerItemsCol').get(0);
       }
@@ -101,12 +107,33 @@ var Picker = (function () {
       }
       triggerElement.style.transform = 'translate3d(0px, ' + transformTo + 'px, 0px)';
       // 更新Picker Item
-      curSelectedIndex = Math.round((transformToRange[index].max - transformTo) / _defaults.pickerItemHeight);
-      if (curSelectedIndex < 0) {
-        curSelectedIndex = 0;
-      } else if (curSelectedIndex > $(triggerElement).find('div.pickerItem').length - 1) {
-        curSelectedIndex = $(triggerElement).find('div.pickerItem').length - 1;
+      var newSelectedIndex = Math.round((transformToRange[index].max - transformTo) / _defaults.pickerItemHeight);
+      if (newSelectedIndex < 0) {
+        newSelectedIndex = 0;
+      } else if (newSelectedIndex > $(triggerElement).find('div.pickerItem').length - 1) {
+        newSelectedIndex = $(triggerElement).find('div.pickerItem').length - 1;
       }
+      if (curSelectedIndex === null || (curSelectedIndex !== null && curSelectedIndex != newSelectedIndex)) {
+        // 切换到新的item的时候，播放音效
+        pickerItemChangeAudio.play();
+        // 更改文字缩放排布
+        $(triggerElement).find('div.pickerItem:eq(' + newSelectedIndex + ')').css('transform', `scale(${1 + _defaults.pickerItemMaxsScaleAdd}, ${1 + _defaults.pickerItemMaxsScaleAdd})`);
+        var itemPreIndex = newSelectedIndex - 1;
+        var itemPreI = 0;
+        while (itemPreIndex >= 0) {
+          itemPreI++;
+          $(triggerElement).find('div.pickerItem:eq(' + itemPreIndex + ')').css('transform', `scale(${1 + _defaults.pickerItemMaxsScaleAdd - itemPreI * 0.1}, ${1 + _defaults.pickerItemMaxsScaleAdd - itemPreI * 0.1})`);
+          itemPreIndex--;
+        }
+        var itemNextIndex = newSelectedIndex + 1;
+        var itemNextI = 0;
+        while (itemNextIndex <= $(triggerElement).find('div.pickerItem').length - 1) {
+          itemNextI++;
+          $(triggerElement).find('div.pickerItem:eq(' + itemNextIndex + ')').css('transform', `scale(${1 + _defaults.pickerItemMaxsScaleAdd - itemNextI * 0.1}, ${1 + _defaults.pickerItemMaxsScaleAdd - itemNextI * 0.1})`);
+          itemNextIndex++;
+        }
+      }
+      curSelectedIndex = newSelectedIndex;
       $(triggerElement).find('div.pickerItem:eq(' + curSelectedIndex + ')').siblings().removeClass('pickerItemSelected');
       $(triggerElement).find('div.pickerItem:eq(' + curSelectedIndex + ')').addClass('pickerItemSelected');
     }
@@ -115,6 +142,8 @@ var Picker = (function () {
       var triggerElement = null;
       if ($(e.target).hasClass('pickerItemsWrap')) {
         triggerElement = $(e.target).find('div.pickerItemsCol').get(0);
+      } else if ($(e.target).hasClass('pickerItemsCol')) {
+        triggerElement = $(e.target).get(0);
       } else {
         triggerElement = $(e.target).parents('div.pickerItemsCol').get(0);
       }
@@ -313,6 +342,7 @@ var Picker = (function () {
               if (itemVal == 0) {
                 pickerItem.classList.add('pickerItemSelected');
               }
+              pickerItem.style.transform = `scale(${1 + _defaults.pickerItemMaxsScaleAdd - itemVal * 0.1}, ${1 + _defaults.pickerItemMaxsScaleAdd - itemVal * 0.1})`;
               pickerItem.innerHTML = itemValObj;
               let displayVal = $.isArray(pickerItemObj.displayValues) ? (pickerItemObj.displayValues[itemVal] || itemValObj) : itemValObj;
               pickerItem.setAttribute('data-picker-value', displayVal);
@@ -354,6 +384,9 @@ var Picker = (function () {
       // 计算调整整体bottom值
       var pickerSelect = document.getElementById('pickerSelectWrap');
       pickerSelect.style.bottom = `-${pickerSelect.clientHeight + 20}px`;
+      // 初始化音效播放组件
+      pickerItemChangeAudio = new Audio('assets/musics/picker_change.mp3');
+      pickerItemChangeAudio.volume = 0.2;
       // 绑定事件
       var pickerShadePane = $('#pickerShadePane');
       pickerShadePane.off('click');
@@ -380,6 +413,20 @@ var Picker = (function () {
         pickerInstance.hide();
       });
       return pickerInstance;
+    },
+    isShow: function () {
+      var pickerSelect = document.getElementById('pickerSelectWrap');
+      if (pickerSelect.style.bottom === '0px' || pickerSelect.style.bottom === '0') {
+        return {
+          show: true,
+          hideFn: pickerInstance.hide
+        };
+      } else {
+        return {
+          show: false,
+          showFn: pickerInstance.show
+        };
+      }
     }
   };
 
@@ -389,6 +436,8 @@ var Picker = (function () {
       var pickerItemElement = null;
       if ($(e.target).hasClass('pickerItemsWrap')) {
         pickerItemElement = $(e.target).find('div.pickerItemsCol').get(0);
+      } else if ($(e.target).hasClass('pickerItemsCol')) {
+        pickerItemElement = $(e.target).get(0);
       } else {
         pickerItemElement = $(e.target).parents('div.pickerItemsCol').get(0);
       }
@@ -457,8 +506,8 @@ var Picker = (function () {
       top: 0;
       width: 100%;
       box-sizing: border-box;
-      -webkit-transition: 300ms;
-      transition: 300ms;
+      -webkit-transition: 100ms;
+      transition: 100ms;
       font-size: 1.2rem;
     }
     div#pickerSelectWrap div.pickerBodyWrap div.pickerItemsWrap div.pickerItemsCol div.pickerItemSelected {
