@@ -1,8 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, ModalController, Platform } from 'ionic-angular';
 import { TabObj } from '../../model/comm';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { StorageService } from '../../providers/storage-service';
 import { ProtocolService } from '../../providers/protocol-service';
 import { EventsService } from '../../providers/events-service';

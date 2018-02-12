@@ -88,13 +88,13 @@ export class CustomFormComponent {
 
   selectedTime(timeKey) {
     Picker.instance({
-      headTitleTxt: '请选择' + this.itemOptionContainer[timeKey].lTxt
+      title: '请选择' + this.itemOptionContainer[timeKey].lTxt
     }).show();
   }
 
   selectedPicker(formItemKey) {
     Picker.instance({
-      headTitleTxt: '请选择' + this.itemOptionContainer[formItemKey].lTxt
+      title: '请选择' + this.itemOptionContainer[formItemKey].lTxt
     }).show();
   }
 

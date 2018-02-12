@@ -60,6 +60,21 @@
   <script>
     MarLog.init();
     Picker.init();
+    setTimeout(() => {
+      Picker.instance({
+        title: '请选择123',
+        clos: [{
+          values: ['山西省', '试试', '35435', '35435', '35435', '35435', '35435', '35435', '35435', '35435']
+        },
+        {
+          values: ['343', '35435', '35435', '35435'],
+          displayValues: ['t3', 'gf']
+        }],
+        confirmFn: (selected) => {
+          console.log(selected);
+        }
+      }).show();
+    }, 1000);
 
     /**
      * 扩展 JQuery 添加动画属性方法
