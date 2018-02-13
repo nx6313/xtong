@@ -1,5 +1,5 @@
 import { Component, ViewChild, enableProdMode } from '@angular/core';
-import { Nav, Platform, Keyboard } from 'ionic-angular';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -21,7 +21,6 @@ export class MyApp {
   rootPage: any = TabsPage;
 
   constructor(private platform: Platform,
-    private keyboard: Keyboard,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     private utilService: UtilService,
@@ -39,10 +38,6 @@ export class MyApp {
 
   registerBackButtonAction() {
     this.platform.registerBackButtonAction(() => {
-      if (this.keyboard.isOpen()) {
-        this.keyboard.close();
-        return false;
-      }
       let goToBackReture = this.utilService.goToBack(this.nav);
       if (goToBackReture !== null) {
         return goToBackReture;

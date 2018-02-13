@@ -23,6 +23,7 @@ export class CustomFormComponent {
 
   itemOptionContainer: {} = {}; // 表单项参数绑定容器
   dataBindContainer: {} = {}; // 数据绑定容器
+  dataRealBindContainer: {} = {}; // 真实数据绑定容器
 
   addressSelectPage: string = 'AddressSelectPage';
 
@@ -42,6 +43,9 @@ export class CustomFormComponent {
     for (let index in this.formItemArr) {
       if (this.formItemArr[index].ngBind !== '') {
         this.dataBindContainer[this.formItemArr[index].ngBind] = this.formItemArr[index].initVal ? this.formItemArr[index].initVal : '';
+        if (this.formItemArr[index].ngRealValBind) {
+          this.dataRealBindContainer[this.formItemArr[index].ngRealValBind] = '';
+        }
         this.itemOptionContainer[this.formItemArr[index].ngBind] = this.formItemArr[index];
       }
     }
@@ -51,7 +55,8 @@ export class CustomFormComponent {
   onSubmit(form) {
     if (form.valid) {
       this.formSubmitFn.emit({
-        formData: form.value
+        formData: form.value,
+        formRealVal: this.dataRealBindContainer
       });
     } else {
       for (let formItemOpt in this.itemOptionContainer) {
@@ -88,13 +93,43 @@ export class CustomFormComponent {
 
   selectedTime(timeKey) {
     Picker.instance({
-      title: '请选择' + this.itemOptionContainer[timeKey].lTxt
+      title: '请选择' + this.itemOptionContainer[timeKey].lTxt,
+      clos: [{
+        values: ['今天', '明天', '后天', this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 3)), 'MM月dd日'), this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 4)), 'MM月dd日')],
+        displayValues: [
+          this.utilService.formatDate(new Date(), 'yyyy-MM-dd'),
+          this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 1)), 'yyyy-MM-dd'),
+          this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 2)), 'yyyy-MM-dd'),
+          this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 3)), 'yyyy-MM-dd'),
+          this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 4)), 'yyyy-MM-dd')
+        ]
+      },
+      {
+        values: '1-24'
+      },
+      {
+        values: '1-59'
+      }],
+      joinWord: ['', '点', '分'],
+      confirmFn: (selected) => {
+        this.dataBindContainer[timeKey] = selected.selectJoinValue;
+        this.dataRealBindContainer[this.itemOptionContainer[timeKey].ngRealValBind] = selected.selectDisplayValue;
+        this.cd.detectChanges();
+      }
     }).show();
   }
 
   selectedPicker(formItemKey) {
     Picker.instance({
-      title: '请选择' + this.itemOptionContainer[formItemKey].lTxt
+      title: '请选择' + this.itemOptionContainer[formItemKey].lTxt,
+      clos: this.itemOptionContainer[formItemKey].pickerCols,
+      confirmFn: (selected) => {
+        this.dataBindContainer[formItemKey] = selected.selectJoinValue;
+        if (this.itemOptionContainer[formItemKey].ngRealValBind) {
+          this.dataRealBindContainer[this.itemOptionContainer[formItemKey].ngRealValBind] = selected.selectDisplayValue;
+        }
+        this.cd.detectChanges();
+      }
     }).show();
   }
 

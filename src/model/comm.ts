@@ -16,10 +16,12 @@ export class CustomForm {
     request?: Boolean = false;
     callBack?: Function = null;
     ngBind: any = null;
+    ngRealValBind: any = null;
     initVal?: any;
     roundLBtn?: string = '';
     txtLBtn?: string = '';
     lBtnCallBack?: Function = null;
+    pickerCols?: Array<PickerItem>;
     constructor(lTxt: string = '', ngBind: any, type?: string) {
         this.lTxt = lTxt;
         this.ngBind = ngBind;
@@ -39,6 +41,14 @@ export class CustomForm {
     }
     setPlaceholder(placeholder) {
         this.placeholder = placeholder;
+        return this;
+    }
+    setNgRealValBind(ngRealValBind) {
+        this.ngRealValBind = ngRealValBind;
+        return this;
+    }
+    setPickerCols(pickerCols) {
+        this.pickerCols = pickerCols;
         return this;
     }
 }
@@ -66,5 +76,21 @@ export class TabObj {
     keyword?: string;
     selected?: Boolean;
     constructor() {
+    }
+}
+export class PickerItem {
+    textAlign?: string;
+    values?: Array<string>;
+    displayValues?: Array<string>;
+    constructor(values: Array<string>) {
+        this.values = values;
+    }
+    setTextAlign(textAlign: string) {
+        this.textAlign = textAlign;
+        return this;
+    }
+    setDisplayValues(displayValues: Array<string>) {
+        this.displayValues = displayValues;
+        return this;
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Nav, NavController, AlertController, LoadingController, ToastController, Platform, Loading } from 'ionic-angular';
+import { Nav, NavController, AlertController, LoadingController, ToastController, Platform, Loading, Keyboard } from 'ionic-angular';
 import { Toast } from '@ionic-native/toast';
 import { StorageService } from './storage-service';
 import { LogService } from './log-service';
@@ -18,6 +18,7 @@ export class UtilService {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     private platform: Platform,
+    private keyboard: Keyboard,
     private toast: Toast,
     private userData: StorageService,
     private logService: LogService,
@@ -211,6 +212,9 @@ export class UtilService {
     if (pickerShow.show) {
       pickerShow.hideFn();
       return false;
+    }
+    if (this.keyboard.isOpen()) {
+      this.keyboard.close();
     }
     let activePage = this.getCurPage();
     this.logService.log('HUE[#E7642B]', '执行后退操作，当前显示页面检测：', activePage.pageName + '『' + activePage.pageType + '』');

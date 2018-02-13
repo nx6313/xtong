@@ -4,6 +4,6 @@
 
 <ion-content>
   <scrollview [topAreaBg]="'#ffffff'">
-      <custom-form [formItems]="formItems"></custom-form>
+    <custom-form [formItems]="formItems" (formSubmit)="formSubmit($event)"></custom-form>
   </scrollview>
 </ion-content>
