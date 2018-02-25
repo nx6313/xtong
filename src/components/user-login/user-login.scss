@@ -49,16 +49,17 @@ user-login {
     }
     div.code {
       button {
-        height: 30px;
-        width: 110px;
-        top: 5px;
-        left: calc(100% - 116px);
+        height: 26px;
+        width: 90px;
+        top: 8px;
+        left: calc(100% - 96px);
         z-index: 10;
         letter-spacing: 1px;
         background: #ffffff;
         color: #24c789;
         border: 1px solid #24c789;
         font-weight: normal;
+        font-size: 12px;
       }
     }
     div.btn {
