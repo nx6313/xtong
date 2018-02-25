@@ -221,7 +221,7 @@ export class UtilService {
     if (activePage.pageName === 'page-welcome') {
       return false;
     }
-    if (activePage.pageName !== 'page-login' && activePage.pageName !== 'page-task' && activePage.pageName !== 'page-about') {
+    if (activePage.pageName !== 'page-login' && activePage.pageName !== 'page-complete-info' && activePage.pageName !== 'page-task' && activePage.pageName !== 'page-about') {
       if (activePage.pageType == 'ionModal') {
         this.eventsService.events.publish(activePage.pageName + ':goToBack');
         return false;
