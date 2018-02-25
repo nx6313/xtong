@@ -32,6 +32,8 @@ export class ScrollviewComponent {
   @Input('ignoreElementClases') ignoreElements: string = '';
   @Input('footerWaterMark') footerWaterMark: string = '';
   @Input('diffHeightWhenLoadFinish') diffHeightWhenLoadFinish: number = 0;
+  @Input('canPull') canPull: Boolean = true;
+  @Input('canUp') canUp: Boolean = true;
   @Input('canSwitchSlide') canSwitchSlide: Boolean = false;
   
   @Input('scrollviewRank') scrollviewRank: string = '';
@@ -102,7 +104,7 @@ export class ScrollviewComponent {
       pageLoadFinish: this.pageLoadFinish,
       shouldPullToRefresh: () => {
         let scrollTop = scrollEle.scrollTop;
-        if (scrollTop <= 0) {
+        if (this.canPull && scrollTop <= 0) {
           return true;
         }
         return false;
@@ -111,7 +113,7 @@ export class ScrollviewComponent {
         let scrollTop = scrollEle.scrollTop;
         let clientHeight = scrollEle.clientHeight;
         let scrollHeight = scrollEle.scrollHeight;
-        if (scrollHeight >= clientHeight + scrollTop && scrollHeight <= clientHeight + scrollTop + 2) {
+        if (this.canUp && scrollHeight >= clientHeight + scrollTop && scrollHeight <= clientHeight + scrollTop + 2) {
           return true;
         }
         return false;

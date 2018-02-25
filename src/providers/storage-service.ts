@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { EventsService } from './events-service';
@@ -9,52 +7,36 @@ import { LogService } from './log-service';
 
 @Injectable()
 export class StorageService {
-  userInfo: {
-    userId?: string,
-    workType?: string
-  } = {
-      userId: '',
-      workType: ''
-    };
-  userAddress: {
-    cityCode?: string, // 每次获取到定位后，设置
-    formattedAddress?: string, // 每次获取到定位后，设置
-    position?: any, // 每次获取到定位后，设置
-    curInLocation?: any // 保存用户当前位置，用于首页定位显示
-  } = {
-      cityCode: '',
-      formattedAddress: '',
-      position: {},
-      curInLocation: {}
-    };
-  supportCity: {
-    'province_name'?: string
-    'city'?: Array<any>
-  } = {
-      'province_name': '',
-      'city': new Array<any>()
-    };
-  filterBaseData: {
-    filterClass: Array<{ id: string, name: string, tclass: Array<{ id: string, name: string, icon: string }> }>,
-    filterZongSelectedId?: string,
-    filterQuyuSelectedId?: string,
-    filterClassSelectedId?: string
-  } = {
-      filterClass: [],
-      filterZongSelectedId: '',
-      filterQuyuSelectedId: '',
-      filterClassSelectedId: ''
-    };
+  userInfo: { userId?: string } = { userId: '' };
 
   constructor(private events: EventsService,
     private storage: Storage,
     private logService: LogService) {
   }
 
-  // 判断是否为第一次使用系统（是否显示欢迎页使用）
-  isFirstIn() {
-    return this.storage.get('firstIn').then((value) => {
-      return value;
+  // 判断进入系统时，需要显示的主页面是哪个
+  checkInPageRoot() {
+    return this.storage.get('firstIn').then((first) => {
+      if (!first) {
+        // 第一次使用，显示欢迎页面
+        return 'welcome';
+      } else {
+        return this.storage.get('userInfo').then((user) => {
+          if (!user) {
+            // 显示登录页面
+            return 'login';
+          } else {
+            let userInfo: UserInfo = user;
+            if (!userInfo.merchantId) {
+              // 显示资料完善页
+              return 'completeInfo';
+            } else {
+              // 显示主页
+              return user;
+            }
+          }
+        });
+      }
     });
   }
 
@@ -77,8 +59,7 @@ export class StorageService {
    */
   setUserInfo(userInfo: UserInfo) {
     this.storage.set('userInfo', userInfo);
-    this.userInfo.userId = userInfo.userId;
-    userInfo.workType ? this.userInfo.workType = userInfo.workType : {};
+    this.userInfo.userId = userInfo.staffId;
   }
 
   /**

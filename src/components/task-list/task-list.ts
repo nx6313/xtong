@@ -114,42 +114,7 @@ export class TaskListComponent {
 
   private acceptOrder(event, task) {
     this.storageService.getUserInfo().then((userInfo) => {
-      if (userInfo && userInfo.workType && userInfo.workType.toLowerCase() !== 'null') {
-        this.utilService.showLoading('正在为您接单');
-        // this.protocolService.receiveOrder(task.orderId).then((receiveOrderData) => {
-        //   this.utilService.closeLoading();
-        //   if (receiveOrderData.flag == 1) {
-        //     // 执行移除动画
-        //     this.utilService.showCurrentTaskElem(() => {
-        //       this.toTaskDetail(task);
-        //     });
-        //     $(event.target.offsetParent).animateCss('bounceOutRight', true).then(() => {
-        //       this.acceptOrderAfterFn.emit({
-        //         acceptTask: task
-        //       });
-        //     });
-        //     // 移除当前订单条目
-        //     this.taskList.splice(this.taskList.indexOf(task), 1);
-        //     this.cd.detectChanges();
-        //   } else {
-        //     this.utilService.showToast(receiveOrderData.msg);
-        //   }
-        // });
-      } else {
-        let loginModal = this.modalCtrl.create(this.loginPage);
-        if (!userInfo) {
-          // 需要登录
-          this.utilService.showToast('请先登录');
-        } else {
-          // 需要设置工种
-          this.utilService.showToast('请先设置您的工种');
-          loginModal = this.modalCtrl.create(this.loginPage, { setTClass: true });
-        }
-        loginModal.onDidDismiss(() => {
-          this.logService.log('从登录页面返回');
-        });
-        loginModal.present();
-      }
+      
     });
     event.stopPropagation();
   }

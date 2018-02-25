@@ -16,6 +16,9 @@ import { LogService } from '../providers/log-service';
 
 import { ComponentsModule } from '../components/components.module';
 
+import { WelcomePage } from '../pages/welcome/welcome';
+import { LoginPage } from '../pages/login/login';
+import { CompleteInfoPage } from '../pages/complete-info/complete-info';
 import { AboutPage } from '../pages/about/about';
 import { TaskPage } from '../pages/task/task';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -29,6 +32,9 @@ import { PipesModule } from '../pipes/pipes.module';
 @NgModule({
   declarations: [
     MyApp,
+    WelcomePage,
+    LoginPage,
+    CompleteInfoPage,
     AboutPage,
     TaskPage,
     TabsPage
@@ -44,6 +50,9 @@ import { PipesModule } from '../pipes/pipes.module';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    WelcomePage,
+    LoginPage,
+    CompleteInfoPage,
     AboutPage,
     TaskPage,
     TabsPage

@@ -12,6 +12,7 @@ import { CustomListComponent } from './custom-list/custom-list';
 import { SlideTabComponent } from './slide-tab/slide-tab';
 import { SwitchPagesComponent } from './switch-pages/switch-pages';
 import { SwitchPageComponent } from './switch-pages/switch-page';
+import { UserLoginComponent } from './user-login/user-login';
 
 import { PipesModule } from '../pipes/pipes.module';
 
@@ -26,7 +27,8 @@ import { PipesModule } from '../pipes/pipes.module';
         CustomListComponent,
         SlideTabComponent,
         SwitchPagesComponent,
-        SwitchPageComponent
+        SwitchPageComponent,
+        UserLoginComponent
     ],
     imports: [
         CommonModule,
@@ -43,7 +45,8 @@ import { PipesModule } from '../pipes/pipes.module';
         CustomListComponent,
         SlideTabComponent,
         SwitchPagesComponent,
-        SwitchPageComponent
+        SwitchPageComponent,
+        UserLoginComponent
     ]
 })
 export class ComponentsModule { }

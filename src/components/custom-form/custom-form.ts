@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter, ElementRef } from '@angular/core';
 import { NavController, ViewController, ModalController, Platform } from 'ionic-angular';
-import { Observable } from 'rxjs/Rx';
 import { EventsService } from '../../providers/events-service';
 import { StorageService } from '../../providers/storage-service';
 import { ProtocolService } from '../../providers/protocol-service';
@@ -105,10 +104,10 @@ export class CustomFormComponent {
         ]
       },
       {
-        values: '1-24'
+        values: '0-24'
       },
       {
-        values: '1-59'
+        values: '0-59'
       }],
       joinWord: ['', '点', '分'],
       confirmFn: (selected) => {

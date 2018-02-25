@@ -117,7 +117,7 @@ var PullToRefresh = (function () {
     if (ionModal && ionModal.length > 0) {
       curPageIdName = $(ionModal[ionModal.length - 1]).find('ion-content').parent().get(0).localName;
     } else {
-      let showTabsContentPages = $('ion-tabs').find('ion-tab.show-tab').find('ion-content');
+      let showTabsContentPages = $('ion-nav').find('.show-page').find('ion-content');
       for (let pageIndex = 0; pageIndex < showTabsContentPages.length; pageIndex++) {
         if ($(showTabsContentPages[pageIndex]).parent().is(':visible')) {
           curPageIdName = $(showTabsContentPages[pageIndex]).parent().get(0).localName;
@@ -933,7 +933,7 @@ var PullToRefresh = (function () {
       _SETTINGS.ptrAfterElement = ptrAfter;
 
       _SETTINGS.ptrElement = ptr;
-      
+
       // 绑定事件
       if (canSwitchSlide) {
         if ($('switch-pages').find('div.switchTabSlideRail').find('span.switchTabItem').length > 0) {

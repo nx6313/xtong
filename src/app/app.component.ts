@@ -10,6 +10,9 @@ import { UtilService } from '../providers/util-service';
 import { LogService } from '../providers/log-service';
 import { StorageService } from '../providers/storage-service';
 import { ProtocolService } from '../providers/protocol-service';
+import { LoginPage } from '../pages/login/login';
+import { WelcomePage } from '../pages/welcome/welcome';
+import { CompleteInfoPage } from '../pages/complete-info/complete-info';
 enableProdMode(); // 调用此函数，启用生产模式
 
 @Component({
@@ -18,7 +21,7 @@ enableProdMode(); // 调用此函数，启用生产模式
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
   backButtonPressed: boolean = false;
-  rootPage: any = TabsPage;
+  rootPage: any = null;
 
   constructor(private platform: Platform,
     private statusBar: StatusBar,
@@ -28,11 +31,28 @@ export class MyApp {
     private storageService: StorageService,
     private protocolService: ProtocolService,
     private eventsService: EventsService) {
+    this.initPageRoot();
     platform.ready().then(() => {
       statusBar.styleLightContent();
       statusBar.backgroundColorByHexString('#343B4C');
-      splashScreen.hide();
       this.registerBackButtonAction();
+    });
+  }
+
+  initPageRoot() {
+    this.storageService.checkInPageRoot().then((rootType) => {
+      if (rootType == 'welcome') {
+        this.rootPage = WelcomePage;
+      } else if (rootType == 'login') {
+        this.rootPage = LoginPage;
+      } else if (rootType == 'completeInfo') {
+        this.rootPage = CompleteInfoPage;
+      } else {
+        this.rootPage = TabsPage;
+      }
+      setTimeout(() => {
+        this.splashScreen.hide();
+      }, 100);
     });
   }
 

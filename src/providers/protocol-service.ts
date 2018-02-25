@@ -18,52 +18,24 @@ export class ProtocolService {
   }
 
   /**
-   * 用户登录（用户名、密码 / 验证码登录）
-   * @param username
-   * @param password
-   */
-  userLogin(username: string, password?: string, verifycode?: string) {
-    var url = this.API_URL + "/app/index.php?i=2&c=entry&do=index&m=hmj_housekeep";
-    var body = { 'username': username };
-    if (password) {
-      body['password'] = password;
-    }
-    if (verifycode) {
-      body['verifycode'] = verifycode;
-    }
-    return this.httpService.makePost(url, body, '用户登录');
-  }
-
-  /**
    * 获取登陆短信验证码
    * @param username
    */
-  loginSmsVerifyCode(username: string) {
-    var url = this.API_URL + "/app/index.php?i=2&c=entry&do=index&op=logverifycode&m=hmj_housekeep";
-    var body = { 'username': username };
+  loginSmsVerifyCode(userPhone: string) {
+    var url = this.API_URL + "configure/getCaptcha";
+    var body = { 'phone': userPhone };
     return this.httpService.makePost(url, body, '获取登录短信验证码');
   }
 
   /**
-   * 用户注册（手机号、密码、验证码注册）
-   * @param mobile
+   * 用户登录（用户名、密码 / 验证码登录）
+   * @param username
    * @param password
-   * @param verifycode
    */
-  userRegister(mobile: string, password: string, verifycode: string) {
-    var url = this.API_URL + "/app/index.php?i=2&c=entry&do=register&m=hmj_housekeep";
-    var body = { 'mobile': mobile, 'password': password, 'verifycode': verifycode };
-    return this.httpService.makePost(url, body, '用户注册');
-  }
-
-  /**
-   * 获取注册短信验证码
-   * @param mobile
-   */
-  registerSmsVerifyCode(mobile: string) {
-    var url = this.API_URL + "/app/index.php?i=2&c=entry&do=register&op=verifycode&m=hmj_housekeep";
-    var body = { 'mobile': mobile };
-    return this.httpService.makePost(url, body, '获取注册短信验证码');
+  userLogin(userPhone: string, verifycode: string) {
+    var url = this.API_URL + "login/staff";
+    var body = { 'phone': userPhone, 'smsCode': verifycode };
+    return this.httpService.makePost(url, body, '用户登录');
   }
 
   /**
@@ -71,7 +43,7 @@ export class ProtocolService {
    * @param mobile
    */
   loginForgetPwd(mobile: string) {
-    var url = this.API_URL + "/app/index.php?i=2&c=entry&do=register&op=forget_pass&m=hmj_housekeep";
+    var url = this.API_URL + "";
     var body = { 'mobile': mobile };
     return this.httpService.makePost(url, body, '获取重置密码短信验证码');
   }
@@ -83,7 +55,7 @@ export class ProtocolService {
    * @param verifycode
    */
   loginResetPwd(mobile: string, password: string, verifycode: string) {
-    var url = this.API_URL + "/app/index.php?i=2&c=entry&do=register&op=reset_pass&m=hmj_housekeep";
+    var url = this.API_URL + "";
     var body = { 'mobile': mobile, 'password': password, 'verifycode': verifycode };
     return this.httpService.makePost(url, body, '重置登录密码');
   }
@@ -109,7 +81,7 @@ export class ProtocolService {
    * @return { note, time, appType, appUrl, versionNumber }
    */
   requestNewAppVersion(appType: string) {
-    var url = this.API_URL + "/getNewAppVersion.do";
+    var url = this.API_URL + "/getNewAppVersion";
     var body = { 'appType': appType };
     return this.httpService.makePost(url, body, '获取APP最后版本信息');
   }

@@ -24,11 +24,19 @@
   font-size: 2rem !important;
 }
 
-.footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+.footer-md::before,
+.tabs-md[tabsPlacement="bottom"]>.tabbar::before {
   top: -1px !important;
   height: 1px !important;
 }
 
 ion-content {
   background-color: #EAF0F1 !important;
+}
+
+.loading-md .loading-wrapper {
+  border-radius: 4px !important;
+  .spinner-crescent circle {
+    stroke: #24c789 !important;
+  }
 }

@@ -218,7 +218,10 @@ export class UtilService {
     }
     let activePage = this.getCurPage();
     this.logService.log('HUE[#E7642B]', '执行后退操作，当前显示页面检测：', activePage.pageName + '『' + activePage.pageType + '』');
-    if (activePage.pageName !== 'page-task' && activePage.pageName !== 'page-about') {
+    if (activePage.pageName === 'page-welcome') {
+      return false;
+    }
+    if (activePage.pageName !== 'page-login' && activePage.pageName !== 'page-task' && activePage.pageName !== 'page-about') {
       if (activePage.pageType == 'ionModal') {
         this.eventsService.events.publish(activePage.pageName + ':goToBack');
         return false;
@@ -381,7 +384,7 @@ export class UtilService {
       curPage.pageType = 'ionModal';
       curPage.pageName = $(ionModal[ionModal.length - 1]).find('ion-content').parent().get(0).localName;
     } else {
-      let showTabsContentPages = $('ion-tabs').find('ion-tab.show-tab').find('ion-content');
+      let showTabsContentPages = $('ion-nav').find('.show-page').find('ion-content');
       for (let pageIndex = 0; pageIndex < showTabsContentPages.length; pageIndex++) {
         if ($(showTabsContentPages[pageIndex]).parent().is(':visible')) {
           curPage.pageType = 'ionModal';
