@@ -23,7 +23,7 @@ export class RemandAddPage {
     new CustomForm('结束时间', 'endTime', 'time').isRequest().setRIcon('icon-time-hmj').setPlaceholder('请选择结束时间').setNgRealValBind('endTimeReal'),
     new CustomForm('车辆数目', 'carNumber', 'number').isRequest().setRIcon('icon-rw-hmj').setPlaceholder('请选择需求车辆数目'),
     new CustomForm('货运类型', 'cargoType', 'picker').isRequest().setRIcon('icon-right').setPlaceholder('请选择货运类型').setNgRealValBind('cargoTypeReal').setPickerCols([
-      new PickerItem(['大货车', '大挂', 'd', 'sdfsd']).setDisplayValues([])
+      new PickerItem(['大货车', '大挂', ' 小货车', '大卡']).setDisplayValues(['1', '2', '3', '4'])
     ]),
     new CustomForm('运输费用', 'freight', 'money').isRequest().setRIcon('icon-qian').setPlaceholder('请输入运输价格（每吨）'),
     new CustomForm('备注说明', 'remark', 'textarea').setPlaceholder('请输入备注信息...')
@@ -69,7 +69,21 @@ export class RemandAddPage {
     this.utilService.showLoading('正在创建新任务');
     this.protocolService.demandAdd(demand).then((demandAdd) => {
       this.utilService.closeLoading();
-      console.log(demandAdd);
+      if (demandAdd && (demandAdd.error === 'timeout' || demandAdd.error === 'neterr')) {
+        if (demandAdd.error === 'timeout') {
+          this.utilService.showToast('创建新任务超时，请稍后重试');
+        } else if (demandAdd.error === 'neterr') {
+          this.utilService.showToast('网络异常，请稍后重试');
+        }
+        return false;
+      }
+      if (demandAdd.result == 1) {
+        this.utilService.showToast('任务添加成功');
+        this.eventsService.unsubscribe('page-remand-add:goToBack');
+        this.viewCtrl.dismiss();
+      } else {
+        this.utilService.showToast(demandAdd.msg);
+      }
     });
   }
 

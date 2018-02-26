@@ -4,7 +4,7 @@
 
 <ion-content>
   <div #addressMapContainer class="addressMapContainer"></div>
-  <div class="addressInputWrap" [hidden]="userCityCode == ''">
+  <div class="addressInputWrap">
     <input class="{{addressInputVal ? 'hasInputAddress' : ''}} {{locationType == 'input' ? '' : 'dragMapToGetPosition'}}" type="text"
       readonly="{{locationType == 'input' ? '' : 'readonly'}}" placeholder="输入地址以查询" [(ngModel)]="addressInputVal" (input)="addressInputChange()">
     <img class="getPositionInMap {{locationType == 'input' ? 'weakenImg' : ''}}" src="https://raw.githubusercontent.com/nx6313/project_resources/master/imgs/get_position_in_map.png"

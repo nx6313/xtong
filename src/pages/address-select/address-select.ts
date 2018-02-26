@@ -81,14 +81,14 @@ export class AddressSelectPage {
           this.userCityCode = data.addressComponent.citycode;
           this.cd.detectChanges();
         }
-        AMap.plugin('AMap.Autocomplete', () => {
-          var autoOptions = {
-            city: this.userCityCode,
-            citylimit: true
-          };
-          this.autocomplete = new AMap.Autocomplete(autoOptions);
-        })
       });
+      AMap.plugin('AMap.Autocomplete', () => {
+        var autoOptions = {
+          city: this.userCityCode,
+          citylimit: true
+        };
+        this.autocomplete = new AMap.Autocomplete(autoOptions);
+      })
       AMap.service('AMap.PlaceSearch', () => {
         this.placeSearch = new AMap.PlaceSearch({
           pageSize: 1,
