@@ -1,4 +1,4 @@
-<form class="formWrap" [ngStyle]="cssStyle" #customForm="ngForm" novalidate>
+<form class="formWrap" autocomplete="off" [ngStyle]="cssStyle" #customForm="ngForm" novalidate>
   <div class="formItem {{formIt.style=='1' ? 'formItem_style_1' : ''}} {{formIt.type == 'textarea' ? 'formItem_textarea' : ''}}"
     *ngFor="let formIt of formItemArr" (click)="formIt.callBack != null ? formIt.callBack(formIt) : {}">
     <span *ngIf="formIt.style=='1' && formIt.lTxt != ''" class="titleTxt">{{formIt.lTxt}}：</span>

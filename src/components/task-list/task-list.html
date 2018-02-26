@@ -4,7 +4,8 @@
     <div class="orderTimeType flex-r flex-b">
       <span class="orderTime">
         <i class="iconfont icon-time-hmj"></i>{{task.orderTime | date:'yyyy年MM月dd日 HH时mm分'}}</span>
-      <span class="orderType"><i *ngIf="task.orderType == '钟点工'" class="iconfont icon-st-time"></i>{{task.orderType}}</span>
+      <span class="orderType">
+        <i *ngIf="task.orderType == '钟点工'" class="iconfont icon-st-time"></i>{{task.orderType}}</span>
     </div>
     <div class="clientPhoneName flex-r flex-c">
       <span class="clientPhone">
@@ -18,13 +19,17 @@
       <span class="getThisOrder ripple" (click)="acceptOrder($event, task)">抢单</span>
     </div>
   </div>
-  <div class="noDataWrap" [hidden]="taskList.length > 0 && !isRefing">
+  <div class="noDataWrap" [hidden]="taskList && taskList.length > 0 && !isRefing">
     <div #loadingDataTipWrap class="loadingDataTipWrap">
-      <img src="http://img.mp.sohu.com/upload/20170730/c5ecdca61e02477da5f6eebc50a5739b.png">
+      <img src="assets/imgs/data_loading.gif">
       <span>数据加载中</span>
     </div>
+    <div #requestIsOuttimeTipWrap class="dataIsEmptyTipWrap" (click)="clickRequestTimeoutBtn()">
+      <img src="assets/imgs/request_task_error.gif">
+      <span>{{errShowTip}}，点击重新加载</span>
+    </div>
     <div #dataIsEmptyTipWrap class="dataIsEmptyTipWrap">
-      <img src="https://raw.githubusercontent.com/nx6313/project_resources/master/imgs/request_task.gif">
+      <img src="assets/imgs/request_task.gif">
       <span>还没有发布的任务哦</span>
       <span class="btn ripple" (click)="clickNoDataBtn()">我要去发布</span>
     </div>

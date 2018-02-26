@@ -4,7 +4,7 @@ switch-pages {
     height: 100%;
     .switchItemWrap {
       position: relative;
-      background: #707A94;
+      background: #343B4C;
       height: 36px;
       line-height: 36px;
       color: rgb(169, 177, 202);
@@ -29,7 +29,7 @@ switch-pages {
         position: absolute;
         bottom: 0;
         height: 3px;
-        background: #95A4C7;
+        background: #707A94;
         min-width: calc(100vw / 4);
         transform: translate3d(0px, 0px, 0px);
         transition: 0.4s ease;

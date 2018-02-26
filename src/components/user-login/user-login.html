@@ -3,7 +3,7 @@
     <img src="assets/imgs/logo.png">
   </div>
   <div class="formWrap">
-    <form #loginForm="ngForm" novalidate>
+    <form autocomplete="off" #loginForm="ngForm" novalidate>
         <div class="formItem code">
           <input type="text" placeholder="请输入手机号" [(ngModel)]="userPhone" name="userPhone">
           <button class="ripple" (click)="getPhoneCode(userPhone)">{{codeBtnTip}}</button>

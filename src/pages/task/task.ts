@@ -46,32 +46,12 @@ export class TaskPage {
   private statusPage7ScrollView: ScrollviewComponent;
   @ViewChild('statusPage7TaskList')
   private statusPage7TaskList: TaskListComponent;
-  @ViewChild('timePage1ScrollView')
-  private timePage1ScrollView: ScrollviewComponent;
-  @ViewChild('timePage1TaskList')
-  private timePage1TaskList: TaskListComponent;
-  @ViewChild('timePage2ScrollView')
-  private timePage2ScrollView: ScrollviewComponent;
-  @ViewChild('timePage2TaskList')
-  private timePage2TaskList: TaskListComponent;
-  @ViewChild('timePage3ScrollView')
-  private timePage3ScrollView: ScrollviewComponent;
-  @ViewChild('timePage3TaskList')
-  private timePage3TaskList: TaskListComponent;
-  @ViewChild('timePage4ScrollView')
-  private timePage4ScrollView: ScrollviewComponent;
-  @ViewChild('timePage4TaskList')
-  private timePage4TaskList: TaskListComponent;
 
   tabs: Array<TabObj> = [
     {
       id: 'searchByStatus',
       txt: '按状态查看',
       selected: true
-    }, {
-      id: 'searchByTime',
-      txt: '按时间查看',
-      selected: false
     }
   ];
   switchTabsByStatus: Array<TabObj> = [
@@ -105,25 +85,12 @@ export class TaskPage {
       keyword: 'unstart'
     }
   ];
-  switchTabsByTime: Array<TabObj> = [
-    {
-      id: 'tab_time_today',
-      txt: '今天'
-    }, {
-      id: 'tab_time_tomorrow',
-      txt: '明天'
-    }, {
-      id: 'tab_time_after_tomorrow',
-      txt: '后天'
-    }, {
-      id: 'tab_time_nicety',
-      txt: new Date(new Date().setDate(new Date().getDate() + 3)).getDate() + '日'
-    }
-  ];
 
   remandAddPage: string = 'RemandAddPage';
   subTime: Subscription;
   remandContainer: RemandPageContainer = new RemandPageContainer();
+
+  curPageSelectedId: string = this.switchTabsByStatus[0].id;
 
   constructor(public navCtrl: NavController,
     private modalCtrl: ModalController,
@@ -140,9 +107,9 @@ export class TaskPage {
     this.subTime = time.subscribe({
       next: (val) => {
         let timeNicetyThreeDayAfter = new Date(new Date().setDate(new Date().getDate() + 3)).getDate() + '日';
-        if (this.switchTabsByTime[3].txt != timeNicetyThreeDayAfter) {
-          this.switchTabsByTime[3].txt = timeNicetyThreeDayAfter;
-        }
+        // if (this.switchTabsByTime[3].txt != timeNicetyThreeDayAfter) {
+        //   this.switchTabsByTime[3].txt = timeNicetyThreeDayAfter;
+        // }
       }
     });
   }
@@ -165,8 +132,7 @@ export class TaskPage {
       return false;
     }
     if (isRef) {
-      remandPageContainerItem.aboutTaskList.setTaskList([], true);
-      remandPageContainerItem.aboutTaskList.isRefing = true;
+      remandPageContainerItem.aboutTaskList.setTaskList([], true, true);
     }
     remandPageContainerItem.aboutScrollView.isLoading = true; // 正在加载数据
     let remandList = new Array<Remand>();
@@ -176,6 +142,17 @@ export class TaskPage {
         this.utilService.showToast(data.msg);
       }
       if (!data) {
+        return false;
+      }
+      if (data && (data.error === 'timeout' || data.error === 'neterr')) {
+        if (data.error === 'timeout') {
+          remandPageContainerItem.aboutTaskList.errShowTip = '请求超时';
+        } else if (data.error === 'neterr') {
+          remandPageContainerItem.aboutTaskList.errShowTip = '网络异常';
+        }
+        setTimeout(() => {
+          remandPageContainerItem.aboutTaskList.setTaskList(null, false);
+        }, 610);
         return false;
       }
       if (data && JSON.parse(data.content).length == 0) {
@@ -206,35 +183,14 @@ export class TaskPage {
   // 页面选项卡切换事件
   switchChange(params) {
     let filterParams: { status?: string, startDate?: string, endDate?: string } = {};
-    if (params.changeType == 'slideTabChange') {
-      this.initRemandContainer(params.id).then(() => {
-        if (params.id == 'searchByStatus') {
-          filterParams.status = this.switchTabsByStatus[0].keyword;
-          this.initListData(false, this.remandContainer.tab_status_all, filterParams);
-        } else if (params.id == 'searchByTime') {
-          filterParams.startDate = this.utilService.formatDate(new Date(), 'yyyy-MM-dd');
-          filterParams.endDate = this.utilService.formatDate(new Date(), 'yyyy-MM-dd');
-          this.initListData(false, this.remandContainer.tab_time_today, filterParams);
-        }
-      });
-    } else if (params.changeType == 'switchPageItem') {
-      params.keyword ? filterParams.status = params.keyword : (() => {
-        if (params.id == 'tab_time_today') {
-          filterParams.startDate = this.utilService.formatDate(new Date(), 'yyyy-MM-dd');
-          filterParams.endDate = this.utilService.formatDate(new Date(), 'yyyy-MM-dd');
-        } else if (params.id == 'tab_time_tomorrow') {
-          filterParams.startDate = this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 1)), 'yyyy-MM-dd');
-          filterParams.endDate = this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 1)), 'yyyy-MM-dd');
-        } else if (params.id == 'tab_time_after_tomorrow') {
-          filterParams.startDate = this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 2)), 'yyyy-MM-dd');
-          filterParams.endDate = this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 2)), 'yyyy-MM-dd');
-        } else if (params.id == 'tab_time_nicety') {
-          filterParams.startDate = this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 3)), 'yyyy-MM-dd');
-          filterParams.endDate = this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 3)), 'yyyy-MM-dd');
-        }
-      })();
-      this.initListData(false, this.remandContainer[params.id], filterParams);
-    }
+    filterParams.status = params.keyword;
+    this.curPageSelectedId = params.id;
+    this.initListData(false, this.remandContainer[params.id], filterParams);
+  }
+
+  // 重新加载
+  refData(params) {
+    this.initListData(true, this.remandContainer[this.curPageSelectedId], { status: this.switchTabsByStatus[0].keyword });
   }
 
   // 跳转到发布新需求页面
@@ -257,11 +213,6 @@ export class TaskPage {
           this.remandContainer.tab_status_cancle = new RemandPageContainerItem(this.statusPage5ScrollView, this.statusPage5TaskList);
           this.remandContainer.tab_status_doing = new RemandPageContainerItem(this.statusPage6ScrollView, this.statusPage6TaskList);
           this.remandContainer.tab_status_nostart = new RemandPageContainerItem(this.statusPage7ScrollView, this.statusPage7TaskList);
-        } else if (initType == 'searchByTime') {
-          this.remandContainer.tab_time_today = new RemandPageContainerItem(this.timePage1ScrollView, this.timePage1TaskList);
-          this.remandContainer.tab_time_tomorrow = new RemandPageContainerItem(this.timePage2ScrollView, this.timePage2TaskList);
-          this.remandContainer.tab_time_after_tomorrow = new RemandPageContainerItem(this.timePage3ScrollView, this.timePage3TaskList);
-          this.remandContainer.tab_time_nicety = new RemandPageContainerItem(this.timePage4ScrollView, this.timePage4TaskList);
         }
         resolve('');
       }, 400);

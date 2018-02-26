@@ -7,11 +7,17 @@ import { LogService } from './log-service';
 
 @Injectable()
 export class StorageService {
-  userInfo: { userId?: string } = { userId: '' };
+  userInfo: { staffId?: string, merchantId?: string } = { staffId: '', merchantId: '' };
 
   constructor(private events: EventsService,
     private storage: Storage,
     private logService: LogService) {
+    this.getUserInfo().then((userInfo) => {
+      if (userInfo) {
+        this.userInfo.staffId = userInfo.staffId;
+        this.userInfo.merchantId = userInfo.merchant.merchantId;
+      }
+    });
   }
 
   // 判断进入系统时，需要显示的主页面是哪个
@@ -27,13 +33,8 @@ export class StorageService {
             return 'login';
           } else {
             let userInfo: UserInfo = user;
-            if (!userInfo.merchantId) {
-              // 显示资料完善页
-              return 'completeInfo';
-            } else {
-              // 显示主页
-              return user;
-            }
+            // 显示主页
+            return user;
           }
         });
       }
@@ -59,7 +60,8 @@ export class StorageService {
    */
   setUserInfo(userInfo: UserInfo) {
     this.storage.set('userInfo', userInfo);
-    this.userInfo.userId = userInfo.staffId;
+    this.userInfo.staffId = userInfo.staffId;
+    this.userInfo.merchantId = userInfo.merchant.merchantId;
   }
 
   /**

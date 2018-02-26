@@ -12,7 +12,6 @@ import { StorageService } from '../providers/storage-service';
 import { ProtocolService } from '../providers/protocol-service';
 import { LoginPage } from '../pages/login/login';
 import { WelcomePage } from '../pages/welcome/welcome';
-import { CompleteInfoPage } from '../pages/complete-info/complete-info';
 enableProdMode(); // 调用此函数，启用生产模式
 
 @Component({
@@ -45,8 +44,6 @@ export class MyApp {
         this.rootPage = WelcomePage;
       } else if (rootType == 'login') {
         this.rootPage = LoginPage;
-      } else if (rootType == 'completeInfo') {
-        this.rootPage = CompleteInfoPage;
       } else {
         this.rootPage = TabsPage;
       }

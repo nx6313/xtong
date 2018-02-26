@@ -14,14 +14,17 @@ declare var $;
 })
 export class TaskListComponent {
   @Output('acceptOrderAfter') acceptOrderAfterFn = new EventEmitter<any>();
+  @Output('clickRequestTimeoutBtn') clickRequestTimeoutBtnFn = new EventEmitter<any>();
   @Output('clickNoDataBtn') clickNoDataBtnFn = new EventEmitter<any>();
   @ViewChild('taskListwrap', { read: ElementRef }) _taskListwrap: ElementRef;
   @ViewChild('loadingDataTipWrap', { read: ElementRef }) _loadingDataTipWrap: ElementRef;
+  @ViewChild('requestIsOuttimeTipWrap', { read: ElementRef }) _requestIsOuttimeTipWrap: ElementRef;
   @ViewChild('dataIsEmptyTipWrap', { read: ElementRef }) _dataIsEmptyTipWrap: ElementRef;
   taskList: Array<Remand> = [];
 
   isRefing: Boolean = false;
   isEmpty: Boolean = false;
+  errShowTip: string = '请求超时';
 
   taskDetailPage: any = 'TaskDetailPage';
   loginPage: any = 'LoginPage';
@@ -35,16 +38,20 @@ export class TaskListComponent {
     private cd: ChangeDetectorRef) {
   }
 
-  setTaskList(taskList: Array<Remand>, onlyClear?: Boolean) {
+  setTaskList(taskList: Array<Remand>, onlyClear?: Boolean, ref?: Boolean) {
     this.taskList = taskList;
-    if (this.taskList.length == 0) {
-      this.isEmpty = true;
+    if (this.taskList === null) {
+      this.isEmpty = null;
     } else {
-      this.isEmpty = false;
-    }
-    this.isRefing = false;
-    if (onlyClear === true) {
-      this.isEmpty = false;
+      if (this.taskList.length == 0) {
+        this.isEmpty = true;
+      } else {
+        this.isEmpty = false;
+      }
+      ref ? this.isRefing = true : {};
+      if (onlyClear === true) {
+        this.isEmpty = false;
+      }
     }
     this.toggleLoadingTip(this.isEmpty);
     this.cd.detectChanges();
@@ -73,11 +80,25 @@ export class TaskListComponent {
 
   private toggleLoadingTip(isEmpty: Boolean) {
     let loadingNativeElem = this._loadingDataTipWrap.nativeElement;
+    let requestIsOuttimeElem = this._requestIsOuttimeTipWrap.nativeElement;
     let emptyNativeElem = this._dataIsEmptyTipWrap.nativeElement;
     // 隐藏可能显示的已无数据的提示
     let taskListNativeElem = this._taskListwrap.nativeElement;
     if (taskListNativeElem.getElementsByClassName('dataHasFullWrap').length > 0) {
       $(taskListNativeElem.getElementsByClassName('dataHasFullWrap')).remove();
+    }
+    if (this.isRefing) {
+      this.isRefing = false;
+      $(requestIsOuttimeElem).stop().fadeOut(300, () => {
+        $(loadingNativeElem).stop().fadeIn(300);
+      });
+      return false;
+    }
+    if (isEmpty === null) {
+      $(loadingNativeElem).stop().fadeOut(300, () => {
+        $(requestIsOuttimeElem).stop().fadeIn(300);
+      });
+      return false;
     }
     if (isEmpty) {
       $(loadingNativeElem).stop().fadeOut(300, () => {
@@ -91,6 +112,18 @@ export class TaskListComponent {
   }
 
   // 点击重新加载数据
+  private clickRequestTimeoutBtn() {
+    // 隐藏可能显示的已无数据的提示
+    let taskListNativeElem = this._taskListwrap.nativeElement;
+    if (taskListNativeElem.getElementsByClassName('dataHasFullWrap').length > 0) {
+      $(taskListNativeElem.getElementsByClassName('dataHasFullWrap')).remove();
+    }
+    this.clickRequestTimeoutBtnFn.emit({
+      toggleLoadingTipFn: () => { this.toggleLoadingTip(false); }
+    });
+  }
+
+  // 点击没有数据按钮
   private clickNoDataBtn() {
     // 隐藏可能显示的已无数据的提示
     let taskListNativeElem = this._taskListwrap.nativeElement;
@@ -114,7 +147,7 @@ export class TaskListComponent {
 
   private acceptOrder(event, task) {
     this.storageService.getUserInfo().then((userInfo) => {
-      
+
     });
     event.stopPropagation();
   }

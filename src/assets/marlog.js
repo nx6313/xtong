@@ -20,7 +20,6 @@
 
     let marlogImgIndex = 1;
     let colorParams = [
-        ['#33B1FE', '#33B1FE', '#4D4C49'],
         ['#D7B119', '#D7B119', '#ECF6F5']
     ];
 

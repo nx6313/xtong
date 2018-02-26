@@ -1,65 +1,42 @@
 <ion-header>
   <title-bar [title]="'任务'" [leftIcon]="null"></title-bar>
-  <slide-tab [tabs]="tabs" (slideTabChange)="switchChange($event)"></slide-tab>
 </ion-header>
 
 <ion-content>
   <switch-pages *ngIf="tabs[0].selected" [switchTabs]="switchTabsByStatus" (switchChange)="switchChange($event)">
     <switch-page>
       <scrollview #statusPage1ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_1'">
-        <task-list #statusPage1TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+        <task-list #statusPage1TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
       <scrollview #statusPage2ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_2'">
-        <task-list #statusPage2TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+        <task-list #statusPage2TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
       <scrollview #statusPage3ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_3'">
-        <task-list #statusPage3TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+        <task-list #statusPage3TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
       <scrollview #statusPage4ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_4'">
-        <task-list #statusPage4TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+        <task-list #statusPage4TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
       <scrollview #statusPage5ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_5'">
-        <task-list #statusPage5TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+        <task-list #statusPage5TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
       <scrollview #statusPage6ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_6'">
-        <task-list #statusPage6TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+        <task-list #statusPage6TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
     <switch-page>
       <scrollview #statusPage7ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_7'">
-        <task-list #statusPage7TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
-      </scrollview>
-    </switch-page>
-  </switch-pages>
-  <switch-pages *ngIf="tabs[1].selected" [switchTabs]="switchTabsByTime" (switchChange)="switchChange($event)">
-    <switch-page>
-      <scrollview #timePage1ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_1'">
-        <task-list #timePage1TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
-      </scrollview>
-    </switch-page>
-    <switch-page>
-      <scrollview #timePage2ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_2'">
-        <task-list #timePage2TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
-      </scrollview>
-    </switch-page>
-    <switch-page>
-      <scrollview #timePage3ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_3'">
-        <task-list #timePage3TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
-      </scrollview>
-    </switch-page>
-    <switch-page>
-      <scrollview #timePage4ScrollView [canSwitchSlide]="true" [scrollviewRank]="'time_page_4'">
-        <task-list #timePage4TaskList (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
+        <task-list #statusPage7TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
   </switch-pages>

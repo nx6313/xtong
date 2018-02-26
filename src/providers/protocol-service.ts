@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { StorageService } from './storage-service';
 import { HttpService } from "./http-service";
 import { UtilService } from "./util-service";
+import { Demand } from '../entities/demand';
 
 
 @Injectable()
@@ -60,13 +61,20 @@ export class ProtocolService {
     return this.httpService.makePost(url, body, '重置登录密码');
   }
 
+  // 添加需求
+  demandAdd(demand: Demand) {
+    var url = this.API_URL + "demand/add";
+    var body = demand;
+    return this.httpService.makePost(url, body, '添加需求');
+  }
+
   /**
    * 获取需求列表
    * @param page
    */
   getDemandList(pageIndex: number, filterParams: { status?: string, startDate?: string, endDate?: string } = null, pageSize: number = 20) {
     var url = this.API_URL + "demand/list";
-    var body = { 'pageIndex': pageIndex, 'pageSize': pageSize, 'merchantId': this.userData.userInfo.userId };
+    var body = { 'pageIndex': pageIndex, 'pageSize': pageSize, 'merchantId': this.userData.userInfo.staffId };
     if (filterParams != null) {
       for (let filterParam in filterParams) {
         filterParams[filterParam] ? body[filterParam] = filterParams[filterParam] : {};

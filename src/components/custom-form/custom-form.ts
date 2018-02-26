@@ -84,6 +84,7 @@ export class CustomFormComponent {
     addressSelectModal.onDidDismiss((data) => {
       if (data) {
         this.dataBindContainer[addressKey] = data.selectAddress.name;
+        this.dataRealBindContainer[this.itemOptionContainer[addressKey].ngRealValBind] = data.selectAddress.location;
         this.cd.detectChanges();
       }
     });
@@ -112,7 +113,10 @@ export class CustomFormComponent {
       joinWord: ['', '点', '分'],
       confirmFn: (selected) => {
         this.dataBindContainer[timeKey] = selected.selectJoinValue;
-        this.dataRealBindContainer[this.itemOptionContainer[timeKey].ngRealValBind] = selected.selectDisplayValue;
+        let selectTimeReal = selected.selectDisplayValue;
+        let selectTimeRealFormat = selectTimeReal.split(' ')[0] + ' ' + selectTimeReal.split(' ')[1] + ':' + selectTimeReal.split(' ')[2];
+        let selectTimeRealFormatDate = this.utilService.formatDate(new Date(selectTimeRealFormat), 'yyyy-MM-dd hh:mm:ss');
+        this.dataRealBindContainer[this.itemOptionContainer[timeKey].ngRealValBind] = selectTimeRealFormatDate;
         this.cd.detectChanges();
       }
     }).show();

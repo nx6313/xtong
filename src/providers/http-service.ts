@@ -21,7 +21,6 @@ export class HttpService {
   public makePost(url: string, body: any, tip?: string) {
     let startTimeZ = new Date().getTime();
     let requestNo = tip ? ' - ' + tip : '';
-    // this.logService.log('JSON[发起接口访问' + requestNo + ']', { url: url, params: body });
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({ headers: headers });
@@ -32,12 +31,18 @@ export class HttpService {
         return res.json();
       })
       .catch(err => {
-        this.handleError(err, url, body, requestNo);
+        this.logService.log('JSON[>>> 接口访问异常 <<<' + requestNo + ']', { '请求地址': url, '参数': body, '错误信息': err });
+        if (err.ok === false) {
+          return { error: 'neterr' };
+        } else if (err.name === 'TimeoutError') {
+          return { error: 'timeout' };
+        } else {
+          this.handleError(err, url, body, requestNo);
+        }
       });
   }
 
   private handleError(error: Response, url: string = '', body: any = null, requestNo: string) {
-    this.logService.log('JSON[>>> 服务器接口访问异常 <<<' + requestNo + ']', { '请求地址': url, '参数': body, '错误信息': error });
     return Observable.throw(error || 'Server Error');
   }
 }

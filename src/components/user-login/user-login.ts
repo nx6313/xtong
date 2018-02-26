@@ -6,7 +6,6 @@ import { StorageService } from '../../providers/storage-service';
 import { ProtocolService } from '../../providers/protocol-service';
 import { UserInfo } from '../../model/user';
 import { TabsPage } from '../../pages/tabs/tabs';
-import { CompleteInfoPage } from '../../pages/complete-info/complete-info';
 
 @Component({
   selector: 'user-login',
@@ -29,21 +28,29 @@ export class UserLoginComponent {
     }
     if (phone) {
       if (/^1[3|4|5|6|7|8][0-9]\d{8}$/.test(phone.trim())) {
-        let smsCodeSub = Observable.timer(1000, 1000).subscribe({
-          next: (val) => {
-            this.codeBtnTip = `${this.canSmsCodeGetAgain - val}s 后重发`;
-            if (val == this.canSmsCodeGetAgain) {
-              this.codeBtnTip = '获取验证码';
-              this.getSmsCode = -2;
-              smsCodeSub.unsubscribe();
-            }
-          }
-        });
         this.utilService.showLoading('正在发送短信验证码');
         this.protocolService.loginSmsVerifyCode(phone.trim()).then((smsVerifyCode) => {
           this.utilService.closeLoading();
+          if (smsVerifyCode && (smsVerifyCode.error === 'timeout' || smsVerifyCode.error === 'neterr')) {
+            if (smsVerifyCode.error === 'timeout') {
+              this.utilService.showToast('发送验证码超时，请稍后重试');
+            } else if (smsVerifyCode.error === 'neterr') {
+              this.utilService.showToast('网络异常，请稍后重试');
+            }
+            return false;
+          }
           if (smsVerifyCode.result === 1) {
             this.getSmsCode = smsVerifyCode.smsCode;
+            let smsCodeSub = Observable.timer(1000, 1000).subscribe({
+              next: (val) => {
+                this.codeBtnTip = `${this.canSmsCodeGetAgain - val}s 后重发`;
+                if (val == this.canSmsCodeGetAgain) {
+                  this.codeBtnTip = '获取验证码';
+                  this.getSmsCode = -2;
+                  smsCodeSub.unsubscribe();
+                }
+              }
+            });
           } else {
             this.utilService.showToast(smsVerifyCode.msg);
           }
@@ -76,14 +83,18 @@ export class UserLoginComponent {
     this.utilService.showLoading('登录中，请稍后');
     this.protocolService.userLogin(phone, code).then((login) => {
       this.utilService.closeLoading();
+      if (login && (login.error === 'timeout' || login.error === 'neterr')) {
+        if (login.error === 'timeout') {
+          this.utilService.showToast('登录请求超时，请稍后重试');
+        } else if (login.error === 'neterr') {
+          this.utilService.showToast('网络异常，请稍后重试');
+        }
+        return false;
+      }
       if (login.result === 1) {
         let userInfo: UserInfo = JSON.parse(login.staffInfo);
         this.storageService.setUserInfo(userInfo);
-        if (!userInfo.merchantId) {
-          this.navCtrl.setRoot(CompleteInfoPage);
-        } else {
-          this.navCtrl.setRoot(TabsPage);
-        }
+        this.navCtrl.setRoot(TabsPage);
       } else {
         this.utilService.showToast(login.msg);
       }
