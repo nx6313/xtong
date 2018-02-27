@@ -8,6 +8,8 @@ import { TabObj } from '../../model/comm';
 export class SwitchPagesComponent {
   @Output('switchChange') switchChangeFn = new EventEmitter<any>();
   @Input('switchTabs') switchTabs: Array<TabObj> = [];
+  @Input('showNum') showNum: number = 4;
+
   switchTabCss: {} = {};
 
   constructor() {
@@ -15,7 +17,7 @@ export class SwitchPagesComponent {
   }
 
   ngOnInit() {
-    this.switchTabs.length < 4 ? this.switchTabCss['width'] = 'calc(100vw / ' + this.switchTabs.length + ')' : {};
+    this.switchTabCss['width'] = 'calc(100vw / ' + this.showNum + ')';
   }
 
   switchTabSelected(params) {

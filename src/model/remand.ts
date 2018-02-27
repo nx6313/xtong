@@ -62,16 +62,10 @@ export class RemandPageContainerItem {
 
 export class RemandPageContainer {
     tab_status_all?: RemandPageContainerItem;
-    tab_status_empty?: RemandPageContainerItem;
-    tab_status_full?: RemandPageContainerItem;
+    tab_status_nostart?: RemandPageContainerItem;
+    tab_status_doing?: RemandPageContainerItem;
     tab_status_stop?: RemandPageContainerItem;
     tab_status_cancle?: RemandPageContainerItem;
-    tab_status_doing?: RemandPageContainerItem;
-    tab_status_nostart?: RemandPageContainerItem;
-    tab_time_today?: RemandPageContainerItem;
-    tab_time_tomorrow?: RemandPageContainerItem;
-    tab_time_after_tomorrow?: RemandPageContainerItem;
-    tab_time_nicety?: RemandPageContainerItem;
     constructor() {
     }
 }

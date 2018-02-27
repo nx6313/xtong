@@ -76,6 +76,7 @@ var PullToRefresh = (function () {
     canSwitchSlide: false,
     switchPageRate: 0.4
   };
+  var splitPageShowNum = 5; // 分屏显示的显示数量
 
   var pullStartY = null;
   var pullMoveY = null;
@@ -576,13 +577,13 @@ var PullToRefresh = (function () {
                   // 判断是否需要将指示器选项卡轨道进行位置移动
                   var switchTabSlideRailCurTransform = getSwitchTabSlideRailCurTransform(e, 0);
                   switchTabSlideRailCurTransform = switchTabSlideRailCurTransform ? switchTabSlideRailCurTransform : 0;
-                  if (switchPageCount > 4 && switchTabSlideRailCurTransform > -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth))) {
-                    let railTramformX = Number(switchTabSlideRailCurTransform) - Number(switchPageIndicatorElement.clientWidth) < -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) ? -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) : Number(switchTabSlideRailCurTransform) - Number(switchPageIndicatorElement.clientWidth);
+                  if (switchPageCount > splitPageShowNum && switchTabSlideRailCurTransform > -((switchPageCount - splitPageShowNum) * Number(switchPageIndicatorElement.clientWidth))) {
+                    let railTramformX = Number(switchTabSlideRailCurTransform) - Number(switchPageIndicatorElement.clientWidth) < -((switchPageCount - splitPageShowNum) * Number(switchPageIndicatorElement.clientWidth)) ? -((switchPageCount - splitPageShowNum) * Number(switchPageIndicatorElement.clientWidth)) : Number(switchTabSlideRailCurTransform) - Number(switchPageIndicatorElement.clientWidth);
                     switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
                   } else {
                     let indicatorTramformX = 0;
-                    if (switchPageCount > 4) {
-                      indicatorTramformX = (curSwitchPageIndex + 1 - (switchPageCount - 4)) * switchPageIndicatorElement.clientWidth;
+                    if (switchPageCount > splitPageShowNum) {
+                      indicatorTramformX = (curSwitchPageIndex + 1 - (switchPageCount - splitPageShowNum)) * switchPageIndicatorElement.clientWidth;
                     } else {
                       indicatorTramformX = (curSwitchPageIndex + 1) * switchPageIndicatorElement.clientWidth;
                     }
@@ -603,7 +604,7 @@ var PullToRefresh = (function () {
                   // 滑动指示器到上一页
                   // 判断是否需要将指示器选项卡轨道进行位置移动
                   var switchTabSlideRailCurTransform = getSwitchTabSlideRailCurTransform(e, 0);
-                  if (switchPageCount > 4 && switchTabSlideRailCurTransform < 0) {
+                  if (switchPageCount > splitPageShowNum && switchTabSlideRailCurTransform < 0) {
                     let railTramformX = Number(switchTabSlideRailCurTransform) + Number(switchPageIndicatorElement.clientWidth) > 0 ? 0 : Number(switchTabSlideRailCurTransform) + Number(switchPageIndicatorElement.clientWidth);
                     switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
                   } else {
@@ -976,13 +977,17 @@ var PullToRefresh = (function () {
           target: $(e).get(0)
         }, 0);
         switchTabSlideRailCurTransform = switchTabSlideRailCurTransform ? switchTabSlideRailCurTransform : 0;
-        if (switchPageCount > 4 && switchTabSlideRailCurTransform > -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth))) {
-          let railTramformX = Number(switchTabSlideRailCurTransform) - ($(e).index() - curSelectSwitchTabIndex) * Number(switchPageIndicatorElement.clientWidth) < -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) ? -((switchPageCount - 4) * Number(switchPageIndicatorElement.clientWidth)) : Number(switchTabSlideRailCurTransform) - ($(e).index() - curSelectSwitchTabIndex) * Number(switchPageIndicatorElement.clientWidth);
+        if (switchPageCount > splitPageShowNum && switchTabSlideRailCurTransform > -((switchPageCount - splitPageShowNum) * Number(switchPageIndicatorElement.clientWidth))) {
+          let railTramformX = Number(switchTabSlideRailCurTransform) - ($(e).index() - curSelectSwitchTabIndex) * Number(switchPageIndicatorElement.clientWidth) < -((switchPageCount - splitPageShowNum) * Number(switchPageIndicatorElement.clientWidth)) ? -((switchPageCount - splitPageShowNum) * Number(switchPageIndicatorElement.clientWidth)) : Number(switchTabSlideRailCurTransform) - ($(e).index() - curSelectSwitchTabIndex) * Number(switchPageIndicatorElement.clientWidth);
           switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
+          if ($(e).index() - curSelectSwitchTabIndex > switchPageCount - splitPageShowNum) {
+            let indicatorTramformX = ($(e).index() - curSelectSwitchTabIndex - (switchPageCount - splitPageShowNum)) * switchPageIndicatorElement.clientWidth;
+            switchPageIndicatorElement.style.transform = 'translate3d(' + indicatorTramformX + 'px, 0px, 0px)';
+          }
         } else {
           let indicatorTramformX = 0;
-          if (switchPageCount > 4) {
-            indicatorTramformX = ($(e).index() - (switchPageCount - 4)) * switchPageIndicatorElement.clientWidth;
+          if (switchPageCount > splitPageShowNum) {
+            indicatorTramformX = ($(e).index() - (switchPageCount - splitPageShowNum)) * switchPageIndicatorElement.clientWidth;
           } else {
             indicatorTramformX = $(e).index() * switchPageIndicatorElement.clientWidth;
           }
@@ -1000,9 +1005,13 @@ var PullToRefresh = (function () {
         var switchTabSlideRailCurTransform = getSwitchTabSlideRailCurTransform({
           target: $(e).get(0)
         }, 0);
-        if (switchPageCount > 4 && switchTabSlideRailCurTransform < 0) {
+        if (switchPageCount > splitPageShowNum && switchTabSlideRailCurTransform < 0) {
           let railTramformX = Number(switchTabSlideRailCurTransform) + (curSelectSwitchTabIndex - $(e).index()) * Number(switchPageIndicatorElement.clientWidth) > 0 ? 0 : Number(switchTabSlideRailCurTransform) + (curSelectSwitchTabIndex - $(e).index()) * Number(switchPageIndicatorElement.clientWidth);
           switchTabSlideRailElement.style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
+          if (curSelectSwitchTabIndex - $(e).index() > switchPageCount - splitPageShowNum) {
+            let indicatorTramformX = ($(e).index() + splitPageShowNum - curSelectSwitchTabIndex) * switchPageIndicatorElement.clientWidth;
+            switchPageIndicatorElement.style.transform = 'translate3d(' + indicatorTramformX + 'px, 0px, 0px)';
+          }
         } else {
           let indicatorTramformX = $(e).index() * switchPageIndicatorElement.clientWidth;
           switchPageIndicatorElement.style.transform = 'translate3d(' + indicatorTramformX + 'px, 0px, 0px)';

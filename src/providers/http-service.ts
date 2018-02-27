@@ -31,7 +31,7 @@ export class HttpService {
         return res.json();
       })
       .catch(err => {
-        this.logService.log('JSON[>>> 接口访问异常 <<<' + requestNo + ']', { '请求地址': url, '参数': body, '错误信息': err });
+        this.logService.log('JSON[>>> 接口访问异常 <<< ' + requestNo + ']', { '请求地址': url, '参数': body, '错误信息': err });
         if (err.ok === false) {
           return { error: 'neterr' };
         } else if (err.name === 'TimeoutError') {

@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content>
-  <switch-pages *ngIf="tabs[0].selected" [switchTabs]="switchTabsByStatus" (switchChange)="switchChange($event)">
+  <switch-pages *ngIf="tabs[0].selected" [switchTabs]="switchTabsByStatus" [showNum]="5" (switchChange)="switchChange($event)">
     <switch-page>
       <scrollview #statusPage1ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_1'">
         <task-list #statusPage1TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
@@ -27,16 +27,6 @@
     <switch-page>
       <scrollview #statusPage5ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_5'">
         <task-list #statusPage5TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
-      </scrollview>
-    </switch-page>
-    <switch-page>
-      <scrollview #statusPage6ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_6'">
-        <task-list #statusPage6TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
-      </scrollview>
-    </switch-page>
-    <switch-page>
-      <scrollview #statusPage7ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_7'">
-        <task-list #statusPage7TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
       </scrollview>
     </switch-page>
   </switch-pages>

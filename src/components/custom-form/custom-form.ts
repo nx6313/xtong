@@ -105,7 +105,7 @@ export class CustomFormComponent {
         ]
       },
       {
-        values: '0-24'
+        values: '0-23'
       },
       {
         values: '0-59'

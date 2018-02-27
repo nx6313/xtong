@@ -16,7 +16,6 @@ switch-pages {
         .switchTabItem {
           display: inline-block;
           padding: 0 0.4rem;
-          min-width: calc(100vw / 4);
           text-align: center;
         }
         .switchTabItemSelected {
@@ -30,7 +29,6 @@ switch-pages {
         bottom: 0;
         height: 3px;
         background: #707A94;
-        min-width: calc(100vw / 4);
         transform: translate3d(0px, 0px, 0px);
         transition: 0.4s ease;
       }

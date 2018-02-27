@@ -74,7 +74,7 @@ export class ProtocolService {
    */
   getDemandList(pageIndex: number, filterParams: { status?: string, startDate?: string, endDate?: string } = null, pageSize: number = 20) {
     var url = this.API_URL + "demand/list";
-    var body = { 'pageIndex': pageIndex, 'pageSize': pageSize, 'merchantId': this.userData.userInfo.staffId };
+    var body = { 'pageIndex': pageIndex, 'pageSize': pageSize, 'staffId': this.userData.userInfo.staffId, 'merchantId': this.userData.userInfo.merchantId };
     if (filterParams != null) {
       for (let filterParam in filterParams) {
         filterParams[filterParam] ? body[filterParam] = filterParams[filterParam] : {};
