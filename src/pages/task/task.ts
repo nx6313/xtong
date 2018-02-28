@@ -109,11 +109,11 @@ export class TaskPage {
 
   // 数据请求
   private initListData(isRef: Boolean, remandPageContainerItem: RemandPageContainerItem, filterParams: { status?: string, startDate?: string, endDate?: string } = null) {
-    if (remandPageContainerItem.dataList.length > 0) {
+    if (remandPageContainerItem.dataMapByDate.size > 0) {
       return false;
     }
     if (isRef) {
-      remandPageContainerItem.aboutTaskList.setTaskList([], true, true);
+      remandPageContainerItem.aboutTaskList.setTaskMap(new Map<string, Array<Remand>>(), true, true);
     }
     remandPageContainerItem.aboutScrollView.isLoading = true; // 正在加载数据
     let remandList = new Array<Remand>();
@@ -133,12 +133,12 @@ export class TaskPage {
           remandPageContainerItem.aboutTaskList.errShowTip = '网络异常';
         }
         setTimeout(() => {
-          remandPageContainerItem.aboutTaskList.setTaskList(null, false);
+          remandPageContainerItem.aboutTaskList.setTaskMap(null, false);
         }, 610);
         return false;
       }
       if (data && JSON.parse(data.content).length == 0) {
-        remandPageContainerItem.aboutTaskList.setTaskList([], false);
+        remandPageContainerItem.aboutTaskList.setTaskMap(new Map<string, Array<Remand>>(), false);
         return false;
       }
       for (let o in JSON.parse(data.content)) {
@@ -160,10 +160,9 @@ export class TaskPage {
         remand.name = remandData.name;
         remand.remark = remandData.remark;
         remandList.push(remand);
-        remandPageContainerItem.addRemandToDateMap(remand, remand.startTime);
+        remandPageContainerItem.addRemandToDateMap(remand, this.utilService.formatDate(remand.startTime, 'yyyy-MM-dd'));
       }
-      remandPageContainerItem.dataList = remandList;
-      remandPageContainerItem.aboutTaskList.setTaskList(remandList);
+      remandPageContainerItem.aboutTaskList.setTaskMap(remandPageContainerItem.dataMapByDate);
     });
   }
 

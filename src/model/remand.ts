@@ -29,20 +29,26 @@ export class RemandPageContainerItem {
     aboutScrollView: ScrollviewComponent;
     aboutTaskList: TaskListComponent;
     pageIndex?: number = 1;
-    dataList?: Array<Remand> = [];
     dataMapByDate?: Map<string, Array<Remand>> = new Map<string, Array<Remand>>(); // 根据时间获取的数据字典
-    dataIdArr?: Array<string> = []; // 数据Id数组，用于判断是否有新数据产生
+    dataIdArr?: Array<number> = []; // 数据Id数组，用于判断是否有新数据产生
     constructor(aboutScrollView: ScrollviewComponent, aboutTaskList: TaskListComponent) {
         this.aboutScrollView = aboutScrollView;
         this.aboutTaskList = aboutTaskList;
     }
     /**
-     * 将 remand 数据，按照指定的时间数据，以同一天的数据为组存放到 map 中
+     * 将 remand 数据，按照指定的时间数据，以同一天的数据为组存放到 map 中；并会将数据的 id 保存到 dataIdArr
      * @param remand 存放的 remand 数据
      * @param judgeKey 用于判断的时间值
      */
-    addRemandToDateMap(remand: Remand, judgeKey: Date) {
-        
+    addRemandToDateMap(remand: Remand, judgeKey: string) {
+        if (this.dataMapByDate.has(judgeKey)) {
+            this.dataMapByDate.get(judgeKey).push(remand);
+        } else {
+            let newRemandArr = new Array<Remand>();
+            newRemandArr.push(remand);
+            this.dataMapByDate.set(judgeKey, newRemandArr);
+        }
+        this.dataIdArr.push(remand.demandId);
     }
 }
 

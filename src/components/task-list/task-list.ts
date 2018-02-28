@@ -20,7 +20,7 @@ export class TaskListComponent {
   @ViewChild('loadingDataTipWrap', { read: ElementRef }) _loadingDataTipWrap: ElementRef;
   @ViewChild('requestIsOuttimeTipWrap', { read: ElementRef }) _requestIsOuttimeTipWrap: ElementRef;
   @ViewChild('dataIsEmptyTipWrap', { read: ElementRef }) _dataIsEmptyTipWrap: ElementRef;
-  taskList: Array<Remand> = [];
+  taskMap: Map<string, Array<Remand>> = new Map<string, Array<Remand>>();
 
   isRefing: Boolean = false;
   isEmpty: Boolean = false;
@@ -38,12 +38,12 @@ export class TaskListComponent {
     private cd: ChangeDetectorRef) {
   }
 
-  setTaskList(taskList: Array<Remand>, onlyClear?: Boolean, ref?: Boolean) {
-    this.taskList = taskList;
-    if (this.taskList === null) {
+  setTaskMap(taskMap: Map<string, Array<Remand>>, onlyClear?: Boolean, ref?: Boolean) {
+    this.taskMap = taskMap;
+    if (this.taskMap === null) {
       this.isEmpty = null;
     } else {
-      if (this.taskList.length == 0) {
+      if (this.taskMap.size == 0) {
         this.isEmpty = true;
       } else {
         this.isEmpty = false;
@@ -54,15 +54,6 @@ export class TaskListComponent {
       }
     }
     this.toggleLoadingTip(this.isEmpty);
-    this.cd.detectChanges();
-  }
-
-  addTask(addTask: (Array<Remand> | Remand)) {
-    if (addTask instanceof Array) {
-      this.taskList = this.taskList.concat(addTask);
-    } else {
-      this.taskList.push(addTask);
-    }
     this.cd.detectChanges();
   }
 
