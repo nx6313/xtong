@@ -6,6 +6,14 @@ export class PageParams {
         params ? this.params = params : {};
     }
 }
+export class Result {
+    result?: number;
+    content?: any;
+    msg?: string;
+    error?: {};
+    constructor() {
+    }
+}
 export class CustomForm {
     type?: string = 'input'; // input、address、number、money、time、picker、textarea
     style?: string = '1';

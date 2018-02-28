@@ -50,23 +50,23 @@ export class TaskPage {
     {
       id: 'tab_status_all',
       txt: '所有',
-      keyword: 'all'
+      keyword: '9'
     }, {
       id: 'tab_status_nostart',
       txt: '未开始',
-      keyword: 'unstart'
+      keyword: '1'
     }, {
       id: 'tab_status_doing',
       txt: '进行中',
-      keyword: 'uncompleted'
+      keyword: '7'
     }, {
       id: 'tab_status_stop',
       txt: '已结束',
-      keyword: 'completed'
+      keyword: '5'
     }, {
       id: 'tab_status_cancle',
       txt: '已取消',
-      keyword: 'cancelled'
+      keyword: '4'
     }
   ];
 
@@ -90,10 +90,7 @@ export class TaskPage {
     let time = Observable.interval(1000);
     this.subTime = time.subscribe({
       next: (val) => {
-        let timeNicetyThreeDayAfter = new Date(new Date().setDate(new Date().getDate() + 3)).getDate() + '日';
-        // if (this.switchTabsByTime[3].txt != timeNicetyThreeDayAfter) {
-        //   this.switchTabsByTime[3].txt = timeNicetyThreeDayAfter;
-        // }
+
       }
     });
   }
@@ -145,23 +142,28 @@ export class TaskPage {
         return false;
       }
       for (let o in JSON.parse(data.content)) {
-        console.log(JSON.parse(data.content)[o]);
+        let remandData = JSON.parse(data.content)[o];
+        console.log(remandData);
         let remand = new Remand();
-        remand.orderId = JSON.parse(data.content)[o].orderformid;
-        remand.orderNum = JSON.parse(data.content)[o].ordersn;
-        remand.orderTime = JSON.parse(data.content)[o].addtime;
+        remand.demandId = remandData.demandId;
+        remand.demandStatus = remandData.demandStatus;
+        remand.carNumber = remandData.carNumber;
+        remand.cargoType = remandData.cargoType;
+        remand.startAddress = remandData.startAddress;
+        remand.startPosition = JSON.parse(remandData.startPosition);
+        remand.startTime = new Date(remandData.startTime);
+        remand.endAddress = remandData.endAddress;
+        remand.endPosition = JSON.parse(remandData.endPosition);
+        remand.endTime = new Date(remandData.endTime);
+        remand.freight = remandData.freight;
+        remand.merchant = remandData.merchant;
+        remand.name = remandData.name;
+        remand.remark = remandData.remark;
         remandList.push(remand);
+        remandPageContainerItem.addRemandToDateMap(remand, remand.startTime);
       }
       remandPageContainerItem.dataList = remandList;
-      if (isRef) {
-        setTimeout(() => {
-          remandPageContainerItem.aboutTaskList.setTaskList(remandList);
-        }, 800);
-      } else {
-        remandPageContainerItem.aboutTaskList.setTaskList(remandList);
-      }
-    }).catch(err => {
-      console.log(err);
+      remandPageContainerItem.aboutTaskList.setTaskList(remandList);
     });
   }
 

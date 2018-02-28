@@ -268,6 +268,18 @@ export class UtilService {
     }
   }
 
+  // 计算两点坐标距离
+  calcNavInfo(oneLatLng: { lat?: number, lng?: number }, twoLatLng: { lat?: number, lng?: number }) {
+    return new Promise<number>((resolve, reject) => {
+      GdLocation.calcNavInfo(oneLatLng, twoLatLng, (navInfo) => {
+        resolve(navInfo);
+      }, (error) => {
+        this.logService.log('JSON[计算两坐标的距离]', error);
+        reject(error);
+      });
+    });
+  }
+
   // 显示当前执行中任务元素
   showCurrentTaskElem(callBack?: Function) {
     if (!document.getElementById('currentTaskElem')) {

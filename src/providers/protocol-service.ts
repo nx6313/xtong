@@ -35,7 +35,7 @@ export class ProtocolService {
    */
   userLogin(userPhone: string, verifycode: string) {
     var url = this.API_URL + "login/staff";
-    var body = { 'phone': userPhone, 'smsCode': verifycode };
+    var body = { 'phone': userPhone, 'captcha': verifycode };
     return this.httpService.makePost(url, body, '用户登录');
   }
 

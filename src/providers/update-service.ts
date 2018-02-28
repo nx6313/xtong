@@ -55,19 +55,19 @@ export class UpdateService {
         if (data.result == 1) {
           if (appType == '1') {
             // android
-            this.androidUrl = data.version.appUrl;
+            this.androidUrl = data.content.appUrl;
           } else if (appType == '2') {
             // ios
-            this.iosUrl = data.version.appUrl;
+            this.iosUrl = data.content.appUrl;
           }
-          console.log('服务器最新版本：' + data.version.versionCode + ' --> 本地版本：' + Number(this.localVersionCode) + ' ==> 是否需要更新：' + (data.version.versionCode > Number(this.localVersionCode)));
-          if (Number(data.version.versionCode) > Number(this.localVersionCode)) {
+          console.log('服务器最新版本：' + data.content.versionCode + ' --> 本地版本：' + Number(this.localVersionCode) + ' ==> 是否需要更新：' + (data.content.versionCode > Number(this.localVersionCode)));
+          if (Number(data.content.versionCode) > Number(this.localVersionCode)) {
             let newVersionPopModal = this.modalCtrl.create(this.newVersionPage, {
               versionData: {
-                note: data.version.note,
-                appUrl: data.version.appUrl,
-                time: data.version.time,
-                versionNumber: data.version.versionNumber
+                note: data.content.note,
+                appUrl: data.content.appUrl,
+                time: data.content.time,
+                versionNumber: data.content.versionNumber
               }
             });
             newVersionPopModal.present();

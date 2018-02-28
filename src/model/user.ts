@@ -11,6 +11,7 @@ export class UserInfo {
 export class Merchant {
     merchantId: string = '';
     companyName: string = '';
+    createTime?: Date;
     constructor(merchantId?: string) {
         merchantId ? this.merchantId = merchantId : {};
     }

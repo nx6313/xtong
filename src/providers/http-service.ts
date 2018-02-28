@@ -7,6 +7,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { EventsService } from './events-service';
 import { LogService } from '../providers/log-service';
+import { Result } from '../model/comm';
 
 @Injectable()
 export class HttpService {
@@ -28,14 +29,14 @@ export class HttpService {
       .then(res => {
         let requestUseTime = (new Date().getTime() - startTimeZ) / 1000;
         this.logService.log('JSON[接口请求' + requestNo + '，耗时：' + requestUseTime + ' 秒]', { '请求地址': url, '参数': body, '返回值': res.json() });
-        return res.json();
+        return <Result>res.json();
       })
       .catch(err => {
         this.logService.log('JSON[>>> 接口访问异常 <<< ' + requestNo + ']', { '请求地址': url, '参数': body, '错误信息': err });
         if (err.ok === false) {
-          return { error: 'neterr' };
+          return <Result>{ error: 'neterr' };
         } else if (err.name === 'TimeoutError') {
-          return { error: 'timeout' };
+          return <Result>{ error: 'timeout' };
         } else {
           this.handleError(err, url, body, requestNo);
         }

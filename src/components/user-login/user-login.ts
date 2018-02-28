@@ -40,7 +40,7 @@ export class UserLoginComponent {
             return false;
           }
           if (smsVerifyCode.result === 1) {
-            this.getSmsCode = smsVerifyCode.smsCode;
+            this.getSmsCode = smsVerifyCode.content;
             let smsCodeSub = Observable.timer(1000, 1000).subscribe({
               next: (val) => {
                 this.codeBtnTip = `${this.canSmsCodeGetAgain - val}s 后重发`;
@@ -92,7 +92,7 @@ export class UserLoginComponent {
         return false;
       }
       if (login.result === 1) {
-        let userInfo: UserInfo = JSON.parse(login.staffInfo);
+        let userInfo: UserInfo = JSON.parse(login.content);
         this.storageService.setUserInfo(userInfo);
         this.navCtrl.setRoot(TabsPage);
       } else {
