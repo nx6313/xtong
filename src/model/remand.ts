@@ -17,10 +17,11 @@ export class Remand {
     freight: number;
     merchant: Merchant;
     name: string;
+    driverNumber: number = 0;
     remark?: string;
     // 计算属性
-    orderDistance?: number; // 订单距离公里数
-    userDistance?: number; // 用户当前距离任务开始地点公里数
+    orderDistance?: number = 0; // 订单距离公里数
+    userDistance?: number = 0; // 用户当前距离任务开始地点公里数
     constructor() {
     }
 }

@@ -75,6 +75,9 @@ export class TaskPage {
   remandContainer: RemandPageContainer = new RemandPageContainer();
 
   curPageSelectedId: string = this.switchTabsByStatus[0].id;
+  curPageSelectedKeyword: string = this.switchTabsByStatus[0].keyword;
+
+  refDataInterval: number = 1000;
 
   constructor(public navCtrl: NavController,
     private modalCtrl: ModalController,
@@ -87,16 +90,11 @@ export class TaskPage {
   }
 
   ionViewDidEnter() {
-    let time = Observable.interval(1000);
-    this.subTime = time.subscribe({
-      next: (val) => {
-
-      }
-    });
+    this.toggleDataRefTimer(true);
   }
 
   ionViewWillLeave() {
-    this.subTime.unsubscribe();
+    this.toggleDataRefTimer(false);
   }
 
   ionViewDidLoad() {
@@ -105,6 +103,36 @@ export class TaskPage {
         this.initListData(false, this.remandContainer.tab_status_all, { status: this.switchTabsByStatus[0].keyword });
       });
     });
+  }
+
+  toggleDataRefTimer(toggle?: Boolean) {
+    if (toggle === true) {
+      if ((!this.subTime || (this.subTime && this.subTime.closed)) && toggle === true) {
+        let time = Observable.interval(this.refDataInterval);
+        this.subTime = time.subscribe({
+          next: (val) => {
+            this.toggleDataRefTimer(false);
+            this.refRemandListData();
+          }
+        });
+      }
+    } else if (toggle === false) {
+      if (this.subTime && !this.subTime.closed) {
+        this.subTime.unsubscribe();
+      }
+    } else {
+      if (!this.subTime || (this.subTime && this.subTime.closed)) {
+        let time = Observable.interval(this.refDataInterval);
+        this.subTime = time.subscribe({
+          next: (val) => {
+            this.toggleDataRefTimer(false);
+            this.refRemandListData();
+          }
+        });
+      } else if (this.subTime && !this.subTime.closed) {
+        this.subTime.unsubscribe();
+      }
+    }
   }
 
   // 数据请求
@@ -158,6 +186,7 @@ export class TaskPage {
         remand.freight = remandData.freight;
         remand.merchant = remandData.merchant;
         remand.name = remandData.name;
+        remandData.driverNumber ? remand.driverNumber = remandData.driverNumber : {};
         remand.remark = remandData.remark;
         remandList.push(remand);
         remandPageContainerItem.addRemandToDateMap(remand, this.utilService.formatDate(remand.startTime, 'yyyy-MM-dd'));
@@ -171,6 +200,7 @@ export class TaskPage {
     let filterParams: { status?: string, startDate?: string, endDate?: string } = {};
     filterParams.status = params.keyword;
     this.curPageSelectedId = params.id;
+    this.curPageSelectedKeyword = params.keyword;
     this.initListData(false, this.remandContainer[params.id], filterParams);
   }
 
@@ -201,6 +231,15 @@ export class TaskPage {
         resolve('');
       }, 400);
     });
+  }
+
+  // 用于定时的数据刷新，需要刷新的数据有：
+  // 1、用户距离订单开始地点的公里数（本地刷新）
+  // 2、需求当前报名人数（通过Socket）
+  // 3、新增的需求以及删除修改的需求（通过Socket）
+  refRemandListData() {
+
+    this.toggleDataRefTimer(true);
   }
 
 }

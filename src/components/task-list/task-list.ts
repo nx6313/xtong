@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ModalController, NavController } from 'ionic-angular';
 import { StorageService } from '../../providers/storage-service';
 import { ProtocolService } from '../../providers/protocol-service';
@@ -20,6 +20,7 @@ export class TaskListComponent {
   @ViewChild('loadingDataTipWrap', { read: ElementRef }) _loadingDataTipWrap: ElementRef;
   @ViewChild('requestIsOuttimeTipWrap', { read: ElementRef }) _requestIsOuttimeTipWrap: ElementRef;
   @ViewChild('dataIsEmptyTipWrap', { read: ElementRef }) _dataIsEmptyTipWrap: ElementRef;
+
   taskMap: Map<string, Array<Remand>> = new Map<string, Array<Remand>>();
 
   isRefing: Boolean = false;
@@ -28,6 +29,38 @@ export class TaskListComponent {
 
   taskDetailPage: any = 'TaskDetailPage';
   loginPage: any = 'LoginPage';
+
+  remandCicleDomContainer: {} = {}; // 需求 当前报名人数cicle对象容器
+
+  // 圆形统计图参数配置
+  circleOptions: {} = {
+    color: "#24C789",
+    backgroundColor: "#F1F1F1",
+    background: true,
+    speed: 2000,
+    widthRatio: 0.1,
+    value: 0.1,
+    unit: 'percent', // 设置圆形进度条当前进度值的单位。例如：percent、deg、rad
+    counterclockwise: true, // 设置圆形进度条是顺时针旋转，还是逆时针旋转。true表示逆时针旋转，false表示顺时针旋转
+    size: 80,
+    startAngle: 0,
+    animate: true,
+    backgroundFix: true,
+    lineCap: "round",
+    animation: "easeInOutCubic",
+    text: '<span class="ciclePercentNum">0<span class="ciclePercentSymbol">%</span></span><span class="cicleTipTxt">已报名</span>',
+    redraw: false,
+    cAngle: 0,
+    textCenter: true,
+    textSize: false,
+    textWeight: 'normal',
+    textFamily: 'sans-serif',
+    relativeTextSize: 1 / 7,
+    autoCss: true,
+    onDraw: (el, circle) => {
+      circle.text('<span class="ciclePercentNum">' + Math.round(circle.value) + '<span class="ciclePercentSymbol">%</span></span><span class="cicleTipTxt">已报名</span>');
+    }
+  };
 
   constructor(public navCtrl: NavController,
     private modalCtrl: ModalController,
@@ -55,6 +88,13 @@ export class TaskListComponent {
     }
     this.toggleLoadingTip(this.isEmpty);
     this.cd.detectChanges();
+
+    let circleDoms = this._taskListwrap.nativeElement.getElementsByClassName('circleApplyNum');
+    $.each(circleDoms, (index, dom) => {
+      this.remandCicleDomContainer[dom.classList[1]] = dom;
+      this.circleOptions['value'] = dom.classList[2];
+      $(dom).circleChart(this.circleOptions);
+    });
   }
 
   dataFull() {

@@ -1,121 +1,191 @@
 task-list {
   .taskListWrap {
     position: relative;
-    .taskItemWrap {
+    .taskGroupWrap {
       position: relative;
-      background: #ffffff;
-      padding: 1.8rem 16px;
-      .orderNum {
+      .taskDateTip {
         display: inline-block;
-        font-size: 1.32rem;
-        margin-bottom: 0.6rem;
-      }
-      .orderTimeType {
-        margin-bottom: 0.6rem;
-        .orderTime {
-          vertical-align: top;
-          i {
-            color: #EC796A;
-            font-size: 1rem;
-            margin-right: 8px;
-          }
-        }
-        .orderType {
-          vertical-align: top;
-          background: #14B4DC;
-          color: #efefef;
-          font-size: 1.2rem;
-          border-radius: 2px;
-          padding: 2px 6px;
-          i {
-            margin-right: 4px;
-            font-size: 10px;
-          }
-        }
-      }
-      .clientPhoneName {
-        margin-bottom: 0.6rem;
-        .clientPhone {
-          i {
-            color: rgb(136, 136, 136);
-            font-size: 1.6rem;
-            margin-right: 8px;
-          }
-          font-size: 2.8rem;
-          margin-right: 14px;
-        }
-        .clientName {
-          i {
-            color: rgb(231, 164, 19);
-            font-size: 1.6rem;
-            margin-right: 8px;
-          }
-          font-size: 1.3rem;
-        }
-      }
-      .clientAddress {
-        display: inline-block;
-        width: 70%;
-        font-size: 1.4rem;
-        color: #9F9F9F;
-        margin-right: 14px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        i {
-          color: #EC796A;
-          font-size: 1rem;
-          margin-right: 8px;
-        }
-      }
-      .getThisOrder {
-        display: inline-block;
-        width: calc(30% - 4px);
+        width: 100%;
         text-align: center;
-        border: 1px solid rgb(216, 64, 64);
-        color: rgb(216, 64, 64);
-        font-size: 1.6rem;
-        border-radius: 2px;
-        padding: 4px 10px;
+        padding: 10px 0 4px 0;
+        color: rgb(18, 29, 46);
+        font-size: 1.4rem;
       }
-    }
-    .taskItemWrap::before {
-      content: '';
-      position: absolute;
-      top: 0px;
-      left: 16px;
-      right: 16px;
-      border-top: 1px solid #eeeeee;
-    }
-    .taskItemWrap:first-child::before {
-      content: '';
-      border-top: none;
-    }
-    .dataHasFullWrap {
-      position: relative;
-      text-align: center;
-      padding: 10px 0;
-      background: #EBF0F2;
-      color: rgb(117, 117, 117);
-      text-shadow: 0px 0px 2px rgba(99, 99, 99, 0.4);
-    }
-    .dataHasFullWrap::before {
-      content: '';
-      position: absolute;
-      right: calc(50% + 60px);
-      top: 50%;
-      width: calc(50% - 20px - 60px);
-      border: 0.04rem dashed rgb(131, 131, 131);
-      text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.8);
-    }
-    .dataHasFullWrap::after {
-      content: '';
-      position: absolute;
-      left: calc(50% + 60px);
-      top: 50%;
-      width: calc(50% - 20px - 60px);
-      border: 0.04rem dashed rgb(131, 131, 131);
-      text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.8);
+      .taskItemWrap {
+        position: relative;
+        background: #ffffff;
+        padding: 1.8rem 16px;
+        color: rgb(15, 23, 36);
+        .addressStart {
+          position: relative;
+          display: inline-block;
+          font-size: 1.8rem;
+          padding-left: 16px;
+          width: 70%;
+          height: 30px;
+          line-height: 30px;
+          vertical-align: middle;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .addressStart::after {
+          content: '';
+          position: absolute;
+          top: calc((30px - 8px) / 2);
+          left: 0;
+          bottom: 0;
+          width: 8px;
+          height: 8px;
+          background: cadetblue;
+          border-radius: 10rem;
+        }
+        .addressEnd {
+          position: relative;
+          display: inline-block;
+          margin-top: 10px;
+          font-size: 1.8rem;
+          padding-left: 16px;
+          width: 70%;
+          height: 30px;
+          line-height: 30px;
+          vertical-align: middle;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .addressEnd::after {
+          content: '';
+          position: absolute;
+          top: calc((30px - 8px) / 2);
+          left: 0;
+          bottom: 0;
+          width: 8px;
+          height: 8px;
+          background: rgb(219, 152, 75);
+          border-radius: 10rem;
+        }
+        .currentApplyNum {
+          position: absolute;
+          top: 14px;
+          right: 8px;
+          width: 28vw;
+          height: 20vw;
+          p.circleChart_text {
+            position: absolute;
+            line-height: 20px !important;
+            top: 20px !important;
+            .ciclePercentNum {
+              position: relative;
+              display: block;
+              color: #61C395;
+              font-size: 1.4rem;
+              transform: scale(1.2, 2.2);
+              font-weight: bold;
+              left: -3px;
+              .ciclePercentSymbol {
+                position: relative;
+                display: inline-block;
+                font-size: 1.2rem;
+                transform: scale(0.8, 0.6);
+                font-weight: normal;
+                bottom: -2px;
+                left: 2px;
+              }
+            }
+            .cicleTipTxt {
+              display: block;
+              color: #8E8E8E;
+              font-size: 1.4rem;
+              margin-top: 4px;
+            }
+          }
+        }
+        .desWrap {
+          margin-top: 18px;
+          font-size: 1.3rem;
+          padding-left: 16px;
+          white-space: nowrap;
+          span {
+            margin-left: 20px;
+          }
+          span:first-of-type {
+            margin-left: 0;
+          }
+        }
+        .footer {
+          position: relative;
+          white-space: nowrap;
+          margin-top: 18px;
+          padding-top: 14px;
+          font-size: 1.3rem;
+          .distance {
+            position: relative;
+            display: inline-block;
+            color: #01BF92;
+            font-size: 1.4rem;
+            transform: scale(1.2, 1.6);
+            font-weight: 400;
+            top: -2px;
+          }
+          .money {
+            position: relative;
+            display: inline-block;
+            color: #F39800;
+            font-size: 1.4rem;
+            transform: scale(1.2, 2);
+            margin-right: 2px;
+            font-weight: 400;
+            top: -3px;
+          }
+        }
+        .footer::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 2px;
+          right: 2px;
+          border-top: 1px solid #eeeeee;
+        }
+      }
+      .taskItemWrap::before {
+        content: '';
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        border-top: 8px solid #EBF0F2;
+      }
+      .taskItemWrap:first-of-type::before {
+        content: '';
+        border-top: none;
+      }
+      .dataHasFullWrap {
+        position: relative;
+        text-align: center;
+        padding: 10px 0;
+        background: #EBF0F2;
+        color: rgb(117, 117, 117);
+        text-shadow: 0px 0px 2px rgba(99, 99, 99, 0.4);
+      }
+      .dataHasFullWrap::before {
+        content: '';
+        position: absolute;
+        right: calc(50% + 60px);
+        top: 50%;
+        width: calc(50% - 20px - 60px);
+        border: 0.04rem dashed rgb(131, 131, 131);
+        text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.8);
+      }
+      .dataHasFullWrap::after {
+        content: '';
+        position: absolute;
+        left: calc(50% + 60px);
+        top: 50%;
+        width: calc(50% - 20px - 60px);
+        border: 0.04rem dashed rgb(131, 131, 131);
+        text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.8);
+      }
     }
     .noDataWrap {
       text-align: center;

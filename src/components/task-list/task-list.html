@@ -1,9 +1,25 @@
 <div #taskListwrap class="taskListWrap">
-  <div class="taskItemWrap" *ngFor="let taskDateKey of taskMap.keys()">
-    <span class="taskDateTip">{{taskDateKey}}</span>
+  <div class="taskGroupWrap" *ngFor="let taskDateKey of taskMap.keys()">
+    <span class="taskDateTip">{{taskDateKey | remandDate}}</span>
     <div class="taskItemWrap" *ngFor="let task of taskMap.get(taskDateKey)" (click)="toTaskDetail(task)">
-      <span class="orderNum">订单号：{{task.name}}</span>
-      
+      <div class="addressStart">{{task.startAddress}}</div>
+      <div class="addressEnd">{{task.endAddress}}</div>
+      <div class="currentApplyNum">
+        <div class="circleApplyNum {{task.demandId}} {{task.driverNumber}}"></div>
+      </div>
+      <div class="desWrap">
+        <span>发货日期：{{task.startTime | remandDate : 'yy.MM.dd'}}—{{task.endTime | remandDate : 'yy.MM.dd'}}</span>
+        <span>类型：精煤</span>
+      </div>
+      <div class="footer flex-r flex-b">
+        <span>
+          距装货地约
+          <span class="distance">{{task.userDistance}}</span> 公里，运输里程约
+          <span class="distance">{{task.orderDistance}}</span> 公里
+        </span>
+        <span>
+          <span class="money">{{task.freight}}</span> 元 / 吨</span>
+      </div>
     </div>
   </div>
   <div class="noDataWrap" [hidden]="taskMap != null && taskMap.size > 0 && !isRefing">

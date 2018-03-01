@@ -76,9 +76,12 @@ export class AddressSelectPage {
         });
         if (data.info === 'SUCCESS') {
           this.addressInputVal = '';
-          this.addressSelfVal = data.formattedAddress;
-          this.selectAddressPosition = new SelectMarkerAddress(data.formattedAddress, data.position);
+          this.addressSelfVal = data.formattedAddress.replace(data.addressComponent.province, '').replace(data.addressComponent.city, '').replace(data.addressComponent.district, '').replace(data.addressComponent.township, '');
+          this.selectAddressPosition = new SelectMarkerAddress(data.formattedAddress.replace(data.addressComponent.province, '').replace(data.addressComponent.city, '').replace(data.addressComponent.district, '').replace(data.addressComponent.township, ''), data.position);
           this.userCityCode = data.addressComponent.citycode;
+          if (this.autocomplete != null) {
+            this.autocomplete.setCity(this.userCityCode);
+          }
           this.cd.detectChanges();
         }
       });
@@ -88,7 +91,7 @@ export class AddressSelectPage {
           citylimit: true
         };
         this.autocomplete = new AMap.Autocomplete(autoOptions);
-      })
+      });
       AMap.service('AMap.PlaceSearch', () => {
         this.placeSearch = new AMap.PlaceSearch({
           pageSize: 1,
@@ -106,8 +109,8 @@ export class AddressSelectPage {
             '地址信息结果': positionResult
           });
           if (positionResult.info == 'OK') {
-            this.addressInputVal = positionResult.address;
-            this.selectAddressPosition = new SelectMarkerAddress(positionResult.address, positionResult.position);
+            this.addressInputVal = positionResult.address.replace(positionResult.regeocode.addressComponent.province, '').replace(positionResult.regeocode.addressComponent.city, '').replace(positionResult.regeocode.addressComponent.district, '').replace(positionResult.regeocode.addressComponent.township, '');
+            this.selectAddressPosition = new SelectMarkerAddress(positionResult.address.replace(positionResult.regeocode.addressComponent.province, '').replace(positionResult.regeocode.addressComponent.city, '').replace(positionResult.regeocode.addressComponent.district, '').replace(positionResult.regeocode.addressComponent.township, ''), positionResult.position);
             this.cd.detectChanges();
           }
         });
