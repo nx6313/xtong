@@ -56,14 +56,14 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-crosswalk-webview": {},
       "cordova-plugin-sysactivity": {},
-      "cordova-plugin-gdlocation": {
-        "API_KEY": "849794f231b1f84d07369aa27989aa2c"
-      },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-gdlocation": {
+        "API_KEY": "849794f231b1f84d07369aa27989aa2c"
+      }
     },
     "platforms": [
       "android"
