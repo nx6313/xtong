@@ -8,7 +8,7 @@ import { LogService } from './log-service';
 @Injectable()
 export class StorageService {
   userInfo: { staffId?: string, merchantId?: string } = { staffId: '', merchantId: '' };
-  userLocation: { staffId?: string, merchantId?: string } = { staffId: '', merchantId: '' };
+  userLocation: { lat?: number, lng?: number, address?: string, cityCode?: number } = { lat: 0, lng: 0, address: '', cityCode: 0 };
 
   constructor(private events: EventsService,
     private storage: Storage,
@@ -73,6 +73,17 @@ export class StorageService {
       let userInfo: UserInfo = value;
       return userInfo;
     });
+  }
+
+  /**
+   * 设置用户当前定位信息
+   */
+  setUserLocation(location) {
+    this.storage.set('userLocation', location);
+    this.userLocation.lat = location.latitude;
+    this.userLocation.lng = location.longitude;
+    this.userLocation.address = location.address;
+    this.userLocation.cityCode = location.cityCode;
   }
 
 }

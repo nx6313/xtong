@@ -80,7 +80,7 @@ export class MyApp {
   // 开始获取用户位置信息
   startGetLocation() {
     this.utilService.getLocation().then((userLocation) => {
-      console.log(userLocation);
+      this.storageService.setUserLocation(userLocation);
     });
   }
 }
