@@ -8,12 +8,16 @@ task-list {
         width: 100%;
         text-align: center;
         padding: 10px 0 4px 0;
-        color: rgb(18, 29, 46);
-        font-size: 1.4rem;
+        color: rgb(82, 82, 82);
+        font-size: 1.2rem;
       }
       .taskItemWrap {
         position: relative;
         background: #ffffff;
+        background-image: url(../assets/imgs/remand_item_bg.png);
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        background-position: top center;
         padding: 1.8rem 16px;
         color: rgb(15, 23, 36);
         .addressStart {
@@ -43,7 +47,7 @@ task-list {
         .addressEnd {
           position: relative;
           display: inline-block;
-          margin-top: 10px;
+          margin-top: 4px;
           font-size: 1.8rem;
           padding-left: 16px;
           width: 70%;
@@ -80,9 +84,9 @@ task-list {
               display: block;
               color: #61C395;
               font-size: 1.4rem;
-              transform: scale(1.2, 2.2);
+              transform: scale(1.4, 2);
               font-weight: bold;
-              left: -3px;
+              left: 0px;
               .ciclePercentSymbol {
                 position: relative;
                 display: inline-block;
@@ -96,13 +100,13 @@ task-list {
             .cicleTipTxt {
               display: block;
               color: #8E8E8E;
-              font-size: 1.4rem;
+              font-size: 1.2rem;
               margin-top: 4px;
             }
           }
         }
         .desWrap {
-          margin-top: 18px;
+          margin-top: 14px;
           font-size: 1.3rem;
           padding-left: 16px;
           white-space: nowrap;
@@ -116,27 +120,28 @@ task-list {
         .footer {
           position: relative;
           white-space: nowrap;
-          margin-top: 18px;
+          margin-top: 14px;
           padding-top: 14px;
           font-size: 1.3rem;
+          color: rgb(133, 136, 135);
           .distance {
             position: relative;
             display: inline-block;
-            color: #01BF92;
+            color: rgb(92, 94, 93);
             font-size: 1.4rem;
-            transform: scale(1.2, 1.6);
+            transform: scale(1.2, 1.3);
             font-weight: 400;
-            top: -2px;
+            bottom: 0px;
           }
           .money {
             position: relative;
             display: inline-block;
             color: #F39800;
             font-size: 1.4rem;
-            transform: scale(1.2, 2);
+            transform: scale(1.2, 1.6);
             margin-right: 2px;
             font-weight: 400;
-            top: -3px;
+            top: -2px;
           }
         }
         .footer::after {
@@ -159,6 +164,9 @@ task-list {
       .taskItemWrap:first-of-type::before {
         content: '';
         border-top: none;
+      }
+      .taskItemWrap::after {
+        background-image: radial-gradient(circle, #C2DBEA 10%, transparent 10.01%);
       }
       .dataHasFullWrap {
         position: relative;

@@ -1,7 +1,7 @@
 <div #taskListwrap class="taskListWrap">
   <div class="taskGroupWrap" *ngFor="let taskDateKey of taskMap.keys()">
     <span class="taskDateTip">{{taskDateKey | remandDate}}</span>
-    <div class="taskItemWrap" *ngFor="let task of taskMap.get(taskDateKey)" (click)="toTaskDetail(task)">
+    <div class="taskItemWrap ripple" *ngFor="let task of taskMap.get(taskDateKey)" (init)="alert(2332)" (click)="toTaskDetail(task)">
       <div class="addressStart">{{task.startAddress}}</div>
       <div class="addressEnd">{{task.endAddress}}</div>
       <div class="currentApplyNum">

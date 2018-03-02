@@ -13,7 +13,11 @@ export class RemandDatePipe implements PipeTransform {
     if (args && args.length > 0) {
       return this.utilService.formatDate(new Date(value), args[0]);
     } else {
-      if (value === this.utilService.formatDate(new Date(), 'yyyy-MM-dd')) {
+      if (value === this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() - 2)), 'yyyy-MM-dd')) {
+        return '前 天';
+      } else if (value === this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() - 1)), 'yyyy-MM-dd')) {
+        return '昨 天';
+      } else if (value === this.utilService.formatDate(new Date(), 'yyyy-MM-dd')) {
         return '今 天';
       } else if (value === this.utilService.formatDate(new Date(new Date().setDate(new Date().getDate() + 1)), 'yyyy-MM-dd')) {
         return '明 天';

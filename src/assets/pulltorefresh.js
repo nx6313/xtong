@@ -423,13 +423,14 @@ var PullToRefresh = (function () {
       }
 
       if (!fingerDistancePriority) {
-        if (Math.abs(distX) > Math.abs(dist)) {
+        if (Math.abs(distX) > 8 && Math.abs(distX) > Math.abs(dist)) {
           fingerDistancePriority = 'horizontal';
         } else {
           fingerDistancePriority = 'vertical';
         }
       }
       if (canSwitchSlide && fingerDistancePriority == 'horizontal') {
+        e.preventDefault();
         // 获取当前分屏的序号
         var switchPageCount = getSwitchPageCount(e);
         var curSwitchPageIndex = getCurSwitchPageIndex(e);

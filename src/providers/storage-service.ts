@@ -8,6 +8,7 @@ import { LogService } from './log-service';
 @Injectable()
 export class StorageService {
   userInfo: { staffId?: string, merchantId?: string } = { staffId: '', merchantId: '' };
+  userLocation: { staffId?: string, merchantId?: string } = { staffId: '', merchantId: '' };
 
   constructor(private events: EventsService,
     private storage: Storage,

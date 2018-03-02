@@ -272,9 +272,10 @@ export class UtilService {
   calcNavInfo(oneLatLng: { lat?: number, lng?: number }, twoLatLng: { lat?: number, lng?: number }) {
     return new Promise<number>((resolve, reject) => {
       GdLocation.calcNavInfo(oneLatLng, twoLatLng, (navInfo) => {
+        this.logService.log('JSON[计算两坐标的距离]', navInfo);
         resolve(navInfo);
       }, (error) => {
-        this.logService.log('JSON[计算两坐标的距离]', error);
+        this.logService.log('JSON[计算两坐标的距离错误]', error);
         reject(error);
       });
     });

@@ -13,7 +13,6 @@ declare var $;
   templateUrl: 'task-list.html'
 })
 export class TaskListComponent {
-  @Output('acceptOrderAfter') acceptOrderAfterFn = new EventEmitter<any>();
   @Output('clickRequestTimeoutBtn') clickRequestTimeoutBtnFn = new EventEmitter<any>();
   @Output('clickNoDataBtn') clickNoDataBtnFn = new EventEmitter<any>();
   @ViewChild('taskListwrap', { read: ElementRef }) _taskListwrap: ElementRef;
@@ -35,7 +34,7 @@ export class TaskListComponent {
   // 圆形统计图参数配置
   circleOptions: {} = {
     color: "#24C789",
-    backgroundColor: "#F1F1F1",
+    backgroundColor: "#E7F0F5",
     background: true,
     speed: 2000,
     widthRatio: 0.1,
@@ -94,6 +93,35 @@ export class TaskListComponent {
       this.remandCicleDomContainer[dom.classList[1]] = dom;
       this.circleOptions['value'] = dom.classList[2];
       $(dom).circleChart(this.circleOptions);
+    });
+  }
+
+  // 通过需求id 更新任务
+  getTaskMapById(taskId: number) {
+    return new Promise<{ remand: Remand, cicleUpdateFn: Function }>((resolve, reject) => {
+      let updateRemand: Remand = null;
+      let taskIterator = this.taskMap.values();
+      t: for (let index = 0; index < this.taskMap.size; index++) {
+        let taskArr = taskIterator.next().value;
+        for (let key in taskArr) {
+          if (taskArr[key].demandId === taskId) {
+            updateRemand = taskArr[key];
+            break t;
+          }
+        }
+      }
+      let getRemand = null;
+      if (updateRemand !== null) {
+        getRemand = {
+          remand: updateRemand,
+          cicleUpdateFn: (newVal: number) => {
+            $(this.remandCicleDomContainer[taskId]).circleChart({
+              value: newVal
+            });
+          }
+        };
+      }
+      resolve(getRemand);
     });
   }
 
@@ -174,13 +202,6 @@ export class TaskListComponent {
       this.logService.log('从任务详情页面返回');
     });
     taskDetailModal.present();
-  }
-
-  private acceptOrder(event, task) {
-    this.storageService.getUserInfo().then((userInfo) => {
-
-    });
-    event.stopPropagation();
   }
 
 }

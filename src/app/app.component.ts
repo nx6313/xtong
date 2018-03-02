@@ -35,6 +35,7 @@ export class MyApp {
       statusBar.styleLightContent();
       statusBar.backgroundColorByHexString('#343B4C');
       this.registerBackButtonAction();
+      this.startGetLocation();
     });
   }
 
@@ -74,5 +75,12 @@ export class MyApp {
         this.backButtonPressed = false;
       }, 2000);
     }
+  }
+
+  // 开始获取用户位置信息
+  startGetLocation() {
+    this.utilService.getLocation().then((userLocation) => {
+      console.log(userLocation);
+    });
   }
 }
