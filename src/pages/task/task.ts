@@ -273,10 +273,6 @@ export class TaskPage {
           if (this.storageService.userLocation.lat > 0 && this.storageService.userLocation.lng > 0) {
             this.utilService.calcNavInfo(getRemand.remand.startPosition, this.storageService.userLocation).then((userDistance) => {
               getRemand.remand.userDistance = Number((userDistance / 1000).toFixed(2));
-              this.logService.log('JSON[距离订单起点距离]', {
-                '用户当前位置': this.storageService.userLocation,
-                '距任务点距离': getRemand.remand.userDistance + ' 公里'
-              });
             });
           }
           this.toggleDataRefTimer(true);

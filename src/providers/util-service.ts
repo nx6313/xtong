@@ -273,6 +273,13 @@ export class UtilService {
     return new Promise<number>((resolve, reject) => {
       if (this.isMobile()) {
         GdLocation.calcNavInfo(oneLatLng, twoLatLng, (navInfo) => {
+          if (MarLog.getLocationLogFlag()) {
+            this.logService.log('JSON[计算得到两点距离]', {
+              '坐标点1': oneLatLng,
+              '坐标点2': twoLatLng,
+              '两坐标点距离': navInfo + ' 米'
+            });
+          }
           resolve(navInfo);
         }, (error) => {
           this.logService.log('JSON[计算两坐标的距离错误]', { error: error });
