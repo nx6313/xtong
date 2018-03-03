@@ -4,11 +4,12 @@ import { EventsService } from './events-service';
 
 import { UserInfo } from '../model/user';
 import { LogService } from './log-service';
+import { SDKLocation } from '../model/position';
 
 @Injectable()
 export class StorageService {
   userInfo: { staffId?: string, merchantId?: string } = { staffId: '', merchantId: '' };
-  userLocation: { lat?: number, lng?: number, address?: string, cityCode?: number } = { lat: 0, lng: 0, address: '', cityCode: 0 };
+  userLocation: { lat?: number, lng?: number, address?: string, cityCode?: string } = { lat: 0, lng: 0, address: '', cityCode: '' };
 
   constructor(private events: EventsService,
     private storage: Storage,
@@ -78,7 +79,7 @@ export class StorageService {
   /**
    * 设置用户当前定位信息
    */
-  setUserLocation(location) {
+  setUserLocation(location: SDKLocation) {
     this.storage.set('userLocation', location);
     this.userLocation.lat = location.latitude;
     this.userLocation.lng = location.longitude;

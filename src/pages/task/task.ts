@@ -79,7 +79,7 @@ export class TaskPage {
 
   remandList: Array<Remand> = null;
 
-  refDataInterval: number = 6000;
+  refDataInterval: number = 4000;
 
   constructor(public navCtrl: NavController,
     private modalCtrl: ModalController,
@@ -251,12 +251,14 @@ export class TaskPage {
             let dd = Math.random() * 100;
             getRemand.cicleUpdateFn(dd);
           }
-          this.utilService.calcNavInfo(getRemand.remand.startPosition, getRemand.remand.endPosition).then((remandDistance) => {
-            getRemand.remand.orderDistance = Number((remandDistance / 1000).toFixed(2));
-          });
+          if (getRemand.remand.orderDistance === 0) {
+            this.utilService.calcNavInfo(getRemand.remand.startPosition, getRemand.remand.endPosition).then((remandDistance) => {
+              getRemand.remand.orderDistance = Number((remandDistance / 1000).toFixed(2));
+            });
+          }
           if (this.storageService.userLocation.lat > 0 && this.storageService.userLocation.lng > 0) {
-            this.utilService.calcNavInfo(getRemand.remand.startPosition, this.storageService.userLocation).then((remandDistance) => {
-              getRemand.remand.userDistance = Number((remandDistance / 1000).toFixed(2));
+            this.utilService.calcNavInfo(getRemand.remand.startPosition, this.storageService.userLocation).then((userDistance) => {
+              getRemand.remand.userDistance = Number((userDistance / 1000).toFixed(2));
             });
           }
           this.toggleDataRefTimer(true);

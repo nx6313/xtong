@@ -14,8 +14,8 @@
       <div class="footer flex-r flex-b">
         <span>
           距装货地约
-          <span class="distance">{{task.userDistance}}</span> 公里，运输里程约
-          <span class="distance">{{task.orderDistance}}</span> 公里
+          <span class="distance">{{task.userDistance | distance}}</span> 公里，运输里程约
+          <span class="distance">{{task.orderDistance | distance}}</span> 公里
         </span>
         <span>
           <span class="money">{{task.freight}}</span> 元 / 吨</span>

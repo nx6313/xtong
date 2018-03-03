@@ -37,7 +37,7 @@ export class TaskListComponent {
     backgroundColor: "#E7F0F5",
     background: true,
     speed: 2000,
-    widthRatio: 0.1,
+    widthRatio: 0.2,
     value: 0.1,
     unit: 'percent', // 设置圆形进度条当前进度值的单位。例如：percent、deg、rad
     counterclockwise: true, // 设置圆形进度条是顺时针旋转，还是逆时针旋转。true表示逆时针旋转，false表示顺时针旋转
