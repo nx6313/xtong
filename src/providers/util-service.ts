@@ -271,12 +271,16 @@ export class UtilService {
   // 计算两点坐标距离
   calcNavInfo(oneLatLng: { lat?: number, lng?: number }, twoLatLng: { lat?: number, lng?: number }) {
     return new Promise<number>((resolve, reject) => {
-      GdLocation.calcNavInfo(oneLatLng, twoLatLng, (navInfo) => {
-        resolve(navInfo);
-      }, (error) => {
-        this.logService.log('JSON[计算两坐标的距离错误]', { error: error });
-        reject(error);
-      });
+      if (this.isMobile()) {
+        GdLocation.calcNavInfo(oneLatLng, twoLatLng, (navInfo) => {
+          resolve(navInfo);
+        }, (error) => {
+          this.logService.log('JSON[计算两坐标的距离错误]', { error: error });
+          reject(error);
+        });
+      } else {
+        resolve(0);
+      }
     });
   }
 

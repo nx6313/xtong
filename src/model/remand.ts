@@ -2,6 +2,7 @@ import { ScrollviewComponent } from "../components/scrollview/scrollview";
 import { TaskListComponent } from "../components/task-list/task-list";
 import { Location } from "./position";
 import { Merchant } from "./user";
+import { Subscription } from "rxjs/Rx";
 
 export class Remand {
     demandId: number;
@@ -30,6 +31,7 @@ export class RemandPageContainerItem {
     aboutScrollView: ScrollviewComponent;
     aboutTaskList: TaskListComponent;
     pageIndex?: number = 1;
+    remandList?: Array<Remand> = new Array<Remand>();
     dataMapByDate?: Map<string, Array<Remand>> = new Map<string, Array<Remand>>(); // 根据时间获取的数据字典
     dataIdArr?: Array<number> = []; // 数据Id数组，用于判断是否有新数据产生
     constructor(aboutScrollView: ScrollviewComponent, aboutTaskList: TaskListComponent) {

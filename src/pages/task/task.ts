@@ -71,13 +71,12 @@ export class TaskPage {
   ];
 
   remandAddPage: string = 'RemandAddPage';
-  subTime: Subscription;
   remandContainer: RemandPageContainer = new RemandPageContainer();
+
+  subTimeMap?: Map<string, Subscription> = new Map<string, Subscription>();
 
   curPageSelectedId: string = this.switchTabsByStatus[0].id;
   curPageSelectedKeyword: string = this.switchTabsByStatus[0].keyword;
-
-  remandList: Array<Remand> = null;
 
   refDataInterval: number = 4000;
 
@@ -117,7 +116,7 @@ export class TaskPage {
       remandPageContainerItem.aboutTaskList.setTaskMap(new Map<string, Array<Remand>>(), true, true);
     }
     remandPageContainerItem.aboutScrollView.isLoading = true; // 正在加载数据
-    this.remandList = new Array<Remand>();
+    remandPageContainerItem.remandList = new Array<Remand>();
     this.protocolService.getDemandList(remandPageContainerItem.pageIndex, filterParams).then(data => {
       remandPageContainerItem.aboutScrollView.isLoading = false;
       if (data && data.result != 1) {
@@ -161,13 +160,13 @@ export class TaskPage {
         remand.name = remandData.name;
         remandData.driverNumber ? remand.driverNumber = remandData.driverNumber : {};
         remand.remark = remandData.remark;
-        this.remandList.push(remand);
+        remandPageContainerItem.remandList.push(remand);
         remandPageContainerItem.addRemandToDateMap(remand, this.utilService.formatDate(remand.startTime, 'yyyy-MM-dd'));
       }
       remandPageContainerItem.aboutTaskList.setTaskMap(remandPageContainerItem.dataMapByDate);
       setTimeout(() => {
         this.refRemandListData();
-      }, 400);
+      }, 600);
     });
   }
 
@@ -178,6 +177,21 @@ export class TaskPage {
     this.curPageSelectedId = params.id;
     this.curPageSelectedKeyword = params.keyword;
     this.initListData(false, this.remandContainer[params.id], filterParams);
+    this.subTimeMap.forEach((subTime, key) => {
+      if (key !== this.curPageSelectedId) {
+        subTime.unsubscribe();
+      } else {
+        if (subTime.closed) {
+          let time = Observable.interval(this.refDataInterval);
+          this.subTimeMap.set(this.curPageSelectedId, time.subscribe({
+            next: (val) => {
+              this.toggleDataRefTimer(false);
+              this.refRemandListData();
+            }
+          }));
+        }
+      }
+    });
   }
 
   // 重新加载
@@ -211,30 +225,30 @@ export class TaskPage {
 
   toggleDataRefTimer(toggle?: Boolean) {
     if (toggle === true) {
-      if ((!this.subTime || (this.subTime && this.subTime.closed)) && toggle === true) {
+      if ((!this.subTimeMap.get(this.curPageSelectedId) || (this.subTimeMap.get(this.curPageSelectedId) && this.subTimeMap.get(this.curPageSelectedId).closed)) && toggle === true) {
         let time = Observable.interval(this.refDataInterval);
-        this.subTime = time.subscribe({
+        this.subTimeMap.set(this.curPageSelectedId, time.subscribe({
           next: (val) => {
             this.toggleDataRefTimer(false);
             this.refRemandListData();
           }
-        });
+        }));
       }
     } else if (toggle === false) {
-      if (this.subTime && !this.subTime.closed) {
-        this.subTime.unsubscribe();
+      if (this.subTimeMap.get(this.curPageSelectedId) && !this.subTimeMap.get(this.curPageSelectedId).closed) {
+        this.subTimeMap.get(this.curPageSelectedId).unsubscribe();
       }
     } else {
-      if (!this.subTime || (this.subTime && this.subTime.closed)) {
+      if (!this.subTimeMap.get(this.curPageSelectedId) || (this.subTimeMap.get(this.curPageSelectedId) && this.subTimeMap.get(this.curPageSelectedId).closed)) {
         let time = Observable.interval(this.refDataInterval);
-        this.subTime = time.subscribe({
+        this.subTimeMap.set(this.curPageSelectedId, time.subscribe({
           next: (val) => {
             this.toggleDataRefTimer(false);
             this.refRemandListData();
           }
-        });
-      } else if (this.subTime && !this.subTime.closed) {
-        this.subTime.unsubscribe();
+        }));
+      } else if (this.subTimeMap.get(this.curPageSelectedId) && !this.subTimeMap.get(this.curPageSelectedId).closed) {
+        this.subTimeMap.get(this.curPageSelectedId).unsubscribe();
       }
     }
   }
@@ -244,8 +258,8 @@ export class TaskPage {
   // 2、需求当前报名人数（通过Socket）
   // 3、新增的需求以及删除修改的需求（通过Socket）
   refRemandListData() {
-    if (this.remandContainer[this.curPageSelectedId] && this.remandList) {
-      this.remandList.forEach((remand, index) => {
+    if (this.remandContainer[this.curPageSelectedId] && (<RemandPageContainerItem>this.remandContainer[this.curPageSelectedId]).remandList.length > 0) {
+      (<RemandPageContainerItem>this.remandContainer[this.curPageSelectedId]).remandList.forEach((remand, index) => {
         (<RemandPageContainerItem>this.remandContainer[this.curPageSelectedId]).aboutTaskList.getTaskMapById(remand.demandId).then((getRemand) => {
           if (getRemand) {
             let dd = Math.random() * 100;
@@ -259,6 +273,10 @@ export class TaskPage {
           if (this.storageService.userLocation.lat > 0 && this.storageService.userLocation.lng > 0) {
             this.utilService.calcNavInfo(getRemand.remand.startPosition, this.storageService.userLocation).then((userDistance) => {
               getRemand.remand.userDistance = Number((userDistance / 1000).toFixed(2));
+              this.logService.log('JSON[距离订单起点距离]', {
+                '用户当前位置': this.storageService.userLocation,
+                '距任务点距离': getRemand.remand.userDistance + ' 公里'
+              });
             });
           }
           this.toggleDataRefTimer(true);
