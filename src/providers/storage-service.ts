@@ -81,10 +81,10 @@ export class StorageService {
    */
   setUserLocation(location: SDKLocation) {
     this.storage.set('userLocation', location);
-    this.userLocation.lat = location.latitude;
-    this.userLocation.lng = location.longitude;
-    this.userLocation.address = location.address;
-    this.userLocation.cityCode = location.cityCode;
-  }
+    location.latitude ? this.userLocation.lat = location.latitude : {};
+    location.longitude ? this.userLocation.lng = location.longitude : {};
+    location.address ? this.userLocation.address = location.address : {};
+    location.cityCode ? this.userLocation.cityCode = location.cityCode : {};
+  }     
 
 }

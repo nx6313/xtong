@@ -243,11 +243,19 @@ export class UtilService {
           }
           resolve(location);
         }, (error) => {
-          this.logService.log('JSON[获取定位信息错误]', error);
+          this.logService.log('JSON[获取定位信息错误]', { error: error });
           reject(error);
         });
       } else {
-        resolve('在真机环境即可获得定位信息');
+        resolve({
+          'longitude': 112.546058,
+          'latitude': 37.795204,
+          'address': '模拟地址',
+          'city': '太原市',
+          'cityCode': '0351',
+          'speed': '10',
+          'time': ''
+        });
       }
     });
   }
@@ -286,6 +294,13 @@ export class UtilService {
           reject(error);
         });
       } else {
+        if (MarLog.getLocationLogFlag()) {
+          this.logService.log('JSON[计算得到两点距离]', {
+            '坐标点1': oneLatLng,
+            '坐标点2': twoLatLng,
+            '两坐标点距离': '模拟距离'
+          });
+        }
         resolve(0);
       }
     });

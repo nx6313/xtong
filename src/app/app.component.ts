@@ -79,7 +79,10 @@ export class MyApp {
 
   // 开始获取用户位置信息
   startGetLocation() {
-    this.utilService.getLocation().then((userLocation) => {
+    this.utilService.getLocation().catch(() => {
+      this.startGetLocation();
+    });
+    this.eventsService.subscribe('location:sendStart', (userLocation) => {
       this.storageService.setUserLocation(userLocation);
     });
   }
