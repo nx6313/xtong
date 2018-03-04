@@ -3,7 +3,10 @@
     <span class="iconfont {{leftIcon}}"></span>
   </div>
   <div class="comm-title center">
-    <span #titleBarTxt>{{title}}</span>
+    <span *ngIf="titleTabs.length == 0" #titleBarTxt>{{title}}</span>
+    <div class="titleTabsWrap" *ngIf="titleTabs.length > 0">
+      <span class="ripple {{titleTab.selected ? 'selected' : ''}}" *ngFor="let titleTab of titleTabs; let i = index" (click)="clearSelected(titleTab, i); titleTab.selected = true">{{titleTab.txt}}</span>
+    </div>
   </div>
   <div *ngIf="rightIcon != ''" class="comm-header-icon comm-header-do ripple" (click)="rightClick()">
     <span class="iconfont {{rightIcon}}"></span>

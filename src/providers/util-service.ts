@@ -205,8 +205,12 @@ export class UtilService {
     return fmt;
   }
 
-  // 触发后退操作
-  goToBack(nav: Nav | NavController) {
+  /**
+   * 触发后退操作
+   * @param nav Nav | NavController 对象
+   * @param modalBack 对于modal页面，是否设置为直接后退模式，而不发送页面相应事件委托来进行后退处理
+   */
+  goToBack(nav: Nav | NavController, modalBack: Boolean = false) {
     // 判断Picker是否显示
     var pickerShow = Picker.isShow();
     if (pickerShow.show) {
@@ -222,7 +226,7 @@ export class UtilService {
       return false;
     }
     if (activePage.pageName !== 'page-login' && activePage.pageName !== 'page-complete-info' && activePage.pageName !== 'page-task' && activePage.pageName !== 'page-about') {
-      if (activePage.pageType == 'ionModal') {
+      if (activePage.pageType == 'ionModal' && !modalBack) {
         this.eventsService.events.publish(activePage.pageName + ':goToBack');
         return false;
       }

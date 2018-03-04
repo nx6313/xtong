@@ -1,0 +1,18 @@
+<ion-header>
+  <title-bar [titleTabs]="carPageTitleTabs" [directBack]="true" (titleTabChange)="titleTabChange($event)"></title-bar>
+</ion-header>
+
+<ion-content>
+  <switch-pages [switchTabs]="switchTabsForCar" [showNum]="2" [hide]="false" (switchChange)="switchChange($event)">
+    <switch-page>
+      <scrollview #carListPageScrollView [scrollviewRank]="'car_list_page'">
+        车辆列表页面
+      </scrollview>
+    </switch-page>
+    <switch-page>
+      <scrollview #carMapPageScrollView [scrollviewRank]="'car_map_page'">
+        司机地图页面
+      </scrollview>
+    </switch-page>
+  </switch-pages>
+</ion-content>

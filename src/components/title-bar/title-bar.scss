@@ -19,6 +19,28 @@ title-bar {
     margin: 0 auto;
     text-align: center;
     z-index: 2000;
+    .titleTabsWrap {
+      display: inline-block;
+      vertical-align: middle;
+      height: 24px;
+      line-height: 24px;
+      span {
+        display: inline-block;
+        font-size: 1.4rem;
+        padding: 0rem 1.2rem;
+        background: rgb(83, 92, 112);
+        color: rgb(226, 235, 243);
+      }
+      span:first-of-type {
+        border-radius: 10rem 0 0 10rem;
+      }
+      span:last-of-type {
+        border-radius: 0 10rem 10rem 0;
+      }
+      span.selected {
+        animation: slideTabSelected 0.6s ease both;
+      }
+    }
   }
   .comm-title span {
     vertical-align: middle;
@@ -40,5 +62,25 @@ title-bar {
     width: 38px;
     height: 41px;
     visibility: hidden;
+  }
+  @-webkit-keyframes slideTabSelected {
+    0% {
+      background: rgb(83, 92, 112);
+      color: rgb(226, 235, 243);
+    }
+    100% {
+      background: rgb(177, 171, 92);
+      color: rgb(66, 74, 92);
+    }
+  }
+  @keyframes slideTabSelected {
+    0% {
+      background: rgb(83, 92, 112);
+      color: rgb(226, 235, 243);
+    }
+    100% {
+      background: rgb(177, 171, 92);
+      color: rgb(66, 74, 92);
+    }
   }
 }

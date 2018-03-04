@@ -82,8 +82,24 @@ export class TabObj {
     id?: any;
     txt?: string;
     keyword?: string;
-    selected?: Boolean;
+    selected?: Boolean = false;
     constructor() {
+    }
+    setId(id: any) {
+        this.id = id;
+        return this;
+    }
+    setTxt(txt: string) {
+        this.txt = txt;
+        return this;
+    }
+    setKeyword(keyword: string) {
+        this.keyword = keyword;
+        return this;
+    }
+    setSelected(selected: Boolean) {
+        this.selected = selected;
+        return this;
     }
 }
 export class PickerItem {

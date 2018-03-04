@@ -40,34 +40,14 @@ export class TaskPage {
   private statusPage5TaskList: TaskListComponent;
 
   tabs: Array<TabObj> = [
-    {
-      id: 'searchByStatus',
-      txt: '按状态查看',
-      selected: true
-    }
+    new TabObj().setId('searchByStatus').setTxt('按状态查看').setSelected(true)
   ];
   switchTabsByStatus: Array<TabObj> = [
-    {
-      id: 'tab_status_all',
-      txt: '所有',
-      keyword: '9'
-    }, {
-      id: 'tab_status_nostart',
-      txt: '未开始',
-      keyword: '1'
-    }, {
-      id: 'tab_status_doing',
-      txt: '进行中',
-      keyword: '7'
-    }, {
-      id: 'tab_status_stop',
-      txt: '已结束',
-      keyword: '5'
-    }, {
-      id: 'tab_status_cancle',
-      txt: '已取消',
-      keyword: '4'
-    }
+    new TabObj().setId('tab_status_all').setTxt('所有').setKeyword('9'),
+    new TabObj().setId('tab_status_nostart').setTxt('未开始').setKeyword('1'),
+    new TabObj().setId('tab_status_doing').setTxt('进行中').setKeyword('7'),
+    new TabObj().setId('tab_status_stop').setTxt('已结束').setKeyword('5'),
+    new TabObj().setId('tab_status_cancle').setTxt('已取消').setKeyword('4')
   ];
 
   remandAddPage: string = 'RemandAddPage';

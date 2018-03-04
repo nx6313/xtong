@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { StorageService } from '../../providers/storage-service';
 import { LoginPage } from '../login/login';
 
-@IonicPage()
 @Component({
   selector: 'page-welcome',
   templateUrl: 'welcome.html',

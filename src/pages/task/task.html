@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content>
-  <switch-pages *ngIf="tabs[0].selected" [switchTabs]="switchTabsByStatus" [showNum]="5" (switchChange)="switchChange($event)">
+  <switch-pages [switchTabs]="switchTabsByStatus" [showNum]="5" (switchChange)="switchChange($event)">
     <switch-page>
       <scrollview #statusPage1ScrollView [canSwitchSlide]="true" [scrollviewRank]="'status_page_1'">
         <task-list #statusPage1TaskList (clickRequestTimeoutBtn)="refData($event)" (clickNoDataBtn)="toCreateNewRemand($event)"></task-list>
