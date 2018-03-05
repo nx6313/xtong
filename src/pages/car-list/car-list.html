@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content>
-  <switch-pages [switchTabs]="switchTabsForCar" [showNum]="2" [hide]="false" (switchChange)="switchChange($event)">
+  <switch-pages [switchTabs]="switchTabsForCar" [showNum]="2" [hide]="true" (switchChange)="switchChange($event)">
     <switch-page>
       <scrollview #carListPageScrollView [scrollviewRank]="'car_list_page'">
         车辆列表页面

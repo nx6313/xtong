@@ -1,3 +1,67 @@
 page-task-detail {
-
+  .detailInfoWrap {
+    background: #ffffff url(../assets/imgs/login_bg.jpg) no-repeat;
+    background-size: 100% auto;
+    background-position: bottom center;
+    div {
+      position: relative;
+    }
+    div::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0.8rem;
+      right: 0.8rem;
+      border-top: 1px solid rgb(235, 235, 235);
+    }
+    div:first-of-type::after {
+      border-top: none;
+    }
+    .taskAddressWrap {
+      padding: 1.4rem 1.2rem;
+      span {
+        position: relative;
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 20px;
+      }
+      span::before {
+        content: '';
+        position: absolute;
+        top: 10px;
+        left: 0;
+        width: 8px;
+        height: 8px;
+        border-radius: 20px;
+        z-index: 10;
+      }
+      span.taskStartAddress::before {
+        background: rgb(36, 206, 93);
+      }
+      span.taskEndAddress::before {
+        background: rgb(218, 180, 12);
+      }
+      span.taskStartAddress::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 3px;
+        width: 1px;
+        height: 50%;
+        background: rgb(199, 199, 199);
+        z-index: 9;
+      }
+      span.taskEndAddress::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 3px;
+        width: 1px;
+        height: 50%;
+        background: rgb(199, 199, 199);
+        z-index: 9;
+      }
+    }
+  }
 }

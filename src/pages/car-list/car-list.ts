@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TabObj } from '../../model/comm';
 import { SwitchPagesComponent } from '../../components/switch-pages/switch-pages';
@@ -9,11 +9,12 @@ import { SwitchPagesComponent } from '../../components/switch-pages/switch-pages
   templateUrl: 'car-list.html',
 })
 export class CarListPage {
+  @ViewChild(SwitchPagesComponent)
   private switchPages: SwitchPagesComponent;
 
   carPageTitleTabs: Array<TabObj> = [
-    new TabObj().setId('car-list').setTxt('车辆列表').setKeyword('list').setSelected(true),
-    new TabObj().setId('car-map').setTxt('司机地图').setKeyword('map')
+    new TabObj().setId('car_list').setTxt('车辆列表').setKeyword('list').setSelected(true),
+    new TabObj().setId('car_map').setTxt('司机地图').setKeyword('map')
   ];
   switchTabsForCar: Array<TabObj> = [
     new TabObj().setId('car_list').setTxt('车辆列表隐藏指示器').setKeyword('carList'),

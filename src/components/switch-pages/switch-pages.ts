@@ -36,9 +36,21 @@ export class SwitchPagesComponent {
    * @param pageIndex 跳转到的页面索引
    */
   skipToPage(pageIndex: number) {
-    console.log(12312321);
-    //let switchPageCount = $(this._switchItemWrap.nativeElement).find('span.switchTabItem').length;
-    //console.log(switchPageCount);
+    let switchPageCount = $(this._switchItemWrap.nativeElement).find('span.switchTabItem').length;
+    let curSwitchPageIndex = $(this._switchItemWrap.nativeElement).find('span.switchTabItemSelected').index();
+    let switchPageScreenWidth = document.body.clientWidth;
+    // 移动指示器到指定位置
+    $(this._switchItemWrap.nativeElement).find('span.switchTabItem:eq(' + pageIndex + ')').siblings().removeClass('switchTabItemSelected');
+    $(this._switchItemWrap.nativeElement).find('span.switchTabItem:eq(' + pageIndex + ')').addClass('switchTabItemSelected');
+    let railTramformX = (switchPageScreenWidth / this.showNum) * pageIndex;
+    $(this._switchItemWrap.nativeElement).find('span.switchTabIndicator').get(0).style.transform = 'translate3d(' + railTramformX + 'px, 0px, 0px)';
+    // 移动内容区域到指定位置
+    this._switchTabsWrap.nativeElement.style.transition = '0.4s ease';
+    setTimeout(function () {
+      this._switchTabsWrap.nativeElement.style.transition = '0s';
+    }, 0.4 * 1000);
+    let switchTabsTramformX = -(switchPageScreenWidth * pageIndex);
+    this._switchTabsWrap.nativeElement.style.transform = 'translate3d(' + switchTabsTramformX + 'px, 0px, 0px)';
   }
 
 }

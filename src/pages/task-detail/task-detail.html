@@ -3,5 +3,48 @@
 </ion-header>
 
 <ion-content>
-
+  <scrollview [canPull]="false">
+    <div class="detailInfoWrap">
+      <div class="taskAddressWrap">
+        <span class="taskStartAddress">{{taskData.startAddress}}</span>
+        <span class="taskEndAddress">{{taskData.endAddress}}</span>
+      </div>
+      <div class="taskTimeWrap">
+        <span class="taskTime">
+          <i class="icon iconfont icon-shouye-hmj"></i>
+          <span>{{taskData.startTime | remandDate : 'yy.MM.dd'}}—{{taskData.endTime | remandDate : 'yy.MM.dd'}}</span>
+        </span>
+        <span class="taskCarNumber">需求 {{taskData.carNumber}} 辆</span>
+      </div>
+      <div class="taskInfoWrap flex-r flex-b">
+        <div>
+          <span>{{taskData.startTime | remandDate : 'dd 日 hh:mm'}}</span>
+          <span>截止时间</span>
+        </div>
+        <div>
+          <span>{{taskData.driverNumber}}</span>
+          <span>已报名</span>
+        </div>
+        <div>
+          <span>{{taskData.freight}} 元/吨</span>
+          <span>运输费</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <i class="icon iconfont icon-shouye-hmj"></i>
+        <span>车辆列表</span>
+        <i class="icon iconfont icon-right"></i>
+      </div>
+      <div>
+        <i class="icon iconfont icon-shouye-hmj"></i>
+        <span>运力地图</span>
+        <i class="icon iconfont icon-right"></i>
+      </div>
+    </div>
+    <a class="btnWrap ripple" (click)="updateRemand()">
+      <span class="formBtn">修改任务</span>
+    </a>
+  </scrollview>
 </ion-content>
